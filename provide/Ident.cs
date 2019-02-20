@@ -5,7 +5,7 @@ namespace provide
     public class Ident: ApiClient
     {
 
-        public Ident(string host, string path, string scheme, string token) : base(host, path, scheme, token) {}
+        public Ident(string token) : base("ident.provide.services", "api/v1", "https", token) {}
 
         // InitIdent convenience method
         // func InitIdent(token *string) *Ident {

@@ -4,7 +4,7 @@ namespace provide
 {
     public class Goldmine: ApiClient
     {
-        public Goldmine(string host, string path, string scheme, string token) : base(host, path, scheme, token) {}
+        public Goldmine(string token) : base("goldmine.provide.services", "api/v1", "https", token) {}
 
         // CreateBridge
         // func CreateBridge(token string, params map[string]interface{}) (int, interface{}, error) {
