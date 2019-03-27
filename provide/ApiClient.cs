@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Net.Http;
 using System.Net.Http.Headers;
+using System.Text;
 using System.Threading.Tasks;
 
 using Newtonsoft.Json;
@@ -43,23 +44,27 @@ namespace provide
             var req = new HttpRequestMessage(new HttpMethod(mthd), uri.ToString());
 
             if (token != null) {
-                req.Headers.Authorization = new AuthenticationHeaderValue(String.Format("bearer {0}", token));
+                req.Headers.Authorization = new AuthenticationHeaderValue("bearer", token);
             }
 
             if (mthd == "POST" || mthd == "PUT") {
-                req.Headers.Add("content-type", "application/json");
-
-                var bytes = System.Text.Encoding.Unicode.GetBytes(JsonConvert.SerializeObject(args));
-                req.Content = new ByteArrayContent(bytes);
+                req.Content = new StringContent(JsonConvert.SerializeObject(args), Encoding.UTF8, "application/json");
             }
 
+            HttpResponseMessage res = null;
+            object resp = null;
+
             try {
-                var res = await client.SendAsync(req);
+                res = await client.SendAsync(req);
                 res.EnsureSuccessStatusCode();
-                var resp = JsonConvert.DeserializeObject(res.Content.ToString());
+                resp = JsonConvert.DeserializeObject(res.Content.ToString());
                 return ((int) res.StatusCode, resp);
             } catch (Exception e) {
                 System.Diagnostics.Debug.WriteLine("Failed to send API request to {0}; {1}", uri.ToString(), e);
+                
+                if (res != null) {
+                    return ((int) res.StatusCode, resp);
+                }
             }
 
             return (-1, null);

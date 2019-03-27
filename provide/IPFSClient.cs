@@ -13,13 +13,13 @@ namespace provide
 
         public IPFSClient(string url) : base(url) {}
 
-        public async Task<string> Add(string data) {
-            var resp = await FileSystem.AddTextAsync(data);
+        public static async Task<string> Add(string data) {
+            var resp = await DefaultIPFSClient().FileSystem.AddTextAsync(data);
             return (string) resp.Id;
         }
 
-        public async Task<string> Get(string hash) {
-            return await FileSystem.ReadAllTextAsync(hash);
+        public static async Task<string> Get(string hash) {
+            return await DefaultIPFSClient().FileSystem.ReadAllTextAsync(hash);
         }
     }
 }
