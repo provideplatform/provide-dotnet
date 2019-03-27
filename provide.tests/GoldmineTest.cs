@@ -11,22 +11,28 @@ namespace provide.tests
         [Fact]
         public void TestGoldmineTxCreateWithIPFSHash()
         {
-            var ipfsTask = IPFSClient.Add("some encrypted document");
+            var ipfsTask = IPFSClient.Add(String.Format("some encrypted document @ {0}", DateTime.Now));
             var hashAwaiter = ipfsTask.GetAwaiter();
             ipfsTask.Wait();
             var hash = hashAwaiter.GetResult();
+            Console.WriteLine(hash);
 
-            var apiToken = "provide application api token";
-            var contractID = "provide contract id";
+            var apiToken = "";
+            var contractID = "";
             var tx = provide.Goldmine.ExecuteContract(apiToken, contractID, new Dictionary<string, object> {
-                { "wallet_id", "provide wallet id" },
+                { "wallet_id", "" },
                 { "method", "send" },
                 { "params", new string[] { "test", "test", "test", "test", "test", "test", hash } },
                 { "value", 0 }
             });
             var awaiter = tx.GetAwaiter();
             tx.Wait();
-            Console.WriteLine(awaiter.GetResult().Item2);
+
+            var ipfsGetTask = IPFSClient.Get(hash);
+            var docAwaiter = ipfsGetTask.GetAwaiter();
+            ipfsGetTask.Wait();
+            var doc = docAwaiter.GetResult();
+            Console.WriteLine(doc);
         }
     }
 }

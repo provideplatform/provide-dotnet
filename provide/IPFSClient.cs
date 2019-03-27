@@ -8,7 +8,7 @@ namespace provide
     public class IPFSClient: IpfsClient
     {
         public static IPFSClient DefaultIPFSClient() {
-            return new IPFSClient("https://ipfs.provide.services:5001");
+            return new IPFSClient("http://ipfs.provide.services:5001");
         }
 
         public IPFSClient(string url) : base(url) {}
