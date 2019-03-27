@@ -1,4 +1,6 @@
 using System;
+using System.Collections.Generic;
+using System.Threading.Tasks;
 
 namespace provide
 {
@@ -6,252 +8,256 @@ namespace provide
     {
         public Goldmine(string token) : base("goldmine.provide.services", "api/v1", "https", token) {}
 
+        public static Goldmine InitGoldmine(string token) {
+            return new Goldmine(token);
+        }
+
         // CreateBridge
-        // func CreateBridge(token string, params map[string]interface{}) (int, interface{}, error) {
-        //     return InitGoldmine(token).Post("bridges", params)
-        // }
+        public static async Task<(int, object)> CreateBridge(string token, Dictionary<string, object> args) {
+            return await InitGoldmine(token).Post("bridges", args);
+        }
 
-        // // ListBridges
-        // func ListBridges(token string, params map[string]interface{}) (int, interface{}, error) {
-        //     return InitGoldmine(token).Get("bridges", params)
-        // }
+        // ListBridges
+        public static async Task<(int, object)> ListBridges(string token, Dictionary<string, object> args) {
+            return await InitGoldmine(token).Get("bridges", args);
+        }
 
-        // // GetBridgeDetails
-        // func GetBridgeDetails(token, bridgeID string, params map[string]interface{}) (int, interface{}, error) {
-        //     uri := fmt.Sprintf("bridges/%s", bridgeID)
-        //     return InitGoldmine(token).Get(uri, params)
-        // }
+        // GetBridgeDetails
+        public static async Task<(int, object)> GetBridgeDetails(string token, string bridgeID, Dictionary<string, object> args) {
+            var uri = String.Format("bridges/{0}", bridgeID);
+            return await InitGoldmine(token).Get(uri, args);
+        }
 
-        // // CreateConnector
-        // func CreateConnector(token string, params map[string]interface{}) (int, interface{}, error) {
-        //     return InitGoldmine(token).Post("connectors", params)
-        // }
+        // CreateConnector
+        public static async Task<(int, object)> CreateConnector(string token, Dictionary<string, object> args) {
+            return await InitGoldmine(token).Post("connectors", args);
+        }
 
-        // // ListConnectors
-        // func ListConnectors(token string, params map[string]interface{}) (int, interface{}, error) {
-        //     return InitGoldmine(token).Get("connectors", params)
-        // }
+        // ListConnectors
+        public static async Task<(int, object)> ListConnectors(string token, Dictionary<string, object> args) {
+            return await InitGoldmine(token).Get("connectors", args);
+        }
 
-        // // GetConnectorDetails
-        // func GetConnectorDetails(token, connectorID string, params map[string]interface{}) (int, interface{}, error) {
-        //     uri := fmt.Sprintf("connectors/%s", connectorID)
-        //     return InitGoldmine(token).Get(uri, params)
-        // }
+        // GetConnectorDetails
+        public static async Task<(int, object)> GetConnectorDetails(string token, string connectorID, Dictionary<string, object> args) {
+            var uri = String.Format("connectors/{0}", connectorID);
+            return await InitGoldmine(token).Get(uri, args);
+        }
 
-        // // DeleteConnector
-        // func DeleteConnector(token, connectorID string) (int, interface{}, error) {
-        //     uri := fmt.Sprintf("connectors/%s", connectorID)
-        //     return InitIdent(stringOrNil(token)).Delete(uri)
-        // }
+        // DeleteConnector
+        public static async Task<(int, object)> DeleteConnector(string token, string connectorID) {
+            var uri = String.Format("connectors/{0}", connectorID);
+            return await InitGoldmine(token).Delete(uri);
+        }
 
-        // // CreateContract
-        // func CreateContract(token string, params map[string]interface{}) (int, interface{}, error) {
-        //     return InitGoldmine(token).Post("contracts", params)
-        // }
+        // CreateContract
+        public static async Task<(int, object)> CreateContract(string token, Dictionary<string, object> args) {
+            return await InitGoldmine(token).Post("contracts", args);
+        }
 
-        // // ExecuteContract
-        // func ExecuteContract(token, contractID string, params map[string]interface{}) (int, interface{}, error) {
-        //     uri := fmt.Sprintf("contracts/%s/execute", contractID)
-        //     return InitGoldmine(token).Post(uri, params)
-        // }
+        // ExecuteContract
+        public static async Task<(int, object)> ExecuteContract(string token, string contractID, Dictionary<string, object> args) {
+            var uri = String.Format("contracts/{0}/execute", contractID);
+            return await InitGoldmine(token).Post(uri, args);
+        }
 
-        // // ListContracts
-        // func ListContracts(token string, params map[string]interface{}) (int, interface{}, error) {
-        //     return InitGoldmine(token).Get("contracts", params)
-        // }
+        // ListContracts
+        public static async Task<(int, object)> ListContracts(string token, Dictionary<string, object> args) {
+            return await InitGoldmine(token).Get("contracts", args);
+        }
 
-        // // GetContractDetails
-        // func GetContractDetails(token, contractID string, params map[string]interface{}) (int, interface{}, error) {
-        //     uri := fmt.Sprintf("contracts/%s", contractID)
-        //     return InitGoldmine(token).Get(uri, params)
-        // }
+        // GetContractDetails
+        public static async Task<(int, object)> GetContractDetails(string token, string contractID, Dictionary<string, object> args) {
+            var uri = String.Format("contracts/{0}", contractID);
+            return await InitGoldmine(token).Get(uri, args);
+        }
 
-        // // CreateNetwork
-        // func CreateNetwork(token string, params map[string]interface{}) (int, interface{}, error) {
-        //     return InitGoldmine(token).Post("networks", params)
-        // }
+        // CreateNetwork
+        public static async Task<(int, object)> CreateNetwork(string token, Dictionary<string, object> args) {
+            return await InitGoldmine(token).Post("networks", args);
+        }
 
-        // // UpdateNetwork updates an existing network
-        // func UpdateNetwork(token, networkID string, params map[string]interface{}) (int, interface{}, error) {
-        //     uri := fmt.Sprintf("networks/%s", networkID)
-        //     return InitIdent(stringOrNil(token)).Put(uri, params)
-        // }
+        // UpdateNetwork updates an existing network
+        public static async Task<(int, object)> UpdateNetwork(string token, string networkID, Dictionary<string, object> args) {
+            var uri = String.Format("networks/{0}", networkID);
+            return await InitGoldmine(token).Put(uri, args);
+        }
 
-        // // ListNetworks
-        // func ListNetworks(token string, params map[string]interface{}) (int, interface{}, error) {
-        //     return InitGoldmine(token).Get("networks", params)
-        // }
+        // ListNetworks
+        public static async Task<(int, object)> ListNetworks(string token, Dictionary<string, object> args) {
+            return await InitGoldmine(token).Get("networks", args);
+        }
 
-        // // GetNetworkDetails
-        // func GetNetworkDetails(token, networkID string, params map[string]interface{}) (int, interface{}, error) {
-        //     uri := fmt.Sprintf("networks/%s", networkID)
-        //     return InitGoldmine(token).Get(uri, params)
-        // }
+        // GetNetworkDetails
+        public static async Task<(int, object)> GetNetworkDetails(string token, string networkID, Dictionary<string, object> args) {
+            var uri = String.Format("networks/{0}", networkID);
+            return await InitGoldmine(token).Get(uri, args);
+        }
 
-        // // ListNetworkAccounts
-        // func ListNetworkAccounts(token, networkID string, params map[string]interface{}) (int, interface{}, error) {
-        //     uri := fmt.Sprintf("networks/%s/accounts", networkID)
-        //     return InitGoldmine(token).Get(uri, params)
-        // }
+        // ListNetworkAccounts
+        public static async Task<(int, object)> ListNetworkAccounts(string token, string networkID, Dictionary<string, object> args) {
+            var uri = String.Format("networks/{0}/accounts", networkID);
+            return await InitGoldmine(token).Get(uri, args);
+        }
 
-        // // ListNetworkBlocks
-        // func ListNetworkBlocks(token, networkID string, params map[string]interface{}) (int, interface{}, error) {
-        //     uri := fmt.Sprintf("networks/%s/blocks", networkID)
-        //     return InitGoldmine(token).Get(uri, params)
-        // }
+        // ListNetworkBlocks
+        public static async Task<(int, object)> ListNetworkBlocks(string token, string networkID, Dictionary<string, object> args) {
+            var uri = String.Format("networks/{0}/blocks", networkID);
+            return await InitGoldmine(token).Get(uri, args);
+        }
 
-        // // ListNetworkBridges
-        // func ListNetworkBridges(token, networkID string, params map[string]interface{}) (int, interface{}, error) {
-        //     uri := fmt.Sprintf("networks/%s/bridges", networkID)
-        //     return InitGoldmine(token).Get(uri, params)
-        // }
+        // ListNetworkBridges
+        public static async Task<(int, object)> ListNetworkBridges(string token, string networkID, Dictionary<string, object> args) {
+            var uri = String.Format("networks/{0}/bridges", networkID);
+            return await InitGoldmine(token).Get(uri, args);
+        }
 
-        // // ListNetworkConnectors
-        // func ListNetworkConnectors(token, networkID string, params map[string]interface{}) (int, interface{}, error) {
-        //     uri := fmt.Sprintf("networks/%s/connectors", networkID)
-        //     return InitGoldmine(token).Get(uri, params)
-        // }
+        // ListNetworkConnectors
+        public static async Task<(int, object)> ListNetworkConnectors(string token, string networkID, Dictionary<string, object> args) {
+            var uri = String.Format("networks/{0}/connectors", networkID);
+            return await InitGoldmine(token).Get(uri, args);
+        }
 
-        // // ListNetworkContracts
-        // func ListNetworkContracts(token, networkID string, params map[string]interface{}) (int, interface{}, error) {
-        //     uri := fmt.Sprintf("networks/%s/contracts", networkID)
-        //     return InitGoldmine(token).Get(uri, params)
-        // }
+        // ListNetworkContracts
+        public static async Task<(int, object)> ListNetworkContracts(string token, string networkID, Dictionary<string, object> args) {
+            var uri = String.Format("networks/{0}/contracts", networkID);
+            return await InitGoldmine(token).Get(uri, args);
+        }
 
-        // // GetNetworkContractDetails
-        // func GetNetworkContractDetails(token, networkID, contractID string, params map[string]interface{}) (int, interface{}, error) {
-        //     uri := fmt.Sprintf("networks/%s/contracts/%s", networkID, contractID)
-        //     return InitGoldmine(token).Get(uri, params)
-        // }
+        // GetNetworkContractDetails
+        public static async Task<(int, object)> GetNetworkContractDetails(string token, string networkID, string contractID, Dictionary<string, object> args) {
+            var uri = String.Format("networks/{0}/contracts/{1}", networkID, contractID);
+            return await InitGoldmine(token).Get(uri, args);
+        }
 
-        // // ListNetworkOracles
-        // func ListNetworkOracles(token, networkID string, params map[string]interface{}) (int, interface{}, error) {
-        //     uri := fmt.Sprintf("networks/%s/oracles", networkID)
-        //     return InitGoldmine(token).Get(uri, params)
-        // }
+        // ListNetworkOracles
+        public static async Task<(int, object)> ListNetworkOracles(string token, string networkID, Dictionary<string, object> args) {
+            var uri = String.Format("networks/{0}/oracles", networkID);
+            return await InitGoldmine(token).Get(uri, args);
+        }
 
-        // // ListNetworkTokens
-        // func ListNetworkTokens(token, networkID string, params map[string]interface{}) (int, interface{}, error) {
-        //     uri := fmt.Sprintf("networks/%s/tokens", networkID)
-        //     return InitGoldmine(token).Get(uri, params)
-        // }
+        // ListNetworkTokens
+        public static async Task<(int, object)> ListNetworkTokens(string token, string networkID, Dictionary<string, object> args) {
+            var uri = String.Format("networks/{0}/tokens", networkID);
+            return await InitGoldmine(token).Get(uri, args);
+        }
 
-        // // ListNetworkTransactions
-        // func ListNetworkTransactions(token, networkID string, params map[string]interface{}) (int, interface{}, error) {
-        //     uri := fmt.Sprintf("networks/%s/transactions", networkID)
-        //     return InitGoldmine(token).Get(uri, params)
-        // }
+        // ListNetworkTransactions
+        public static async Task<(int, object)> ListNetworkTransactions(string token, string networkID, Dictionary<string, object> args) {
+            var uri = String.Format("networks/{0}/transactions", networkID);
+            return await InitGoldmine(token).Get(uri, args);
+        }
 
-        // // GetNetworkTransactionDetails
-        // func GetNetworkTransactionDetails(token, networkID, txID string, params map[string]interface{}) (int, interface{}, error) {
-        //     uri := fmt.Sprintf("networks/%s/transactions/%s", networkID, txID)
-        //     return InitGoldmine(token).Get(uri, params)
-        // }
+        // GetNetworkTransactionDetails
+        public static async Task<(int, object)> GetNetworkTransactionDetails(string token, string networkID, string txID, Dictionary<string, object> args) {
+            var uri = String.Format("networks/{0}/transactions/{1}", networkID, txID);
+            return await InitGoldmine(token).Get(uri, args);
+        }
 
-        // // GetNetworkStatusMeta
-        // func GetNetworkStatusMeta(token, networkID, txID string, params map[string]interface{}) (int, interface{}, error) {
-        //     uri := fmt.Sprintf("networks/%s/status", networkID, txID)
-        //     return InitGoldmine(token).Get(uri, params)
-        // }
+        // GetNetworkStatusMeta
+        public static async Task<(int, object)> GetNetworkStatusMeta(string token, string networkID, string txID, Dictionary<string, object> args) {
+            var uri = String.Format("networks/{0}/status", networkID, txID);
+            return await InitGoldmine(token).Get(uri, args);
+        }
 
-        // // ListNetworkNodes
-        // func ListNetworkNodes(token, networkID string, params map[string]interface{}) (int, interface{}, error) {
-        //     uri := fmt.Sprintf("networks/%s/nodes", networkID)
-        //     return InitGoldmine(token).Get(uri, params)
-        // }
+        // ListNetworkNodes
+        public static async Task<(int, object)> ListNetworkNodes(string token, string networkID, Dictionary<string, object> args) {
+            var uri = String.Format("networks/{0}/nodes", networkID);
+            return await InitGoldmine(token).Get(uri, args);
+        }
 
-        // // CreateNetworkNode
-        // func CreateNetworkNode(token, networkID string, params map[string]interface{}) (int, interface{}, error) {
-        //     uri := fmt.Sprintf("networks/%s/nodes", networkID)
-        //     return InitGoldmine(token).Post(uri, params)
-        // }
+        // CreateNetworkNode
+        public static async Task<(int, object)> CreateNetworkNode(string token, string networkID, Dictionary<string, object> args) {
+            var uri = String.Format("networks/{0}/nodes", networkID);
+            return await InitGoldmine(token).Post(uri, args);
+        }
 
-        // // GetNetworkNodeDetails
-        // func GetNetworkNodeDetails(token, networkID, nodeID string, params map[string]interface{}) (int, interface{}, error) {
-        //     uri := fmt.Sprintf("networks/%s/nodes/%s", networkID, nodeID)
-        //     return InitGoldmine(token).Get(uri, params)
-        // }
+        // GetNetworkNodeDetails
+        public static async Task<(int, object)> GetNetworkNodeDetails(string token, string networkID, string nodeID, Dictionary<string, object> args) {
+            var uri = String.Format("networks/{0}/nodes/{1}", networkID, nodeID);
+            return await InitGoldmine(token).Get(uri, args);
+        }
 
-        // // GetNetworkNodeLogs
-        // func GetNetworkNodeLogs(token, networkID, nodeID string, params map[string]interface{}) (int, interface{}, error) {
-        //     uri := fmt.Sprintf("networks/%s/nodes/%s/logs", networkID, nodeID)
-        //     return InitGoldmine(token).Get(uri, params)
-        // }
+        // GetNetworkNodeLogs
+        public static async Task<(int, object)> GetNetworkNodeLogs(string token, string networkID, string nodeID, Dictionary<string, object> args) {
+            var uri = String.Format("networks/{0}/nodes/{1}/logs", networkID, nodeID);
+            return await InitGoldmine(token).Get(uri, args);
+        }
 
-        // // DeleteNetworkNode
-        // func DeleteNetworkNode(token, networkID, nodeID string) (int, interface{}, error) {
-        //     uri := fmt.Sprintf("networks/%s/nodes/%s", networkID, nodeID)
-        //     return InitIdent(stringOrNil(token)).Delete(uri)
-        // }
+        // DeleteNetworkNode
+        public static async Task<(int, object)> DeleteNetworkNode(string token, string networkID, string nodeID) {
+            var uri = String.Format("networks/{0}/nodes/{1}", networkID, nodeID);
+            return await InitGoldmine(token).Delete(uri);
+        }
 
-        // // CreateOracle
-        // func CreateOracle(token string, params map[string]interface{}) (int, interface{}, error) {
-        //     return InitGoldmine(token).Post("oracles", params)
-        // }
+        // CreateOracle
+        public static async Task<(int, object)> CreateOracle(string token, Dictionary<string, object> args) {
+            return await InitGoldmine(token).Post("oracles", args);
+        }
 
-        // // ListOracles
-        // func ListOracles(token string, params map[string]interface{}) (int, interface{}, error) {
-        //     return InitGoldmine(token).Get("oracles", params)
-        // }
+        // ListOracles
+        public static async Task<(int, object)> ListOracles(string token, Dictionary<string, object> args) {
+            return await InitGoldmine(token).Get("oracles", args);
+        }
 
-        // // GetOracleDetails
-        // func GetOracleDetails(token, oracleID string, params map[string]interface{}) (int, interface{}, error) {
-        //     uri := fmt.Sprintf("oracles/%s", oracleID)
-        //     return InitGoldmine(token).Get(uri, params)
-        // }
+        // GetOracleDetails
+        public static async Task<(int, object)> GetOracleDetails(string token, string oracleID, Dictionary<string, object> args) {
+            var uri = String.Format("oracles/{0}", oracleID);
+            return await InitGoldmine(token).Get(uri, args);
+        }
 
-        // // CreateTokenContract
-        // func CreateTokenContract(token string, params map[string]interface{}) (int, interface{}, error) {
-        //     return InitGoldmine(token).Post("tokens", params)
-        // }
+        // CreateTokenContract
+        public static async Task<(int, object)> CreateTokenContract(string token, Dictionary<string, object> args) {
+            return await InitGoldmine(token).Post("tokens", args);
+        }
 
-        // // ListTokenContracts
-        // func ListTokenContracts(token string, params map[string]interface{}) (int, interface{}, error) {
-        //     return InitGoldmine(token).Get("tokens", params)
-        // }
+        // ListTokenContracts
+        public static async Task<(int, object)> ListTokenContracts(string token, Dictionary<string, object> args) {
+            return await InitGoldmine(token).Get("tokens", args);
+        }
 
-        // // GetTokenContractDetails
-        // func GetTokenContractDetails(token, tokenID string, params map[string]interface{}) (int, interface{}, error) {
-        //     uri := fmt.Sprintf("tokens/%s", tokenID)
-        //     return InitGoldmine(token).Get(uri, params)
-        // }
+        // GetTokenContractDetails
+        public static async Task<(int, object)> GetTokenContractDetails(string token, string tokenID, Dictionary<string, object> args) {
+            var uri = String.Format("tokens/{0}", tokenID);
+            return await InitGoldmine(token).Get(uri, args);
+        }
 
-        // // CreateTransaction
-        // func CreateTransaction(token string, params map[string]interface{}) (int, interface{}, error) {
-        //     return InitGoldmine(token).Post("transactions", params)
-        // }
+        // CreateTransaction
+        public static async Task<(int, object)> CreateTransaction(string token, Dictionary<string, object> args) {
+            return await InitGoldmine(token).Post("transactions", args);
+        }
 
-        // // ListTransactions
-        // func ListTransactions(token string, params map[string]interface{}) (int, interface{}, error) {
-        //     return InitGoldmine(token).Get("transactions", params)
-        // }
+        // ListTransactions
+        public static async Task<(int, object)> ListTransactions(string token, Dictionary<string, object> args) {
+            return await InitGoldmine(token).Get("transactions", args);
+        }
 
-        // // GetTransactionDetails
-        // func GetTransactionDetails(token, txID string, params map[string]interface{}) (int, interface{}, error) {
-        //     uri := fmt.Sprintf("transactions/%s", txID)
-        //     return InitGoldmine(token).Get(uri, params)
-        // }
+        // GetTransactionDetails
+        public static async Task<(int, object)> GetTransactionDetails(string token, string txID, Dictionary<string, object> args) {
+            var uri = String.Format("transactions/{0}", txID);
+            return await InitGoldmine(token).Get(uri, args);
+        }
 
-        // // CreateWallet
-        // func CreateWallet(token string, params map[string]interface{}) (int, interface{}, error) {
-        //     return InitGoldmine(token).Post("wallets", params)
-        // }
+        // CreateWallet
+        public static async Task<(int, object)> CreateWallet(string token, Dictionary<string, object> args) {
+            return await InitGoldmine(token).Post("wallets", args);
+        }
 
-        // // ListWallets
-        // func ListWallets(token string, params map[string]interface{}) (int, interface{}, error) {
-        //     return InitGoldmine(token).Get("wallets", params)
-        // }
+        // ListWallets
+        public static async Task<(int, object)> ListWallets(string token, Dictionary<string, object> args) {
+            return await InitGoldmine(token).Get("wallets", args);
+        }
 
-        // // GetWalletDetails
-        // func GetWalletDetails(token, walletID string, params map[string]interface{}) (int, interface{}, error) {
-        //     uri := fmt.Sprintf("wallets/%s", walletID)
-        //     return InitGoldmine(token).Get(uri, params)
-        // }
+        // GetWalletDetails
+        public static async Task<(int, object)> GetWalletDetails(string token, string walletID, Dictionary<string, object> args) {
+            var uri = String.Format("wallets/{0}", walletID);
+            return await InitGoldmine(token).Get(uri, args);
+        }
 
-        // // GetWalletBalance
-        // func GetWalletBalance(token, walletID, tokenID string, params map[string]interface{}) (int, interface{}, error) {
-        //     uri := fmt.Sprintf("wallets/%s/balances/%s", walletID, tokenID)
-        //     return InitGoldmine(token).Get(uri, params)
-        // }
+        // GetWalletBalance
+        public static async Task<(int, object)> GetWalletBalance(string token, string walletID, string tokenID, Dictionary<string, object> args) {
+            var uri = String.Format("wallets/{0}/balances/{1}", walletID, tokenID);
+            return await InitGoldmine(token).Get(uri, args);
+        }
     }
 }

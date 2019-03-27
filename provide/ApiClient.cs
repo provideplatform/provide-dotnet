@@ -74,8 +74,8 @@ namespace provide
             return await sendRequest("PUT", buildUrl(uri), args);
         }
 
-        public async Task<(int, object)> Delete(string uri, Dictionary<string, object> args) {
-            return await sendRequest("DELETE", buildUrl(uri), args);
+        public async Task<(int, object)> Delete(string uri) {
+            return await sendRequest("DELETE", buildUrl(uri), null);
         }
 
         private string buildUrl(string uri) {
