@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Threading.Tasks;
 
 namespace provide
 {
@@ -7,26 +9,17 @@ namespace provide
 
         public Ident(string token) : base("ident.provide.services", "api/v1", "https", token) {}
 
-        // InitIdent convenience method
-        // func InitIdent(token *string) *Ident {
-        //     return &Ident{
-        //         APIClient{
-        //             Host:   "ident.provide.services",
-        //             Path:   "api/v1",
-        //             Scheme: "https",
-        //             Token:  token,
-        //         },
-        //     }
-        // }
+        public static Ident InitIdent(string token) {
+            return new Ident(token);
+        }
 
-        // // Authenticate a user by email address and password, returning a newly-authorized API token
-        // func Authenticate(email, passwd string) (int, interface{}, error) {
-        //     prvd := InitIdent(nil)
-        //     return prvd.Post("authenticate", map[string]interface{}{
-        //         "email":    email,
-        //         "password": passwd,
-        //     })
-        // }
+        // Authenticate a user by email address and password, returning a newly-authorized API token
+        public static async Task<(int, object)> Authenticate(string email, string passwd) {
+            return await InitIdent(null).Post("authenticate", new Dictionary<string, object> {
+                { "email", email },
+                { "password", passwd }
+            });
+        }
 
         // // CreateApplication on behalf of the given API token
         // func CreateApplication(token string, params map[string]interface{}) (int, interface{}, error) {
