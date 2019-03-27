@@ -48,6 +48,9 @@ namespace provide
 
             if (mthd == "POST" || mthd == "PUT") {
                 req.Headers.Add("content-type", "application/json");
+
+                var bytes = System.Text.Encoding.Unicode.GetBytes(JsonConvert.SerializeObject(args));
+                req.Content = new ByteArrayContent(bytes);
             }
 
             try {
