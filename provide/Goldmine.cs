@@ -12,6 +12,28 @@ namespace provide
             return new Goldmine(token);
         }
 
+        // CreateAccount
+        public static async Task<(int, object)> CreateAccount(string token, Dictionary<string, object> args) {
+            return await InitGoldmine(token).Post("accounts", args);
+        }
+
+        // ListAccounts
+        public static async Task<(int, object)> ListAccounts(string token, Dictionary<string, object> args) {
+            return await InitGoldmine(token).Get("accounts", args);
+        }
+
+        // GetAccountDetails
+        public static async Task<(int, object)> GetAccountDetails(string token, string accountID, Dictionary<string, object> args) {
+            var uri = String.Format("accounts/{0}", accountID);
+            return await InitGoldmine(token).Get(uri, args);
+        }
+
+        // GetAccountBalance
+        public static async Task<(int, object)> GetAccountBalance(string token, string accountID, string tokenID, Dictionary<string, object> args) {
+            var uri = String.Format("accounts/{0}/balances/{1}", accountID, tokenID);
+            return await InitGoldmine(token).Get(uri, args);
+        }
+
         // CreateBridge
         public static async Task<(int, object)> CreateBridge(string token, Dictionary<string, object> args) {
             return await InitGoldmine(token).Post("bridges", args);
@@ -251,12 +273,6 @@ namespace provide
         // GetWalletDetails
         public static async Task<(int, object)> GetWalletDetails(string token, string walletID, Dictionary<string, object> args) {
             var uri = String.Format("wallets/{0}", walletID);
-            return await InitGoldmine(token).Get(uri, args);
-        }
-
-        // GetWalletBalance
-        public static async Task<(int, object)> GetWalletBalance(string token, string walletID, string tokenID, Dictionary<string, object> args) {
-            var uri = String.Format("wallets/{0}/balances/{1}", walletID, tokenID);
             return await InitGoldmine(token).Get(uri, args);
         }
     }
