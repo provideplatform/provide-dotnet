@@ -91,7 +91,7 @@ namespace provide
         }
 
         // UpdateConnectedEntity -- invokes the configured connector proxy in a RESTful manner -- i.e., PUT /:id
-        public static async Task<(int, object)> CreateConnectedEntity(string token, string connectorID, string entityID, Dictionary<string, object> args) {
+        public static async Task<(int, object)> UpdateConnectedEntity(string token, string connectorID, string entityID, Dictionary<string, object> args) {
             var uri = String.Format("connectors/{0}/entities/{1}", connectorID, entityID);
             return await InitGoldmine(token).Put(uri, args);
         }
