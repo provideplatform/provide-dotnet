@@ -72,6 +72,36 @@ namespace provide
             return await InitGoldmine(token).Delete(uri);
         }
 
+        // ListConnectedEntities -- invokes the configured connector proxy in a RESTful manner -- i.e., GET /
+        public static async Task<(int, object)> ListConnectedEntities(string token, string connectorID, Dictionary<string, object> args) {
+            var uri = String.Format("connectors/{0}/entities", connectorID);
+            return await InitGoldmine(token).Get(uri, args);
+        }
+
+        // GetConnectedEntityDetails -- invokes the configured connector proxy in a RESTful manner -- i.e., GET /:id
+        public static async Task<(int, object)> GetConnectedEntityDetails(string token, string connectorID, string entityID, Dictionary<string, object> args) {
+            var uri = String.Format("connectors/{0}/entities/{1}", connectorID, entityID);
+            return await InitGoldmine(token).Get(uri, args);
+        }
+
+        // CreateConnectedEntity -- invokes the configured connector proxy in a RESTful manner -- i.e., POST /
+        public static async Task<(int, object)> CreateConnectedEntity(string token, string connectorID, Dictionary<string, object> args) {
+            var uri = String.Format("connectors/{0}/entities", connectorID);
+            return await InitGoldmine(token).Post(uri, args);
+        }
+
+        // UpdateConnectedEntity -- invokes the configured connector proxy in a RESTful manner -- i.e., PUT /:id
+        public static async Task<(int, object)> CreateConnectedEntity(string token, string connectorID, string entityID, Dictionary<string, object> args) {
+            var uri = String.Format("connectors/{0}/entities/{1}", connectorID, entityID);
+            return await InitGoldmine(token).Put(uri, args);
+        }
+
+        // DeleteConnectedEntity -- invokes the configured connector proxy in a RESTful manner -- i.e., DELETE /:id
+        public static async Task<(int, object)> DeleteConnectedEntity(string token, string connectorID, string entityID) {
+            var uri = String.Format("connectors/{0}/entities/{1}", connectorID, entityID);
+            return await InitGoldmine(token).Delete(uri);
+        }
+
         // CreateContract
         public static async Task<(int, object)> CreateContract(string token, Dictionary<string, object> args) {
             return await InitGoldmine(token).Post("contracts", args);
