@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.IdentityModel.Tokens.Jwt;
 using System.Linq;
 using System.Net.Http;
 using System.Net.Http.Headers;
@@ -17,11 +18,30 @@ namespace provide
         private string scheme;
         private string token;
 
+        public ApiClient(string token) {
+            var jwtHandler = new JwtSecurityTokenHandler();
+            var jwt = jwtHandler.ReadToken(token) as JwtSecurityToken;    
+
+            var audience = new Uri(jwt.Audiences.First());
+            this.scheme = audience.Scheme;
+            this.host = audience.Host;
+            this.path = audience.AbsolutePath;
+            if (!audience.IsDefaultPort) {
+                this.host = string.Format("{0}:{1}", this.host, audience.Port);
+            }
+
+            this.token = token;
+        }
+
         public ApiClient(string host, string path, string scheme, string token) {
             this.host = host;
             this.path = path;
             this.scheme = scheme;
             this.token = token;
+        }
+
+        public override string ToString() {
+            return string.Format("provide.ApiClient {0}://{1}{2}", this.scheme, this.host, this.path);
         }
 
         private HttpClient buildClient() {
