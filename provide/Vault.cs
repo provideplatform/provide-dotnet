@@ -7,7 +7,7 @@ namespace provide
     public class Vault: ApiClient
     {
 
-        public Vault(string token) : base("ident.provide.services", "api/v1", "https", token) {}
+        public Vault(string token) : base(token) {}
 
         public static Vault InitVault(string token) {
             return new Vault(token);

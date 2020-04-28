@@ -7,7 +7,7 @@ namespace provide
     public class Ident: ApiClient
     {
 
-        public Ident(string token) : base("ident.provide.services", "api/v1", "https", token) {}
+        public Ident(string token) : base(token) {}
 
         public static Ident InitIdent(string token) {
             return new Ident(token);

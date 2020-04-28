@@ -6,7 +6,7 @@ namespace provide
 {
     public class Goldmine: ApiClient
     {
-        public Goldmine(string token) : base("goldmine.provide.services", "api/v1", "https", token) {}
+        public Goldmine(string token) : base(token) {}
 
         public static Goldmine InitGoldmine(string token) {
             return new Goldmine(token);
