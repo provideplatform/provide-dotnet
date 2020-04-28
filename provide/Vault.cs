@@ -52,7 +52,7 @@ namespace provide
         // VerifySignature verifies that a message was previously signed with a given key
         public static async Task<(int, object)>VerifySignature(string token, string vaultID, string keyID, string msg, string sig) {
             var uri = String.Format("vaults/{}/keys/{}/verify", vaultID, keyID);
-            return await InitVault(token).Post(uri, new Dictionary<string, object> { { "message", msg, "signature": sig } });
+            return await InitVault(token).Post(uri, new Dictionary<string, object> { { "message", msg }, { "signature", sig } });
         }
     }
 }
