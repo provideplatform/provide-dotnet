@@ -38,8 +38,8 @@ namespace provide
         }
 
         // DeleteVaultKey permanently removes the specified key material from within the key management service
-        public static async Task<(int, object)>DeleteVaultKey(string token, string vaultID) {
-            var uri = String.Format("vaults/{}/keys", vaultID);
+        public static async Task<(int, object)>DeleteVaultKey(string token, string vaultID, string keyID) {
+            var uri = String.Format("vaults/{}/keys/{}", vaultID, keyID);
             return await InitVault(token).Delete(uri);
         }
 
