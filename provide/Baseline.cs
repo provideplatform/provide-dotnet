@@ -48,21 +48,21 @@ namespace provide
             }
         }
 
-        // InitProtocol initiates the Baseline protocol using the Provide<>Baseline proxy connector,
+        // CreateAgreement initiates the Baseline protocol using the Provide<>Baseline proxy connector,
         // computing a witness using a generic zkSNARK circuit.
-        public async Task<(int, object)> InitProtocol(Dictionary<string, object> args) {
+        public async Task<(int, object)> CreateAgreement(Dictionary<string, object> args) {
             return await this.goldmine.CreateConnectedEntity(this.connectorID, args);
         }
 
-        // ContinueProtocol interacts with an in-progress instance of the Baseline protocol using the
+        // UpdateAgreement interacts with an in-progress instance of the Baseline protocol using the
         // Provide<>Baseline proxy connector.
-        public async Task<(int, object)> ContinueProtocol(string entityID, Dictionary<string, object> args) {
+        public async Task<(int, object)> UpdateAgreement(string entityID, Dictionary<string, object> args) {
             return await this.goldmine.UpdateConnectedEntity(this.connectorID, entityID, args);
         }
 
-        // GetProtocol retrieves the latest state of an in-progress or previously-completed instance of
+        // GetAgreement retrieves the latest state of an in-progress or previously-completed instance of
         // the Baseline protocol.
-        public async Task<(int, object)> GetProtocol(string entityID, Dictionary<string, object> args) {
+        public async Task<(int, object)> GetAgreement(string entityID, Dictionary<string, object> args) {
             return await this.goldmine.GetConnectedEntityDetails(this.connectorID, entityID, args);
         }
     }
