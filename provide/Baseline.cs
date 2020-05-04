@@ -27,7 +27,7 @@ namespace provide
                 if (claim.Type.Equals("prvd")) {
                     try {
                         var prvdClaim = JsonConvert.DeserializeObject<Dictionary<string, string>>(claim.Value);
-                        var connectorID = prvdClaim["connector_id"].ToString();
+                        this.connectorID = prvdClaim["connector_id"].ToString();
 
                         var task = this.goldmine.GetConnectorDetails(this.connectorID, new Dictionary<string, object> {});
                         var awaiter = task.GetAwaiter();
@@ -35,8 +35,6 @@ namespace provide
 
                         var connector = awaiter.GetResult();
                         if (connector.Item1 == 200) {
-                            this.connectorID = connectorID;
-
                             // FIXME-- parse connector response and verify it is a baseline connector...
                         } else {
                             System.Diagnostics.Debug.WriteLine("Failed to fetch connector; {0}", connectorID);

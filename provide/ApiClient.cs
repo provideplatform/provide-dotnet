@@ -91,23 +91,29 @@ namespace provide
         }
 
         public async Task<(int, object)> Get(string uri, Dictionary<string, object> args) {
-            return await sendRequest("GET", buildUrl(uri), args);
+            return await this.sendRequest("GET", buildUrl(uri), args);
         }
 
         public async Task<(int, object)> Post(string uri, Dictionary<string, object> args) {
-            return await sendRequest("POST", buildUrl(uri), args);
+            return await this.sendRequest("POST", buildUrl(uri), args);
         }
 
         public async Task<(int, object)> Put(string uri, Dictionary<string, object> args) {
-            return await sendRequest("PUT", buildUrl(uri), args);
+            return await this.sendRequest("PUT", buildUrl(uri), args);
         }
 
         public async Task<(int, object)> Delete(string uri) {
-            return await sendRequest("DELETE", buildUrl(uri), null);
+            return await this.sendRequest("DELETE", buildUrl(uri), null);
         }
 
         private string buildUrl(string uri) {
-            return String.Format("{0}://{1}/{2}/{3}", scheme, host, path, uri);
+            return String.Format(
+                "{0}://{1}/{2}/{3}",
+                this.scheme,
+                this.host,
+                this.path.TrimStart('/').TrimEnd('/'),
+                uri.TrimStart('/').TrimEnd('/')
+            );
         }
     }
 }
