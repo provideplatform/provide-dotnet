@@ -52,7 +52,7 @@ namespace provide
             return client;
         }
 
-        private async Task<(int, object)> sendRequest(string method, string url, Dictionary<string, object> args) {
+        private async Task<(int, byte[])> sendRequest(string method, string url, Dictionary<string, object> args) {
             var client = buildClient();
             var uri = new UriBuilder(url);
             var mthd = method.ToUpper();
@@ -72,37 +72,47 @@ namespace provide
             }
 
             HttpResponseMessage res = null;
-            object resp = null;
+            HttpContent content = null;
 
             try {
                 res = await client.SendAsync(req);
+                content = res.Content;
                 res.EnsureSuccessStatusCode();
-                resp = JsonConvert.DeserializeObject(res.Content.ToString());
-                return ((int) res.StatusCode, resp);
+                var raw = await content.ReadAsByteArrayAsync();
+                return ((int) res.StatusCode, raw);
             } catch (Exception e) {
-                System.Diagnostics.Debug.WriteLine("Failed to send API request to {0}; {1}", uri.ToString(), e);
-                
+                System.Diagnostics.Debug.WriteLine("Failed to complete API {0} request to {1}; {2}", method, uri.ToString(), e);
+
                 if (res != null) {
-                    return ((int) res.StatusCode, resp);
+                    byte[] raw;
+                    if (content != null) {
+                        raw = await content.ReadAsByteArrayAsync();
+                        return ((int) res.StatusCode, raw);
+                    }
+                    return ((int) res.StatusCode, null);
+                }
+            } finally {
+                if (content != null) {
+                    content.Dispose();
                 }
             }
 
             return (-1, null);
         }
 
-        public async Task<(int, object)> Get(string uri, Dictionary<string, object> args) {
+        public async Task<(int, byte[])> Get(string uri, Dictionary<string, object> args) {
             return await this.sendRequest("GET", buildUrl(uri), args);
         }
 
-        public async Task<(int, object)> Post(string uri, Dictionary<string, object> args) {
+        public async Task<(int, byte[])> Post(string uri, Dictionary<string, object> args) {
             return await this.sendRequest("POST", buildUrl(uri), args);
         }
 
-        public async Task<(int, object)> Put(string uri, Dictionary<string, object> args) {
+        public async Task<(int, byte[])> Put(string uri, Dictionary<string, object> args) {
             return await this.sendRequest("PUT", buildUrl(uri), args);
         }
 
-        public async Task<(int, object)> Delete(string uri) {
+        public async Task<(int, byte[])> Delete(string uri) {
             return await this.sendRequest("DELETE", buildUrl(uri), null);
         }
 

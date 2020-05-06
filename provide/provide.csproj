@@ -2,13 +2,14 @@
   <PropertyGroup>
     <TargetFramework>netstandard2.0</TargetFramework>
     <PackageId>Provide</PackageId>
-    <Version>1.2.1</Version>
+    <Version>1.2.2</Version>
     <Authors>Kyle Thomas</Authors>
     <Company>Provide Technologies Inc.</Company>
   </PropertyGroup>
 
   <ItemGroup>
     <PackageReference Include="Ipfs.Http.Client" Version="0.27.2" />
+    <PackageReference Include="NATS.Client" Version="0.10.0" />
     <PackageReference Include="Newtonsoft.Json" Version="12.0.1" />
     <PackageReference Include="System.IdentityModel.Tokens.Jwt" Version="6.5.1" />
   </ItemGroup>
