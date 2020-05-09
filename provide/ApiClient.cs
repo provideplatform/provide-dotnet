@@ -20,7 +20,7 @@ namespace provide
 
         public ApiClient(string token) {
             var jwtHandler = new JwtSecurityTokenHandler();
-            var jwt = jwtHandler.ReadToken(token) as JwtSecurityToken;    
+            var jwt = jwtHandler.ReadToken(token) as JwtSecurityToken;
 
             var audience = new Uri(jwt.Audiences.First());
             this.scheme = audience.Scheme;

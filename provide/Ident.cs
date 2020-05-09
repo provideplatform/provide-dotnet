@@ -8,9 +8,17 @@ namespace provide
     {
 
         public Ident(string token) : base(token) {}
-
+        public Ident(string host, string path, string scheme, string token) : base(host, path, scheme, token) {}
+    
         public static Ident InitIdent(string token) {
-            return new Ident(token);
+            Ident ident;
+            try {
+                ident = new Ident(token);
+            } catch {
+                ident = new Ident("ident.provide.services", "api/v1", "https", token);
+            }
+
+            return ident;
         }
 
         // Authenticate a user by email address and password, returning a newly-authorized API token
