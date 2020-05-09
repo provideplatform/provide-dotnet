@@ -55,6 +55,28 @@ namespace provide
             return await this.Post("tokens", args);
         }
 
+        // CreateOrganization on behalf of the given user
+        public async Task<(int, byte[])>CreateOrganization(Dictionary<string, object> args) {
+            return await this.Post("organizations", args);
+        }
+
+        // UpdateOrganization using the given API token, organization id and args
+        public async Task<(int, byte[])>UpdateOrganization(string organizationID, Dictionary<string, object> args) {
+            var uri = String.Format("organizations/{0}", organizationID);
+            return await this.Put(uri, args);
+        }
+
+        // ListOrganizations retrieves a paginated list of organizations scoped to the given API token
+        public async Task<(int, byte[])>ListOrganizations(Dictionary<string, object> args) {
+            return await this.Get("organizations", args);
+        }
+
+        // GetOrganizationDetails retrives organization details for the given API token and organization id
+        public async Task<(int, byte[])>GetOrganizationDetails(string organizationID, Dictionary<string, object> args) {
+            var uri = String.Format("organizations/{0}", organizationID);
+            return await this.Get(uri, args);
+        }
+
         // CreateToken creates a new API token.
         public async Task<(int, byte[])>CreateToken(Dictionary<string, object> args) {
             return await this.Post("tokens", args);

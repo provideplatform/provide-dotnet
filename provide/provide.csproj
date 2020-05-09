@@ -2,7 +2,7 @@
   <PropertyGroup>
     <TargetFramework>netstandard2.0</TargetFramework>
     <PackageId>Provide</PackageId>
-    <Version>1.2.2</Version>
+    <Version>1.2.3</Version>
     <Authors>Kyle Thomas</Authors>
     <Company>Provide Technologies Inc.</Company>
   </PropertyGroup>
