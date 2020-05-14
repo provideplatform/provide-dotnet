@@ -13,6 +13,15 @@ namespace provide
 {
     public class ApiClient
     {
+        private static readonly HttpClient client;
+
+        static ApiClient() {
+            client = new HttpClient();
+            client.DefaultRequestHeaders.Accept.Clear();
+            client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+            client.DefaultRequestHeaders.Add("user-agent", "provide dotnet API client");
+        }
+
         private string host;
         private string path;
         private string scheme;
@@ -44,16 +53,7 @@ namespace provide
             return string.Format("provide.ApiClient {0}://{1}{2}", this.scheme, this.host, this.path);
         }
 
-        private HttpClient buildClient() {
-            HttpClient client = new HttpClient();
-            client.DefaultRequestHeaders.Accept.Clear();
-            client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
-            client.DefaultRequestHeaders.Add("user-agent", "provide dotnet API client");
-            return client;
-        }
-
         private async Task<(int, string)> sendRequest(string method, string url, Dictionary<string, object> args) {
-            var client = buildClient();
             var uri = new UriBuilder(url);
             var mthd = method.ToUpper();
 
