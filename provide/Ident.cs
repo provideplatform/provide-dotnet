@@ -6,6 +6,12 @@ namespace provide
 {
     public class Ident: ApiClient
     {
+        const string DEFAULT_HOST = "ident.provide.services";
+        const string DEFAULT_PATH = "api/v1";
+        const string DEFAULT_SCHEME = "https";
+        const string HOST_ENVIRONMENT_VAR = "IDENT_API_HOST";
+        const string SCHEME_ENVIRONMENT_VAR = "IDENT_API_SCHEME";
+        const string PATH_ENVIRONMENT_VAR = "IDENT_API_PATH";
 
         public Ident(string token) : base(token) {}
         public Ident(string host, string path, string scheme, string token) : base(host, path, scheme, token) {}
@@ -15,7 +21,23 @@ namespace provide
             try {
                 ident = new Ident(token);
             } catch {
-                ident = new Ident("ident.provide.services", "api/v1", "https", token);
+                string host = Environment.GetEnvironmentVariable(HOST_ENVIRONMENT_VAR);
+                string path = Environment.GetEnvironmentVariable(PATH_ENVIRONMENT_VAR);
+                string scheme = Environment.GetEnvironmentVariable(SCHEME_ENVIRONMENT_VAR);
+
+                if (host == null) {
+                    host = DEFAULT_HOST;
+                }
+
+                if (path == null) {
+                    path = DEFAULT_PATH;
+                }
+
+                if (scheme == null) {
+                    scheme = DEFAULT_SCHEME;
+                }
+
+                ident = new Ident(host, path, scheme, token);
             }
 
             return ident;
