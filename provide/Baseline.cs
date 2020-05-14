@@ -51,8 +51,7 @@ namespace provide
 
             var connector = awaiter.GetResult();
             if (connector.Item1 == 200 && connector.Item2 != null) {
-                var respstr = System.Text.Encoding.Default.GetString(connector.Item2);
-                var resp = JsonConvert.DeserializeObject<Dictionary<string, object>>(respstr);
+                var resp = JsonConvert.DeserializeObject<Dictionary<string, object>>(connector.Item2);
                 var connectorType = resp["type"];
                 if (connectorType == null || !connectorType.Equals("baseline")) {
                     throw new ApplicationException(CONNECTOR_TYPE_INVALID_MESSAGE);
