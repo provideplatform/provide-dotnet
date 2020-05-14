@@ -66,7 +66,7 @@ namespace provide
 
         // CreateAgreement creates a new agreement and sends it to the named recipients; a witness is calculated
         // using a generic zkSNARK agreement circuit at this time but a specific circuit may be specified in the future.
-        public async Task<(int, byte[])> CreateAgreement(Dictionary<string, object> args, string[] recipients) {
+        public async Task<(int, string)> CreateAgreement(Dictionary<string, object> args, string[] recipients) {
             return await this.goldmine.CreateConnectedEntity(this.connectorID, new Dictionary<string, object> {
                 { "payload", args },
                 { "recipients", recipients }
@@ -74,18 +74,18 @@ namespace provide
         }
 
         // UpdateAgreement attempts to updates an in-progress Baseline agreement.
-        public async Task<(int, byte[])> UpdateAgreement(string entityID, Dictionary<string, object> args) {
+        public async Task<(int, string)> UpdateAgreement(string entityID, Dictionary<string, object> args) {
             return await this.goldmine.UpdateConnectedEntity(this.connectorID, entityID, args);
         }
 
         // GetAgreement retrieves a specific Baseline agreement by id.
-        public async Task<(int, byte[])> GetAgreement(string entityID, Dictionary<string, object> args) {
+        public async Task<(int, string)> GetAgreement(string entityID, Dictionary<string, object> args) {
             return await this.goldmine.GetConnectedEntityDetails(this.connectorID, entityID, args);
         }
 
         // ListAgreements retrieves a list of in-progress or previously completed Baseline agreement instances
         // which match the given query params.
-        public async Task<(int, byte[])> ListAgreements(Dictionary<string, object> args) {
+        public async Task<(int, string)> ListAgreements(Dictionary<string, object> args) {
             return await this.goldmine.ListConnectedEntities(this.connectorID, args);
         }
     }
