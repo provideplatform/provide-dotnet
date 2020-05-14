@@ -94,9 +94,9 @@ namespace provide
                     return ((int) res.StatusCode, null);
                 }
             } finally {
-                if (content != null) {
-                    content.Dispose();
-                }
+                // if (content != null) {
+                //     content.Dispose();
+                // }
             }
 
             return (-1, null);
