@@ -46,61 +46,61 @@ namespace provide
         
         // CreateVault creates a new vault available within the key management service
         public async Task<(int, string)>CreateVault(string token, Dictionary<string, object> args) {
-            var uri = String.Format("vaults");
+            var uri = "vaults";
             return await this.Post(uri, args);
         }
 
         // ListVaults lists available vaults available within the key management service
         public async Task<(int, string)>ListVaults(string token, Dictionary<string, object> args) {
-            var uri = String.Format("vaults");
+            var uri = "vaults";
             return await this.Get(uri, args);
         }
 
         // ListVaultKeys retrieves a list of the symmetric keys and asymmetric key pairs secured within the vault key management service
         public async Task<(int, string)>ListVaultKeys(string token, string vaultID, Dictionary<string, object> args) {
-            var uri = String.Format("vaults/{}/keys", vaultID);
+            var uri = $"vaults/{vaultID}/keys";
             return await this.Get(uri, args);
         }
 
         // CreateVaultKey creates a new key available within the vault key management service
         public async Task<(int, string)>CreateVaultKey(string token, string vaultID, Dictionary<string, object> args) {
-            var uri = String.Format("vaults/{}/keys", vaultID);
+            var uri = $"vaults/{vaultID}/keys";
             return await this.Post(uri, args);
         }
 
         // DeleteVaultKey permanently removes the specified key material from within the vault key management service
         public async Task<(int, string)>DeleteVaultKey(string token, string vaultID, string keyID) {
-            var uri = String.Format("vaults/{}/keys/{}", vaultID, keyID);
+            var uri = $"vaults/{vaultID}/keys/{keyID}";
             return await this.Delete(uri);
         }
 
         // ListVaultSecrets retrieves a list of the secrets secured within the vault
         public async Task<(int, string)>ListVaultSecrets(string token, string vaultID, Dictionary<string, object> args) {
-            var uri = String.Format("vaults/{}/secrets", vaultID);
+            var uri = $"vaults/{vaultID}/secrets";
             return await this.Get(uri, args);
         }
 
         // CreateVaultSecret creates a new secret within the vault
         public async Task<(int, string)>CreateVaultSecret(string token, string vaultID, Dictionary<string, object> args) {
-            var uri = String.Format("vaults/{}/secrets", vaultID);
+            var uri = $"vaults/{vaultID}/secrets";
             return await this.Post(uri, args);
         }
 
         // DeleteVaultSecret permanently removes the specified secret from the vault
         public async Task<(int, string)>DeleteVaultSecret(string token, string vaultID, string secretID) {
-            var uri = String.Format("vaults/{}/secrets/{}", vaultID, secretID);
+            var uri = $"vaults/{vaultID}/secrets/{secretID}";
             return await this.Delete(uri);
         }
 
         // SignMessage securely signs the given message
         public async Task<(int, string)>SignMessage(string token, string vaultID, string keyID, string msg) {
-            var uri = String.Format("vaults/{}/keys/{}/sign", vaultID, keyID);
+            var uri = $"vaults/{vaultID}/keys/{keyID}/sign";
             return await this.Post(uri, new Dictionary<string, object> { { "message", msg } });
         }
 
         // VerifySignature verifies that a message was previously signed with a given key
         public async Task<(int, string)>VerifySignature(string token, string vaultID, string keyID, string msg, string sig) {
-            var uri = String.Format("vaults/{}/keys/{}/verify", vaultID, keyID);
+            var uri = $"vaults/{vaultID}/keys/{keyID}/verify";
             return await this.Post(uri, new Dictionary<string, object> { { "message", msg }, { "signature", sig } });
         }
     }
