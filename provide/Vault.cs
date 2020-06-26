@@ -55,6 +55,12 @@ namespace provide
             var uri = "vaults";
             return await this.Get(uri, args);
         }
+        
+        // DeleteVault permanently removes specified vault from the key management service
+        public async Task<(int, string)>DeleteVault(string token, string vaultID) {
+            var uri = $"vaults/{vaultID}";
+            return await this.Delete(uri);
+        }
 
         // ListVaultKeys retrieves a list of the symmetric keys and asymmetric key pairs secured within the vault key management service
         public async Task<(int, string)>ListVaultKeys(string token, string vaultID, Dictionary<string, object> args) {
