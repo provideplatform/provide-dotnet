@@ -108,6 +108,7 @@ namespace provide
 
 
         // Tmp refactoring method, same as send request but with type instead of dict
+        // this will be main send request method at the end
         private async Task<(int, string)> SendRequest2(string method, string url, BaseModel reqObj)
         {
             var uri = new UriBuilder(url);
@@ -155,6 +156,7 @@ namespace provide
         {
             var mthd = method.ToUpper();
 
+            // refactor this when possible to test some list methods
             // if (mthd == "GET" && args != null) {
             //     uri.Query = string.Join("&", args.Select(kvp => string.Format("{0}={1}", kvp.Key, kvp.Value)));
             // }

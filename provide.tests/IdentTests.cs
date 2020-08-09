@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Threading.Tasks;
 using provide.Model.Ident;
 using Xunit;
 
@@ -13,6 +14,12 @@ namespace provide.tests
             
         //     // Assert.Equal("provide.ApiClient https://goldmine.unibright.io/", apiClient.ToString());
         // }
+
+        private async Task<Ident> CreateIdentForTestUser()
+        {
+            var authResponse = await Ident.Authenticate("user@prvd.local", "testp455");
+            return new Ident(authResponse.Token.Token);
+        }
 
         [Fact]
         public async void TestCreateUser() 
@@ -33,12 +40,11 @@ namespace provide.tests
         [Fact]
         public async void TestCreateOrganization()
         {
-            var authResponse = await Ident.Authenticate("user@prvd.local", "testp455");
+            var ident = await CreateIdentForTestUser();
             var organization = new Organization 
             {
                 Name = "test organization"
             };
-            var ident = new Ident(authResponse.Token.Token);
             // check error: unable to assert arbitrary org permissions
             var res = await ident.CreateOrganization(organization);
         }
@@ -46,14 +52,21 @@ namespace provide.tests
         [Fact]
         public async void TestCreateApplication() 
         {
-            var authResponse = await Ident.Authenticate("user@prvd.local", "testp455");
+            var ident = await CreateIdentForTestUser();
             var application = new Application 
             {
                 Name = "test application"
             };
-            var ident = new Ident(authResponse.Token.Token);
 
             var res = await ident.CreateApplication(application);
+        }
+
+        [Fact]
+        public async void TestListUsers()
+        {
+            var ident = await CreateIdentForTestUser();
+            // TODO: checks args for list methods
+            var res = await ident.ListApplications(new Dictionary<string, object>{});
         }
     }
 }
