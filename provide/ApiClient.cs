@@ -6,7 +6,7 @@ using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Text;
 using System.Threading.Tasks;
-
+using System.Web;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Serialization;
 using provide.Model;
@@ -154,10 +154,10 @@ namespace provide
         {
             var mthd = method.ToUpper();
 
-            // refactor this when possible to test some list methods
-            // if (mthd == "GET" && args != null) {
-            //     uri.Query = string.Join("&", args.Select(kvp => string.Format("{0}={1}", kvp.Key, kvp.Value)));
-            // }
+            if (mthd == "GET" && reqObj != null)
+            {
+                uri.Query = CreateQueryString(reqObj);
+            }
 
             var req = new HttpRequestMessage(new HttpMethod(mthd), uri.ToString());
             if (token != null)
@@ -165,14 +165,7 @@ namespace provide
                 req.Headers.Authorization = new AuthenticationHeaderValue("bearer", token);
             }
 
-            var serializedObj = JsonConvert.SerializeObject(reqObj, new JsonSerializerSettings
-            {
-                ContractResolver = new DefaultContractResolver
-                {
-                    NamingStrategy = new SnakeCaseNamingStrategy()
-                },
-                Formatting = Formatting.Indented
-            });
+            var serializedObj = SerializeObject(reqObj);
 
             if (mthd == "POST" || mthd == "PUT")
             {
@@ -180,6 +173,26 @@ namespace provide
             }
 
             return req;
+        }
+
+        private string CreateQueryString(BaseModel reqObj)
+        {
+            var json = SerializeObject(reqObj);
+            var dict = JsonConvert.DeserializeObject<IDictionary<string, string>>(json);
+            return string.Join("&", dict.Where(x => !string.IsNullOrEmpty(x.Value))
+                .Select((x => HttpUtility.UrlEncode(x.Key) + "=" + HttpUtility.UrlEncode(x.Value))));
+        }
+
+        private string SerializeObject(BaseModel reqObj)
+        {
+            return JsonConvert.SerializeObject(reqObj, new JsonSerializerSettings
+            {
+                ContractResolver = new DefaultContractResolver
+                {
+                    NamingStrategy = new SnakeCaseNamingStrategy()
+                },
+                Formatting = Formatting.Indented
+            });
         }
 
         public async Task<(int, string)> Get(string uri, Dictionary<string, object> args) {

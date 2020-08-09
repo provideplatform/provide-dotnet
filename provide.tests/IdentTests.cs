@@ -62,7 +62,7 @@ namespace provide.tests
         }
 
         [Fact]
-        public async void TestListUsers()
+        public async void TestListApplications()
         {
             var ident = await CreateIdentForTestUser();
             // TODO: checks args for list methods
