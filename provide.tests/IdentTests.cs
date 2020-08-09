@@ -13,18 +13,33 @@ namespace provide.tests
             
         //     // Assert.Equal("provide.ApiClient https://goldmine.unibright.io/", apiClient.ToString());
         // }
+
         [Fact]
         public async void TestCreateUser() 
         {
             var ident = Ident.InitIdent("");
-            var user = new User {
-                Email = "user2@prvd.local",
+            var user = new User
+            {
+                Email = "user@prvd.local",
                 Password = "testp455",
                 FirstName = "Prvd",
                 LastName = "User"
             };
 
-            var res = await ident.CreateUser2(user);
+            var res = await ident.CreateUser(user);
+        }
+
+        [Fact]
+        public async void TestCreateOrganization()
+        {
+            var authResponse = await Ident.Authenticate("user@prvd.local", "testp455");
+            var organization = new Organization 
+            {
+                Name = "test organization"
+            };
+            var ident = new Ident(authResponse.Token.Token);
+            // check error: unable to assert arbitrary org permissions
+            var res = await ident.CreateOrganization(organization);
         }
     }
 }

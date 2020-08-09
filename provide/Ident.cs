@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using Newtonsoft.Json;
 using provide.Model.Ident;
 
 namespace provide
@@ -45,11 +46,13 @@ namespace provide
         }
 
         // Authenticate a user by email address and password, returning a newly-authorized API token
-        public static async Task<(int, string)> Authenticate(string email, string passwd) {
-            return await InitIdent(null).Post("authenticate", new Dictionary<string, object> {
+        public static async Task<AuthResponse> Authenticate(string email, string passwd) {
+            var response = await InitIdent(null).Post("authenticate", new Dictionary<string, object> {
                 { "email", email },
                 { "password", passwd }
             });
+            // TODO: error handling
+            return JsonConvert.DeserializeObject<AuthResponse>(response.Item2);
         }
 
         // CreateApplication on behalf of the given API token
@@ -87,8 +90,8 @@ namespace provide
         }
 
         // CreateOrganization on behalf of the given user
-        public async Task<(int, string)>CreateOrganization(Dictionary<string, object> args) {
-            return await this.Post("organizations", args);
+        public async Task<(int, string)>CreateOrganization(Organization organization) {
+            return await this.Post2("organizations", organization);
         }
 
         // UpdateOrganization using the given API token, organization id and args
@@ -131,12 +134,7 @@ namespace provide
         }
 
         // CreateUser creates a new user for which API tokens and managed signing identities can be authorized
-        public async Task<(int, string)>CreateUser(Dictionary<string, object> args) {
-            return await this.Post("users", args);
-        }
-
-        // Tmp refactoring method, same as create user but with type instead of dict
-        public async Task<(int, string)>CreateUser2(User user) {
+        public async Task<(int, string)>CreateUser(User user) {
             return await this.Post2("users", user);
         }
 
