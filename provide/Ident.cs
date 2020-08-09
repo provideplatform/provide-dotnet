@@ -56,8 +56,8 @@ namespace provide
         }
 
         // CreateApplication on behalf of the given API token
-        public async Task<(int, string)>CreateApplication(Dictionary<string, object> args) {
-            return await this.Post("applications", args);
+        public async Task<(int, string)>CreateApplication(Application application) {
+            return await this.Post2("applications", application);
         }
 
         // UpdateApplication using the given API token, application id and args

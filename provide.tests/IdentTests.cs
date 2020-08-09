@@ -29,6 +29,7 @@ namespace provide.tests
             var res = await ident.CreateUser(user);
         }
 
+
         [Fact]
         public async void TestCreateOrganization()
         {
@@ -40,6 +41,19 @@ namespace provide.tests
             var ident = new Ident(authResponse.Token.Token);
             // check error: unable to assert arbitrary org permissions
             var res = await ident.CreateOrganization(organization);
+        }
+
+        [Fact]
+        public async void TestCreateApplication() 
+        {
+            var authResponse = await Ident.Authenticate("user@prvd.local", "testp455");
+            var application = new Application 
+            {
+                Name = "test application"
+            };
+            var ident = new Ident(authResponse.Token.Token);
+
+            var res = await ident.CreateApplication(application);
         }
     }
 }
