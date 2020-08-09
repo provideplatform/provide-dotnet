@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using provide.Model.Ident;
 
 namespace provide
 {
@@ -132,6 +133,11 @@ namespace provide
         // CreateUser creates a new user for which API tokens and managed signing identities can be authorized
         public async Task<(int, string)>CreateUser(Dictionary<string, object> args) {
             return await this.Post("users", args);
+        }
+
+        // Tmp refactoring method, same as create user but with type instead of dict
+        public async Task<(int, string)>CreateUser2(User user) {
+            return await this.Post2("users", user);
         }
 
         // ListUsers retrieves a paginated list of users scoped to the given API token

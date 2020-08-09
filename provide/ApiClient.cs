@@ -8,6 +8,8 @@ using System.Text;
 using System.Threading.Tasks;
 
 using Newtonsoft.Json;
+using Newtonsoft.Json.Serialization;
+using provide.Model;
 
 namespace provide
 {
@@ -67,6 +69,8 @@ namespace provide
                 req.Headers.Authorization = new AuthenticationHeaderValue("bearer", token);
             }
 
+            var tmp = JsonConvert.SerializeObject(args);
+
             if (mthd == "POST" || mthd == "PUT") {
                 req.Content = new StringContent(JsonConvert.SerializeObject(args), Encoding.UTF8, "application/json");
             }
@@ -102,12 +106,93 @@ namespace provide
             return (-1, null);
         }
 
+
+        // Tmp refactoring method, same as send request but with type instead of dict
+        private async Task<(int, string)> SendRequest2(string method, string url, BaseModel reqObj)
+        {
+            var uri = new UriBuilder(url);
+            var req = CreateRequestMessage(method, reqObj, uri);
+
+            HttpResponseMessage res = null;
+            HttpContent content = null;
+
+            try
+            {
+                res = await client.SendAsync(req);
+                content = res.Content;
+                res.EnsureSuccessStatusCode();
+                var raw = await content.ReadAsByteArrayAsync();
+                var str = System.Text.Encoding.Default.GetString(raw);
+                return ((int)res.StatusCode, str);
+            }
+            catch (Exception e)
+            {
+                System.Diagnostics.Debug.WriteLine("Failed to complete API {0} request to {1}; {2}", method, uri.ToString(), e);
+
+                if (res != null)
+                {
+                    byte[] raw;
+                    if (content != null)
+                    {
+                        raw = await content.ReadAsByteArrayAsync();
+                        var str = System.Text.Encoding.Default.GetString(raw);
+                        return ((int)res.StatusCode, str);
+                    }
+                    return ((int)res.StatusCode, null);
+                }
+            }
+            finally
+            {
+                // if (content != null) {
+                //     content.Dispose();
+                // }
+            }
+
+            return (-1, null);
+        }
+
+        private HttpRequestMessage CreateRequestMessage(string method, BaseModel reqObj, UriBuilder uri)
+        {
+            var mthd = method.ToUpper();
+
+            // if (mthd == "GET" && args != null) {
+            //     uri.Query = string.Join("&", args.Select(kvp => string.Format("{0}={1}", kvp.Key, kvp.Value)));
+            // }
+
+            var req = new HttpRequestMessage(new HttpMethod(mthd), uri.ToString());
+            if (token != null)
+            {
+                req.Headers.Authorization = new AuthenticationHeaderValue("bearer", token);
+            }
+
+            var serializedObj = JsonConvert.SerializeObject(reqObj, new JsonSerializerSettings
+            {
+                ContractResolver = new DefaultContractResolver
+                {
+                    NamingStrategy = new SnakeCaseNamingStrategy()
+                },
+                Formatting = Formatting.Indented
+            });
+
+            if (mthd == "POST" || mthd == "PUT")
+            {
+                req.Content = new StringContent(serializedObj, Encoding.UTF8, "application/json");
+            }
+
+            return req;
+        }
+
         public async Task<(int, string)> Get(string uri, Dictionary<string, object> args) {
             return await this.sendRequest("GET", buildUrl(uri), args);
         }
 
         public async Task<(int, string)> Post(string uri, Dictionary<string, object> args) {
             return await this.sendRequest("POST", buildUrl(uri), args);
+        }
+
+        // Tmp refactoring method, same as post but with type instead of dict
+        public async Task<(int, string)> Post2(string uri, BaseModel reqObj) {
+            return await this.SendRequest2("POST", buildUrl(uri), reqObj);
         }
 
         public async Task<(int, string)> Put(string uri, Dictionary<string, object> args) {
