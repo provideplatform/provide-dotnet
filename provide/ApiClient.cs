@@ -69,8 +69,6 @@ namespace provide
                 req.Headers.Authorization = new AuthenticationHeaderValue("bearer", token);
             }
 
-            var tmp = JsonConvert.SerializeObject(args);
-
             if (mthd == "POST" || mthd == "PUT") {
                 req.Content = new StringContent(JsonConvert.SerializeObject(args), Encoding.UTF8, "application/json");
             }
