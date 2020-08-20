@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using Newtonsoft.Json;
+using provide.Model;
 using provide.Model.Ident;
 
 namespace provide
@@ -56,9 +57,9 @@ namespace provide
         }
 
         // CreateApplication on behalf of the given API token
-        public async Task<(int, string)>CreateApplication(Application application) {
-            return await this.Post2("applications", application);
-        }
+        // public async Task<(int, string)>CreateApplication(Application application) {
+        //     return await this.Post2("applications", application);
+        // }
 
         // UpdateApplication using the given API token, application id and args
         public async Task<(int, string)>UpdateApplication(string applicationID, Dictionary<string, object> args) {
@@ -90,9 +91,9 @@ namespace provide
         }
 
         // CreateOrganization on behalf of the given user
-        public async Task<(int, string)>CreateOrganization(Organization organization) {
-            return await this.Post2("organizations", organization);
-        }
+        // public async Task<(int, string)>CreateOrganization(Organization organization) {
+        //     var res = await this.Post2("organizations", organization);
+        // }
 
         // UpdateOrganization using the given API token, organization id and args
         public async Task<(int, string)>UpdateOrganization(string organizationID, Dictionary<string, object> args) {
@@ -134,8 +135,8 @@ namespace provide
         }
 
         // CreateUser creates a new user for which API tokens and managed signing identities can be authorized
-        public async Task<(int, string)>CreateUser(User user) {
-            return await this.Post2("users", user);
+        public async Task<BaseModel>CreateUser(User user) {
+            return await this.Post2<User>("users", user);
         }
 
         // ListUsers retrieves a paginated list of users scoped to the given API token

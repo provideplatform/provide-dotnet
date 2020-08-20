@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.IdentityModel.Tokens.Jwt;
 using System.Linq;
+using System.Net;
 using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Text;
@@ -10,6 +11,7 @@ using System.Web;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Serialization;
 using provide.Model;
+using provide.Model.Client;
 
 namespace provide
 {
@@ -107,7 +109,7 @@ namespace provide
 
         // Tmp refactoring method, same as send request but with type instead of dict
         // this will be main send request method at the end
-        private async Task<(int, string)> SendRequest2(string method, string url, BaseModel reqObj)
+        private async Task<BaseModel> SendRequest2<T>(string method, string url, BaseModel reqObj) where T: BaseModel
         {
             var uri = new UriBuilder(url);
             var req = CreateRequestMessage(method, reqObj, uri);
@@ -122,7 +124,7 @@ namespace provide
                 res.EnsureSuccessStatusCode();
                 var raw = await content.ReadAsByteArrayAsync();
                 var str = System.Text.Encoding.Default.GetString(raw);
-                return ((int)res.StatusCode, str);
+                return JsonConvert.DeserializeObject<T>(str);
             }
             catch (Exception e)
             {
@@ -130,14 +132,7 @@ namespace provide
 
                 if (res != null)
                 {
-                    byte[] raw;
-                    if (content != null)
-                    {
-                        raw = await content.ReadAsByteArrayAsync();
-                        var str = System.Text.Encoding.Default.GetString(raw);
-                        return ((int)res.StatusCode, str);
-                    }
-                    return ((int)res.StatusCode, null);
+                    return await CreateErrorResponse(content, res.StatusCode);
                 }
             }
             finally
@@ -146,8 +141,24 @@ namespace provide
                 //     content.Dispose();
                 // }
             }
-
-            return (-1, null);
+            return new BaseModel();
+        }
+        
+        private async Task<BaseModel> CreateErrorResponse(HttpContent content, HttpStatusCode statusCode)
+        {
+            if (content == null)
+            {
+                return new BaseModel();
+            }
+            var raw = await content.ReadAsByteArrayAsync();
+            var str = System.Text.Encoding.Default.GetString(raw);
+            // error content is either error array or single message
+            var errorResponse = JsonConvert.DeserializeObject<ErrorResponse>(str);
+            return new BaseModel
+            {
+                Errors = errorResponse.Errors,
+                Message = errorResponse.Message,
+            };
         }
 
         private HttpRequestMessage CreateRequestMessage(string method, BaseModel reqObj, UriBuilder uri)
@@ -204,8 +215,8 @@ namespace provide
         }
 
         // Tmp refactoring method, same as post but with type instead of dict
-        public async Task<(int, string)> Post2(string uri, BaseModel reqObj) {
-            return await this.SendRequest2("POST", buildUrl(uri), reqObj);
+        public async Task<BaseModel> Post2<T>(string uri, BaseModel reqObj) where T: BaseModel {
+            return await this.SendRequest2<T>("POST", buildUrl(uri), reqObj);
         }
 
         public async Task<(int, string)> Put(string uri, Dictionary<string, object> args) {
