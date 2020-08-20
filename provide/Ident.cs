@@ -47,19 +47,14 @@ namespace provide
         }
 
         // Authenticate a user by email address and password, returning a newly-authorized API token
-        public static async Task<AuthResponse> Authenticate(string email, string passwd) {
-            var response = await InitIdent(null).Post("authenticate", new Dictionary<string, object> {
-                { "email", email },
-                { "password", passwd }
-            });
-            // TODO: error handling
-            return JsonConvert.DeserializeObject<AuthResponse>(response.Item2);
+        public static async Task<BaseModel> Authenticate(Auth auth) {
+            return await InitIdent(null).Post2<AuthResponse>("authenticate", auth);
         }
 
         // CreateApplication on behalf of the given API token
-        // public async Task<(int, string)>CreateApplication(Application application) {
-        //     return await this.Post2("applications", application);
-        // }
+        public async Task<BaseModel>CreateApplication(Application application) {
+            return await this.Post2<Application>("applications", application);
+        }
 
         // UpdateApplication using the given API token, application id and args
         public async Task<(int, string)>UpdateApplication(string applicationID, Dictionary<string, object> args) {
@@ -91,9 +86,9 @@ namespace provide
         }
 
         // CreateOrganization on behalf of the given user
-        // public async Task<(int, string)>CreateOrganization(Organization organization) {
-        //     var res = await this.Post2("organizations", organization);
-        // }
+        public async Task<BaseModel>CreateOrganization(Organization organization) {
+            return await this.Post2<Organization>("organizations", organization);
+        }
 
         // UpdateOrganization using the given API token, organization id and args
         public async Task<(int, string)>UpdateOrganization(string organizationID, Dictionary<string, object> args) {
