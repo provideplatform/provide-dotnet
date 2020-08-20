@@ -1,10 +1,12 @@
+using System;
+
 namespace provide.Model.GoldMine
 {
     public class Wallet: BaseModel
     {
-        public string WalletId { get; set; }
-        public string ApplicationId  { get; set; }
-        public string UserId  { get; set; }
+        public Guid WalletId { get; set; }
+        public Guid ApplicationId  { get; set; }
+        public Guid UserId  { get; set; }
         public string Path  { get; set; }
         public int? Purpose  { get; set; }
         public string Mnemonic  { get; set; }

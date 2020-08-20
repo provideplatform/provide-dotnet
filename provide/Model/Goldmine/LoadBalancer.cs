@@ -1,11 +1,12 @@
+using System;
 using System.Collections.Generic;
 
 namespace provide.Model.GoldMine
 {
     public class LoadBalancer: BaseModel
     {
-        public string NetworkId { get; set; }
-        public string ApplicationId { get; set; }
+        public Guid NetworkId { get; set; }
+        public Guid ApplicationId { get; set; }
         public string Name { get; set; }
         public string Type { get; set; }
         public string Host { get; set; }

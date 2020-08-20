@@ -1,8 +1,10 @@
+using System;
+
 namespace provide.Model.Vault
 {
     public class Key: BaseModel
     {
-        public string VaultId { get; set; }
+        public Guid VaultId { get; set; }
         public string Type { get; set; }
         public string Name { get; set; }
         public string Description { get; set; }
