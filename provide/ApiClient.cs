@@ -109,7 +109,7 @@ namespace provide
 
         // Tmp refactoring method, same as send request but with type instead of dict
         // this will be main send request method at the end
-        private async Task<BaseModel> SendRequest2<T>(string method, string url, BaseModel reqObj) where T: BaseModel
+        private async Task<ProvideResponse> SendRequest2<T>(string method, string url, BaseModel reqObj) where T: ProvideResponse
         {
             var uri = new UriBuilder(url);
             var req = CreateRequestMessage(method, reqObj, uri);
@@ -141,20 +141,20 @@ namespace provide
                 //     content.Dispose();
                 // }
             }
-            return new BaseModel();
+            return new ProvideResponse();
         }
         
-        private async Task<BaseModel> CreateErrorResponse(HttpContent content, HttpStatusCode statusCode)
+        private async Task<ProvideResponse> CreateErrorResponse(HttpContent content, HttpStatusCode statusCode)
         {
             if (content == null)
             {
-                return new BaseModel();
+                return new ProvideResponse();
             }
             var raw = await content.ReadAsByteArrayAsync();
             var str = System.Text.Encoding.Default.GetString(raw);
             // error content is either error array or single message
             var errorResponse = JsonConvert.DeserializeObject<ErrorResponse>(str);
-            return new BaseModel
+            return new ProvideResponse
             {
                 Errors = errorResponse.Errors,
                 Message = errorResponse.Message,
@@ -215,7 +215,7 @@ namespace provide
         }
 
         // Tmp refactoring method, same as post but with type instead of dict
-        public async Task<BaseModel> Post2<T>(string uri, BaseModel reqObj) where T: BaseModel {
+        public async Task<ProvideResponse> Post2<T>(string uri, BaseModel reqObj) where T: ProvideResponse {
             return await this.SendRequest2<T>("POST", buildUrl(uri), reqObj);
         }
 

@@ -1,8 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
-using Newtonsoft.Json;
-using provide.Model;
+using provide.Model.Client;
 using provide.Model.Ident;
 
 namespace provide
@@ -47,13 +46,13 @@ namespace provide
         }
 
         // Authenticate a user by email address and password, returning a newly-authorized API token
-        public static async Task<BaseModel> Authenticate(Auth auth) {
+        public static async Task<ProvideResponse> Authenticate(Auth auth) {
             return await InitIdent(null).Post2<AuthResponse>("authenticate", auth);
         }
 
         // CreateApplication on behalf of the given API token
-        public async Task<BaseModel>CreateApplication(Application application) {
-            return await this.Post2<Application>("applications", application);
+        public async Task<ProvideResponse>CreateApplication(Application application) {
+            return await this.Post2<ApplicationResponse>("applications", application);
         }
 
         // UpdateApplication using the given API token, application id and args
@@ -86,9 +85,9 @@ namespace provide
         }
 
         // CreateOrganization on behalf of the given user
-        public async Task<BaseModel>CreateOrganization(Organization organization) {
-            return await this.Post2<Organization>("organizations", organization);
-        }
+        // public async Task<BaseModel>CreateOrganization(Organization organization) {
+        //     return await this.Post2<Organization>("organizations", organization);
+        // }
 
         // UpdateOrganization using the given API token, organization id and args
         public async Task<(int, string)>UpdateOrganization(string organizationID, Dictionary<string, object> args) {
@@ -130,9 +129,9 @@ namespace provide
         }
 
         // CreateUser creates a new user for which API tokens and managed signing identities can be authorized
-        public async Task<BaseModel>CreateUser(User user) {
-            return await this.Post2<User>("users", user);
-        }
+        // public async Task<BaseModel>CreateUser(User user) {
+        //     return await this.Post2<User>("users", user);
+        // }
 
         // ListUsers retrieves a paginated list of users scoped to the given API token
         public async Task<(int, string)>ListUsers(Dictionary<string, object> args) {
