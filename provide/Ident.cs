@@ -86,9 +86,9 @@ namespace provide
         }
 
         // CreateOrganization on behalf of the given user
-        // public async Task<BaseModel>CreateOrganization(Organization organization) {
-        //     return await this.Post2<Organization>("organizations", organization);
-        // }
+        public async Task<Organization>CreateOrganization(Organization organization) {
+            return await this.Post2<Organization>("organizations", organization);
+        }
 
         // UpdateOrganization using the given API token, organization id and args
         public async Task<(int, string)>UpdateOrganization(string organizationID, Dictionary<string, object> args) {
@@ -130,9 +130,9 @@ namespace provide
         }
 
         // CreateUser creates a new user for which API tokens and managed signing identities can be authorized
-        // public async Task<BaseModel>CreateUser(User user) {
-        //     return await this.Post2<User>("users", user);
-        // }
+        public async Task<User>CreateUser(User user) {
+            return await this.Post2<User>("users", user);
+        }
 
         // ListUsers retrieves a paginated list of users scoped to the given API token
         public async Task<(int, string)>ListUsers(Dictionary<string, object> args) {

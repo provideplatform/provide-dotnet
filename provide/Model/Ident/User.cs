@@ -4,7 +4,7 @@ namespace provide.Model.Ident
 {
     public class User : BaseModel
     {
-        public Guid? ApplicationId { get; set; }
+        public Guid ApplicationId { get; set; }
         public string Name { get; set; }
         public string FirstName { get; set; }
         public string LastName { get; set; }

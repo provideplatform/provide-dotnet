@@ -12,6 +12,7 @@ using Newtonsoft.Json;
 using Newtonsoft.Json.Serialization;
 using provide.Model;
 using provide.Model.Client;
+using provide.Model.Client.ProvideError;
 using provide.Model.Ident;
 
 namespace provide
@@ -110,7 +111,7 @@ namespace provide
 
         // Tmp refactoring method, same as send request but with type instead of dict
         // this will be main send request method at the end
-        private async Task<ProvideResponse> SendRequest2<T>(string method, string url, BaseModel reqObj) where T: ProvideResponse
+        private async Task<T> SendRequest2<T>(string method, string url, BaseModel reqObj)
         {
             var uri = new UriBuilder(url);
             var req = CreateRequestMessage(method, reqObj, uri);
@@ -134,7 +135,7 @@ namespace provide
 
                 if (res != null)
                 {
-                    return await CreateErrorResponse(content, res.StatusCode);
+                    await CreateErrorResponse(content, res.StatusCode);
                 }
             }
             finally
@@ -143,24 +144,25 @@ namespace provide
                 //     content.Dispose();
                 // }
             }
-            return new ProvideResponse();
+            return default(T);
         }
         
-        private async Task<ProvideResponse> CreateErrorResponse(HttpContent content, HttpStatusCode statusCode)
+        private async Task CreateErrorResponse(HttpContent content, HttpStatusCode statusCode)
         {
-            if (content == null)
-            {
-                return new ProvideResponse();
-            }
+            // if (content == null)
+            // {
+            //     return new ProvideResponse();
+            // }
             var raw = await content.ReadAsByteArrayAsync();
             var str = System.Text.Encoding.Default.GetString(raw);
             // error content is either error array or single message
+            var test = JsonConvert.DeserializeObject<ProvideError>(str);
             var errorResponse = JsonConvert.DeserializeObject<ErrorResponse>(str);
-            return new ProvideResponse
-            {
-                Errors = errorResponse.Errors,
-                Message = errorResponse.Message,
-            };
+            // return new ProvideResponse
+            // {
+            //     Errors = errorResponse.Errors,
+            //     Message = errorResponse.Message,
+            // };
         }
 
         private HttpRequestMessage CreateRequestMessage(string method, BaseModel reqObj, UriBuilder uri)
@@ -221,7 +223,7 @@ namespace provide
         }
 
         // Tmp refactoring method, same as post but with type instead of dict
-        public async Task<ProvideResponse> Post2<T>(string uri, BaseModel reqObj) where T: ProvideResponse {
+        public async Task<T> Post2<T>(string uri, BaseModel reqObj) {
             return await this.SendRequest2<T>("POST", buildUrl(uri), reqObj);
         }
 

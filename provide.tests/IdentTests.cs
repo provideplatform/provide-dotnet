@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using provide.Model.Client;
@@ -27,33 +28,33 @@ namespace provide.tests
             return new Ident((authResponse as AuthResponse).Token.Token);
         }
 
-        // [Fact]
-        // public async void TestCreateUser() 
-        // {
-        //     var ident = Ident.InitIdent("");
-        //     var user = new User
-        //     {
-        //         Email = "user-test@prvd.local",
-        //         Password = "testp455",
-        //         FirstName = "Prvd",
-        //         LastName = "User"
-        //     };
+        [Fact]
+        public async void TestCreateUser() 
+        {
+            var ident = Ident.InitIdent("");
+            var user = new User
+            {
+                Email = "user-test-2@prvd.local",
+                Password = "testp455",
+                FirstName = "Prvd",
+                LastName = "User"
+            };
 
-        //     var res = await ident.CreateUser(user);
-        // }
+            var res = await ident.CreateUser(user);
+        }
 
 
-        // [Fact]
-        // public async void TestCreateOrganization()
-        // {
-        //     var ident = await CreateIdentForTestUser();
-        //     var organization = new Organization 
-        //     {
-        //         Name = "test organization"
-        //     };
-        //     // check error: unable to assert arbitrary org permissions
-        //     var res = await ident.CreateOrganization(organization);
-        // }
+        [Fact]
+        public async void TestCreateOrganization()
+        {
+            var ident = await CreateIdentForTestUser();
+            var organization = new Organization 
+            {
+                Name = "test organization"
+            };
+            // check error: unable to assert arbitrary org permissions
+            var res = await ident.CreateOrganization(organization);
+        }
 
         [Fact]
         public async void TestCreateApplication() 
@@ -74,7 +75,7 @@ namespace provide.tests
             // TODO: checks args for list methods
             var res = await ident.ListApplications(new Application()) as ProvideGetListResponse<Application>;
 
-            var resId = res.ResponseList[0].Id;
+            var resId = Guid.NewGuid();
 
             var res2 = await ident.GetApplicationDetails(resId, new Application());
         }
