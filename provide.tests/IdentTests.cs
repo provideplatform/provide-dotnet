@@ -72,7 +72,11 @@ namespace provide.tests
         {
             var ident = await CreateIdentForTestUser();
             // TODO: checks args for list methods
-            var res = await ident.ListApplications(new Dictionary<string, object>{});
+            var res = await ident.ListApplications(new Application()) as ProvideGetListResponse<Application>;
+
+            var resId = res.ResponseList[0].Id;
+
+            var res2 = await ident.GetApplicationDetails(resId, new Application());
         }
     }
 }

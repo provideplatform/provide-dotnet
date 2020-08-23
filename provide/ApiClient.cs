@@ -12,6 +12,7 @@ using Newtonsoft.Json;
 using Newtonsoft.Json.Serialization;
 using provide.Model;
 using provide.Model.Client;
+using provide.Model.Ident;
 
 namespace provide
 {
@@ -124,6 +125,7 @@ namespace provide
                 res.EnsureSuccessStatusCode();
                 var raw = await content.ReadAsByteArrayAsync();
                 var str = System.Text.Encoding.Default.GetString(raw);
+               
                 return JsonConvert.DeserializeObject<T>(str);
             }
             catch (Exception e)
@@ -212,6 +214,10 @@ namespace provide
 
         public async Task<(int, string)> Post(string uri, Dictionary<string, object> args) {
             return await this.sendRequest("POST", buildUrl(uri), args);
+        }
+
+        public async Task<ProvideResponse> Get2<T>(string uri, BaseModel reqObj) where T: ProvideResponse {
+            return await this.SendRequest2<T>("GET", buildUrl(uri), reqObj);
         }
 
         // Tmp refactoring method, same as post but with type instead of dict

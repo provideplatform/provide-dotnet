@@ -62,14 +62,15 @@ namespace provide
         }
 
         // ListApplications retrieves a paginated list of applications scoped to the given API token
-        public async Task<(int, string)>ListApplications(Dictionary<string, object> args) {
-            return await this.Get("applications", args);
+        public async Task<ProvideResponse>ListApplications(Application application)
+        {
+            return await this.Get2<ProvideGetListResponse<Application>>("applications", application);
         }
 
         // GetApplicationDetails retrives application details for the given API token and application id
-        public async Task<(int, string)>GetApplicationDetails(string applicationID, Dictionary<string, object> args) {
+        public async Task<ProvideResponse>GetApplicationDetails(Guid applicationID, Application application) {
             var uri = String.Format("applications/{0}", applicationID);
-            return await this.Get(uri, args);
+            return await this.Get2<ProvideGetResponse<Application>>(uri, application);
         }
 
         // ListApplicationTokens retrieves a paginated list of application API tokens
