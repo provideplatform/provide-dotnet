@@ -13,7 +13,6 @@ using Newtonsoft.Json.Serialization;
 using provide.Model;
 using provide.Model.Client;
 using provide.Model.Client.ProvideError;
-using provide.Model.Ident;
 
 namespace provide
 {
@@ -214,7 +213,7 @@ namespace provide
             return await this.sendRequest("POST", buildUrl(uri), args);
         }
 
-        public async Task<ProvideResponse> Get2<T>(string uri, BaseModel reqObj) where T: ProvideResponse {
+        public async Task<T> Get2<T>(string uri, BaseModel reqObj) {
             return await this.SendRequest2<T>("GET", buildUrl(uri), reqObj);
         }
 

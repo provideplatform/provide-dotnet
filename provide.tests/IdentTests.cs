@@ -23,7 +23,7 @@ namespace provide.tests
                 { 
                     Email = "user@prvd.local",
                     Password = "testp455"
-                }) as AuthResponse;
+                });
             return new Ident((authResponse as AuthResponse).Token.Token);
         }
 
@@ -72,11 +72,9 @@ namespace provide.tests
         {
             var ident = await CreateIdentForTestUser();
             // TODO: checks args for list methods
-            var res = await ident.ListApplications(new Application()) as ProvideGetListResponse<Application>;
+            var res = await ident.ListApplications(new Application());
 
-            var resId = Guid.NewGuid();
-
-            var res2 = await ident.GetApplicationDetails(resId, new Application());
+            var res2 = await ident.GetApplicationDetails(res[0].Id, new Application());
         }
     }
 }
