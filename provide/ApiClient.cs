@@ -133,9 +133,15 @@ namespace provide
             {
                 System.Diagnostics.Debug.WriteLine("Failed to complete API {0} request to {1}; {2}", method, uri.ToString(), e);
 
+                // TODO: is this neccessary?
+                if (content == null)
+                {
+                    return default(T);
+                }
+
                 if (res != null)
                 {
-                    await CreateErrorResponse(content, res.StatusCode);
+                    await ThrowErrorException(content, res.StatusCode);
                 }
             }
             finally
@@ -144,25 +150,15 @@ namespace provide
                 //     content.Dispose();
                 // }
             }
+            // This should not execute?
             return default(T);
         }
         
-        private async Task CreateErrorResponse(HttpContent content, HttpStatusCode statusCode)
+        private async Task ThrowErrorException(HttpContent content, HttpStatusCode statusCode)
         {
-            // if (content == null)
-            // {
-            //     return new ProvideResponse();
-            // }
             var raw = await content.ReadAsByteArrayAsync();
             var str = System.Text.Encoding.Default.GetString(raw);
-            // error content is either error array or single message
-            var test = JsonConvert.DeserializeObject<ProvideError>(str);
-            var errorResponse = JsonConvert.DeserializeObject<ErrorResponse>(str);
-            // return new ProvideResponse
-            // {
-            //     Errors = errorResponse.Errors,
-            //     Message = errorResponse.Message,
-            // };
+            throw ProvideException.CreateException(str, statusCode);
         }
 
         private HttpRequestMessage CreateRequestMessage(string method, BaseModel reqObj, UriBuilder uri)
