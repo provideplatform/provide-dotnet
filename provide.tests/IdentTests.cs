@@ -24,7 +24,7 @@ namespace provide.tests
                     Email = "user@prvd.local",
                     Password = "testp455"
                 });
-            return new Ident((authResponse as AuthResponse).Token.Token);
+            return new Ident(authResponse.Token.Token);
         }
 
         [Fact]
@@ -33,7 +33,7 @@ namespace provide.tests
             var ident = Ident.InitIdent("");
             var user = new User
             {
-                Email = "user-test-2@prvd.local",
+                Email = "user@prvd.local",
                 Password = "testp455",
                 FirstName = "Prvd",
                 LastName = "User"
@@ -52,6 +52,7 @@ namespace provide.tests
                 Name = "test organization"
             };
             // check error: unable to assert arbitrary org permissions
+            // don't send permission
             var res = await ident.CreateOrganization(organization);
         }
 

@@ -10,6 +10,7 @@ namespace provide.Model.Ident
         public string IssuedAt { get; set; } 
         public string ExpiresAt { get; set; } 
         public string Subject { get; set; } 
+        // prvd and nats
         public int Permissions { get; set; }
     }
 }
