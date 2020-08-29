@@ -4,12 +4,12 @@ using System.Threading.Tasks;
 
 namespace provide
 {
-    public class Goldmine: ApiClient
+    public class NChain: ApiClient
     {
-        public Goldmine(string token) : base(token) {}
+        public NChain(string token) : base(token) {}
 
-        public Goldmine InitGoldmine(string token) {
-            return new Goldmine(token);
+        public NChain InitNChain(string token) {
+            return new NChain(token);
         }
 
         // CreateAccount

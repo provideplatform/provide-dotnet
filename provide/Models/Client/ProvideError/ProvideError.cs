@@ -1,11 +1,12 @@
 using Newtonsoft.Json;
+using provide.Model;
 
 namespace provide.Model.Client.ProvideError
 {
     [JsonConverter(typeof(ProvideErrorConverter))]
     public class ProvideError
     {
-        public Error[] Errors { get; set; }
+        public ProvideError[] Errors { get; set; }
 
         public static ProvideError FormatError(string content)
         {
@@ -15,7 +16,7 @@ namespace provide.Model.Client.ProvideError
             }
             catch (JsonException)
             {
-                Error[] errors = { new Error { Message = content }};
+                ProvideError[] errors = { new ProvideError()} ;
                 return new ProvideError
                 {
                     Errors = errors

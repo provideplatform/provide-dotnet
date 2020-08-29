@@ -11,7 +11,6 @@ using System.Web;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Serialization;
 using provide.Model;
-using provide.Model.Client;
 using provide.Model.Client.ProvideError;
 
 namespace provide

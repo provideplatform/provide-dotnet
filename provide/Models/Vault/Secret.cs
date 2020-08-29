@@ -1,3 +1,4 @@
+using provide.Model;
 using System;
 
 namespace provide.Model.Vault

@@ -14,7 +14,7 @@ namespace provide.Model.Client.ProvideError
         }
 
         public ProvideException(HttpStatusCode statusCode, ProvideError apiError = null)
-            : this(apiError == null ? statusCode.ToString() : apiError.Errors[0].Message)
+            : this(apiError == null ? statusCode.ToString() : apiError.Errors[0].ToString())
         {
             StatusCode = statusCode;
             ProvideError = apiError;

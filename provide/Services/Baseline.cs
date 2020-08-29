@@ -9,17 +9,17 @@ namespace provide
 {
     public class Baseline
     {
-        const string CONNECTOR_TYPE_INVALID_MESSAGE = "Invalid Goldmine connector type -- only the 'baseline' connector is supported";
-        const string CONNECTOR_UNRESOLVED_MESSAGE = "Unable to resolve Goldmine connector without a configured GOLDMINE_CONNECTOR_ID environment variable or a connector_id within the signed JWT app claims";
-        const string CONNECTOR_ID_ENVIRONMENT_VAR = "GOLDMINE_CONNECTOR_ID";
+        const string CONNECTOR_TYPE_INVALID_MESSAGE = "Invalid NChain connector type -- only the 'baseline' connector is supported";
+        const string CONNECTOR_UNRESOLVED_MESSAGE = "Unable to resolve NChain connector without a configured NCHAIN_CONNECTOR_ID environment variable or a connector_id within the signed JWT app claims";
+        const string CONNECTOR_ID_ENVIRONMENT_VAR = "NCHAIN_CONNECTOR_ID";
 
         private Ident ident;
-        private Goldmine goldmine;
+        private NChain nchain;
         private string connectorID;
 
         public Baseline(string token) {
             this.ident = new Ident(token);
-            this.goldmine = new Goldmine(token);
+            this.nchain = new NChain(token);
             this.resolveConnector(token);
         }
 
@@ -45,7 +45,7 @@ namespace provide
                 throw new ApplicationException(CONNECTOR_UNRESOLVED_MESSAGE);
             }
 
-            var task = this.goldmine.GetConnectorDetails(this.connectorID, new Dictionary<string, object> {});
+            var task = this.nchain.GetConnectorDetails(this.connectorID, new Dictionary<string, object> {});
             var awaiter = task.GetAwaiter();
             task.Wait();
 
@@ -66,7 +66,7 @@ namespace provide
         // CreateAgreement creates a new agreement and sends it to the named recipients; a witness is calculated
         // using a generic zkSNARK agreement circuit at this time but a specific circuit may be specified in the future.
         public async Task<(int, string)> CreateAgreement(Dictionary<string, object> args, string[] recipients) {
-            return await this.goldmine.CreateConnectedEntity(this.connectorID, new Dictionary<string, object> {
+            return await this.nchain.CreateConnectedEntity(this.connectorID, new Dictionary<string, object> {
                 { "payload", args },
                 { "recipients", recipients }
             });
@@ -74,18 +74,18 @@ namespace provide
 
         // UpdateAgreement attempts to updates an in-progress Baseline agreement.
         public async Task<(int, string)> UpdateAgreement(string entityID, Dictionary<string, object> args) {
-            return await this.goldmine.UpdateConnectedEntity(this.connectorID, entityID, args);
+            return await this.nchain.UpdateConnectedEntity(this.connectorID, entityID, args);
         }
 
         // GetAgreement retrieves a specific Baseline agreement by id.
         public async Task<(int, string)> GetAgreement(string entityID, Dictionary<string, object> args) {
-            return await this.goldmine.GetConnectedEntityDetails(this.connectorID, entityID, args);
+            return await this.nchain.GetConnectedEntityDetails(this.connectorID, entityID, args);
         }
 
         // ListAgreements retrieves a list of in-progress or previously completed Baseline agreement instances
         // which match the given query params.
         public async Task<(int, string)> ListAgreements(Dictionary<string, object> args) {
-            return await this.goldmine.ListConnectedEntities(this.connectorID, args);
+            return await this.nchain.ListConnectedEntities(this.connectorID, args);
         }
     }
 }

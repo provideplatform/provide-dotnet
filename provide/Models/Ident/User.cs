@@ -15,4 +15,3 @@ namespace provide.Model.Ident
         public string TermsOfServiceAgreedAt { get; set; }
     }
 }
-

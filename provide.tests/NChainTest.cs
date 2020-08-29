@@ -1,10 +1,10 @@
-using System.Threading.Tasks;
 using provide.Model.Ident;
+using System.Threading.Tasks;
 using Xunit;
 
 namespace provide.tests
 {
-    public class GoldmineTest
+    public class NChainTest
     {
         private async Task<string> CreateIdentForTestUser()
         {
@@ -19,10 +19,10 @@ namespace provide.tests
         }
 
         [Fact]
-        public async void TestGoldmine() 
+        public async void TestNChain() 
         {
             var token = await CreateIdentForTestUser();
-            var goldmine = new Goldmine(token);
+            var nchain = new NChain(token);
 
             
         }
