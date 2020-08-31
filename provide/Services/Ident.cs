@@ -55,6 +55,12 @@ namespace provide
             return await InitIdent(null).Post2<AuthResponse>("authenticate", auth);
         }
 
+        // Create a user
+        public static async Task<User> CreateUser(User user)
+        {
+            return await InitIdent(null).Post2<User>("users", user);
+        }
+
         // CreateApplication on behalf of the given API token
         public async Task<ApplicationResponse>CreateApplication(Application application)
         {
@@ -75,7 +81,7 @@ namespace provide
         }
 
         // GetApplicationDetails retrives application details for the given API token and application id
-        public async Task<Application>GetApplicationDetails(Guid applicationID, Application application)
+        public async Task<Application>GetApplicationDetails(Guid? applicationID, Application application)
         {
             var uri = String.Format("applications/{0}", applicationID);
             return await this.Get2<Application>(uri, application);
@@ -148,10 +154,10 @@ namespace provide
         }
 
         // CreateUser creates a new user for which API tokens and managed signing identities can be authorized
-        public async Task<User>CreateUser(User user)
-        {
-            return await this.Post2<User>("users", user);
-        }
+        // public async Task<User>CreateUser(User user)
+        // {
+        //     return await this.Post2<User>("users", user);
+        // }
 
         // ListUsers retrieves a paginated list of users scoped to the given API token
         public async Task<(int, string)>ListUsers(Dictionary<string, object> args)

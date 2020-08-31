@@ -11,7 +11,6 @@ using System.Web;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Serialization;
 using provide.Model;
-using provide.Model.Client.ProvideError;
 
 namespace provide
 {
@@ -109,101 +108,43 @@ namespace provide
 
         // Tmp refactoring method, same as send request but with type instead of dict
         // this will be main send request method at the end
-        private async Task<T> SendRequest2<T>(string method, string url, BaseModel reqObj)
-        {
+        private async Task<T> SendRequest2<T>(string method, string url, BaseModel reqObj) {
             var uri = new UriBuilder(url);
-            var req = CreateRequestMessage(method, reqObj, uri);
+            var req = this.createRequestMessage(method, reqObj, uri);
 
             HttpResponseMessage res = null;
             HttpContent content = null;
 
-            try
-            {
+            try {
                 res = await client.SendAsync(req);
                 content = res.Content;
                 res.EnsureSuccessStatusCode();
                 var raw = await content.ReadAsByteArrayAsync();
                 var str = System.Text.Encoding.Default.GetString(raw);
-               
+
                 return JsonConvert.DeserializeObject<T>(str);
             }
-            catch (Exception e)
-            {
+            catch (Exception e) {
                 System.Diagnostics.Debug.WriteLine("Failed to complete API {0} request to {1}; {2}", method, uri.ToString(), e);
 
                 // TODO: is this neccessary?
-                if (content == null)
-                {
+                if (content == null) {
                     return default(T);
                 }
 
-                if (res != null)
-                {
-                    await ThrowErrorException(content, res.StatusCode);
+                if (res != null) {
+                    await this.throwErrorException(content, res.StatusCode);
                 }
-            }
-            finally
-            {
+            } finally {
                 // if (content != null) {
                 //     content.Dispose();
                 // }
             }
+
             // This should not execute?
             return default(T);
         }
         
-        private async Task ThrowErrorException(HttpContent content, HttpStatusCode statusCode)
-        {
-            var raw = await content.ReadAsByteArrayAsync();
-            var str = System.Text.Encoding.Default.GetString(raw);
-            throw ProvideException.CreateException(str, statusCode);
-        }
-
-        private HttpRequestMessage CreateRequestMessage(string method, BaseModel reqObj, UriBuilder uri)
-        {
-            var mthd = method.ToUpper();
-
-            if (mthd == "GET" && reqObj != null)
-            {
-                uri.Query = CreateQueryString(reqObj);
-            }
-
-            var req = new HttpRequestMessage(new HttpMethod(mthd), uri.ToString());
-            if (token != null)
-            {
-                req.Headers.Authorization = new AuthenticationHeaderValue("bearer", token);
-            }
-
-            var serializedObj = SerializeObject(reqObj);
-
-            if (mthd == "POST" || mthd == "PUT")
-            {
-                req.Content = new StringContent(serializedObj, Encoding.UTF8, "application/json");
-            }
-
-            return req;
-        }
-
-        private string CreateQueryString(BaseModel reqObj)
-        {
-            var json = SerializeObject(reqObj);
-            var dict = JsonConvert.DeserializeObject<IDictionary<string, string>>(json);
-            return string.Join("&", dict.Where(x => !string.IsNullOrEmpty(x.Value))
-                .Select((x => HttpUtility.UrlEncode(x.Key) + "=" + HttpUtility.UrlEncode(x.Value))));
-        }
-
-        private string SerializeObject(BaseModel reqObj)
-        {
-            return JsonConvert.SerializeObject(reqObj, new JsonSerializerSettings
-            {
-                ContractResolver = new DefaultContractResolver
-                {
-                    NamingStrategy = new SnakeCaseNamingStrategy()
-                },
-                Formatting = Formatting.Indented
-            });
-        }
-
         public async Task<(int, string)> Get(string uri, Dictionary<string, object> args) {
             return await this.sendRequest("GET", buildUrl(uri), args);
         }
@@ -237,6 +178,49 @@ namespace provide
                 this.path.TrimStart('/').TrimEnd('/'),
                 uri.TrimStart('/').TrimEnd('/')
             );
+        }
+        
+        private async Task throwErrorException(HttpContent content, HttpStatusCode statusCode) {
+            var raw = await content.ReadAsByteArrayAsync();
+            var str = System.Text.Encoding.Default.GetString(raw);
+            throw new Exception(str);
+        }
+
+        private HttpRequestMessage createRequestMessage(string method, BaseModel model, UriBuilder uri) {
+            var mthd = method.ToUpper();
+
+            if (mthd == "GET" && model != null) {
+                uri.Query = createQueryString(model);
+            }
+
+            var req = new HttpRequestMessage(new HttpMethod(mthd), uri.ToString());
+            if (token != null) {
+                req.Headers.Authorization = new AuthenticationHeaderValue("bearer", token);
+            }
+
+            var serializedObj = serializeObject(model);
+
+            if (mthd == "POST" || mthd == "PUT") {
+                req.Content = new StringContent(serializedObj, Encoding.UTF8, "application/json");
+            }
+
+            return req;
+        }
+
+        private string createQueryString(BaseModel model) {
+            var json = serializeObject(model);
+            var dict = JsonConvert.DeserializeObject<IDictionary<string, string>>(json);
+            return string.Join("&", dict.Where(x => !string.IsNullOrEmpty(x.Value))
+                .Select((x => HttpUtility.UrlEncode(x.Key) + "=" + HttpUtility.UrlEncode(x.Value))));
+        }
+
+        private string serializeObject(BaseModel model) {
+            return JsonConvert.SerializeObject(model, new JsonSerializerSettings {
+                ContractResolver = new DefaultContractResolver {
+                    NamingStrategy = new SnakeCaseNamingStrategy(),
+                },
+                Formatting = Formatting.Indented
+            });
         }
     }
 }

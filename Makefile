@@ -16,6 +16,7 @@ restart: stop start
 
 start:
 	docker-compose up -d --remove-orphans
+	@sleep 3
 
 start-attached:
 	docker-compose up --remove-orphans

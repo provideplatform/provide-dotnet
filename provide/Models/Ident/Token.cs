@@ -1,16 +1,33 @@
-namespace provide.Model.Ident
-{
-    public class JWTToken
-    {
-        public string Token { get; set; } 
-        public string AccessToken { get; set; } 
-        public string Kid { get; set; } 
-        public string Audience { get; set; } 
-        public string Issuer { get; set; } 
-        public string IssuedAt { get; set; } 
-        public string ExpiresAt { get; set; } 
-        public string Subject { get; set; } 
-        // prvd and nats
+using Newtonsoft.Json;
+
+namespace provide.Model.Ident {
+    public class JWTToken {
+    
+        [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
+        public string Token { get; set; }
+
+        [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
+        public string AccessToken { get; set; }
+
+        [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
+        public string Kid { get; set; }
+
+        [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
+        public string Audience { get; set; }
+
+        [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
+        public string Issuer { get; set; }
+
+        [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
+        public string IssuedAt { get; set; }
+
+        [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
+        public string ExpiresAt { get; set; }
+
+        [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
+        public string Subject { get; set; }
+
+        [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
         public int Permissions { get; set; }
     }
 }
