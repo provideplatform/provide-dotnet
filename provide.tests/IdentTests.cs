@@ -6,28 +6,36 @@ using Xunit;
 
 namespace provide.tests
 {
-    public class IdentTest
+    public class IdentFixture: IAsyncLifetime
     {
-
-        private string email;
-        private User user;
-        private Ident ident;
-
-        public IdentTest() {
-            this.createTestInstance();
+        public string email;
+        public User user;
+        public Ident ident;
+        
+        public async Task InitializeAsync()
+        {
+            await this.CreateTestInstance();
         }
 
-        private async Task<User> createUser() {
-            this.email = createUserEmail();
-            this.user = await IdentTest.createTestUser(this.email);
+        public Task DisposeAsync()
+        {
+            return Task.CompletedTask;
+        }
+
+        private async Task<User> CreateUser()
+        {
+            this.email = CreateUserEmail();
+            this.user = await IdentFixture.CreateTestUser(this.email);
             return this.user;
         }
 
-        private string createUserEmail() {
+        private string CreateUserEmail()
+        {
             return String.Format("user{0}@prvd.local", (Int32) (DateTime.UtcNow.Subtract(new DateTime(1970, 1, 1))).TotalSeconds);
         }
 
-        private static async Task<User> createTestUser(string email) {
+        private static async Task<User> CreateTestUser(string email)
+        {
             return await Ident.CreateUser(new User() {
                 FirstName = "Test",
                 LastName = "User",
@@ -36,8 +44,9 @@ namespace provide.tests
             });
         }
 
-        private async void createTestInstance() {
-            await this.createUser();
+        private async Task CreateTestInstance()
+        {
+            await this.CreateUser();
 
             var authResponse = await Ident.Authenticate(
                 new Auth {
@@ -48,7 +57,16 @@ namespace provide.tests
 
             this.ident = new Ident(authResponse.Token.Token);
         }
+    }
 
+    public class IdentTest : IClassFixture<IdentFixture>
+    {
+        private IdentFixture fixture;
+
+        public IdentTest(IdentFixture fixture)
+        {
+            this.fixture = fixture;
+        }
         // [Fact]
         // public void TestIdentJwtInit()
         // {
@@ -59,8 +77,8 @@ namespace provide.tests
         [Fact]
         public void TestCreateUser() 
         {
-            Assert.NotNull(this.user);
-            Assert.Equal(this.user.Email, this.email);
+            Assert.NotNull(this.fixture.user);
+            Assert.Equal(this.fixture.user.Email, this.fixture.email);
         }
 
         [Fact]
@@ -72,7 +90,7 @@ namespace provide.tests
             };
             // check error: unable to assert arbitrary org permissions
             // don't send permission
-            var res = await this.ident.CreateOrganization(organization);
+            var res = await this.fixture.ident.CreateOrganization(organization);
         }
 
         [Fact]
@@ -83,7 +101,7 @@ namespace provide.tests
                 Name = "test application"
             };
 
-            var res = await this.ident.CreateApplication(application);
+            var res = await this.fixture.ident.CreateApplication(application);
             Assert.NotNull(res.Application.Id);
         }
 
@@ -91,8 +109,8 @@ namespace provide.tests
         public async void TestListApplications()
         {
             // TODO: checks args for list methods
-            var res = await this.ident.ListApplications(new Application());
-            var res2 = await this.ident.GetApplicationDetails(res[0].Id, new Application());
+            var res = await this.fixture.ident.ListApplications(new Application());
+            var res2 = await this.fixture.ident.GetApplicationDetails(res[0].Id, new Application());
         }
     }
 }
