@@ -88,9 +88,10 @@ namespace provide
                 content = res.Content;
                 res.EnsureSuccessStatusCode();
                 var raw = await content.ReadAsByteArrayAsync();
-                var str = System.Text.Encoding.Default.GetString(raw);
-
-                return JsonConvert.DeserializeObject<T>(str);
+                if (raw.Length > 0) {
+                    var str = System.Text.Encoding.Default.GetString(raw);
+                    return JsonConvert.DeserializeObject<T>(str);
+                }
             }
             catch (Exception e) {
                 System.Diagnostics.Debug.WriteLine("Failed to complete API {0} request to {1}; {2}", method, uri.ToString(), e);
