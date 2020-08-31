@@ -8,9 +8,11 @@ namespace provide.tests
 {
     public class IdentFixture: IAsyncLifetime
     {
-        public string email;
-        public User user;
-        public Ident ident;
+        public string Email { get; private set; }
+        public User User { get; private set; }
+        public Ident Ident { get; private set; }
+
+        private const string TestUserPwd = "testp4ss";
         
         public async Task InitializeAsync()
         {
@@ -24,9 +26,9 @@ namespace provide.tests
 
         private async Task<User> CreateUser()
         {
-            this.email = CreateUserEmail();
-            this.user = await IdentFixture.CreateTestUser(this.email);
-            return this.user;
+            this.Email = CreateUserEmail();
+            this.User = await IdentFixture.CreateTestUser(this.Email);
+            return this.User;
         }
 
         private string CreateUserEmail()
@@ -40,7 +42,7 @@ namespace provide.tests
                 FirstName = "Test",
                 LastName = "User",
                 Email = email,
-                Password = "testp4ss",
+                Password = TestUserPwd,
             });
         }
 
@@ -50,12 +52,12 @@ namespace provide.tests
 
             var authResponse = await Ident.Authenticate(
                 new Auth {
-                    Email = this.user.Email,
-                    Password = this.user.Password,
+                    Email = this.User.Email,
+                    Password = TestUserPwd,
                 }
             );
 
-            this.ident = new Ident(authResponse.Token.Token);
+            this.Ident = new Ident(authResponse.Token.Token);
         }
     }
 
@@ -77,8 +79,8 @@ namespace provide.tests
         [Fact]
         public void TestCreateUser() 
         {
-            Assert.NotNull(this.fixture.user);
-            Assert.Equal(this.fixture.user.Email, this.fixture.email);
+            Assert.NotNull(this.fixture.User);
+            Assert.Equal(this.fixture.User.Email, this.fixture.Email);
         }
 
         [Fact]
@@ -90,7 +92,7 @@ namespace provide.tests
             };
             // check error: unable to assert arbitrary org permissions
             // don't send permission
-            var res = await this.fixture.ident.CreateOrganization(organization);
+            var res = await this.fixture.Ident.CreateOrganization(organization);
         }
 
         [Fact]
@@ -101,7 +103,7 @@ namespace provide.tests
                 Name = "test application"
             };
 
-            var res = await this.fixture.ident.CreateApplication(application);
+            var res = await this.fixture.Ident.CreateApplication(application);
             Assert.NotNull(res.Application.Id);
         }
 
@@ -109,8 +111,8 @@ namespace provide.tests
         public async void TestListApplications()
         {
             // TODO: checks args for list methods
-            var res = await this.fixture.ident.ListApplications(new Application());
-            var res2 = await this.fixture.ident.GetApplicationDetails(res[0].Id, new Application());
+            var res = await this.fixture.Ident.ListApplications(new Application());
+            var res2 = await this.fixture.Ident.GetApplicationDetails(res[0].Id, new Application());
         }
     }
 }
