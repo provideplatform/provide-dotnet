@@ -18,8 +18,8 @@ namespace provide
         private string connectorID;
 
         public Baseline(string token) {
-            this.ident = new Ident(token);
-            this.nchain = new NChain(token);
+            this.ident = Ident.InitIdent(token);
+            this.nchain =  NChain.InitNChain(token);
             this.resolveConnector(token);
         }
 
