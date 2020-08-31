@@ -52,65 +52,33 @@ namespace provide
             this.token = token;
         }
 
+        public async Task<T> Get<T>(string uri, Dictionary<string, object> args) {
+            return await this.sendRequest<T>("GET", buildUrl(uri), args);
+        }
+
+        public async Task<T> Post<T>(string uri, BaseModel model) {
+            return await this.sendRequest<T>("POST", buildUrl(uri), model);
+        }
+
+        public async Task<T> Put<T>(string uri, BaseModel model) {
+            return await this.sendRequest<T>("PUT", buildUrl(uri), model);
+        }
+
+        public async Task<T> Patch<T>(string uri, BaseModel model) {
+            return await this.sendRequest<T>("PATCH", buildUrl(uri), model);
+        }
+
+        public async Task<T> Delete<T>(string uri) {
+            return await this.sendRequest<T>("DELETE", buildUrl(uri), null);
+        }
+
         public override string ToString() {
             return string.Format("provide.ApiClient {0}://{1}{2}", this.scheme, this.host, this.path);
         }
 
-        private async Task<(int, string)> sendRequest(string method, string url, Dictionary<string, object> args) {
+        private async Task<T> sendRequest<T>(string method, string url, BaseModel model, Dictionary<string, object> query = null) {
             var uri = new UriBuilder(url);
-            var mthd = method.ToUpper();
-
-            if (mthd == "GET" && args != null) {
-                uri.Query = string.Join("&", args.Select(kvp => string.Format("{0}={1}", kvp.Key, kvp.Value)));
-            }
-
-            var req = new HttpRequestMessage(new HttpMethod(mthd), uri.ToString());
-
-            if (token != null) {
-                req.Headers.Authorization = new AuthenticationHeaderValue("bearer", token);
-            }
-
-            if (mthd == "POST" || mthd == "PUT") {
-                req.Content = new StringContent(JsonConvert.SerializeObject(args), Encoding.UTF8, "application/json");
-            }
-
-            HttpResponseMessage res = null;
-            HttpContent content = null;
-
-            try {
-                res = await client.SendAsync(req);
-                content = res.Content;
-                res.EnsureSuccessStatusCode();
-                var raw = await content.ReadAsByteArrayAsync();
-                var str = System.Text.Encoding.Default.GetString(raw);
-                return ((int) res.StatusCode, str);
-            } catch (Exception e) {
-                System.Diagnostics.Debug.WriteLine("Failed to complete API {0} request to {1}; {2}", method, uri.ToString(), e);
-
-                if (res != null) {
-                    byte[] raw;
-                    if (content != null) {
-                        raw = await content.ReadAsByteArrayAsync();
-                        var str = System.Text.Encoding.Default.GetString(raw);
-                        return ((int) res.StatusCode, str);
-                    }
-                    return ((int) res.StatusCode, null);
-                }
-            } finally {
-                // if (content != null) {
-                //     content.Dispose();
-                // }
-            }
-
-            return (-1, null);
-        }
-
-
-        // Tmp refactoring method, same as send request but with type instead of dict
-        // this will be main send request method at the end
-        private async Task<T> SendRequest2<T>(string method, string url, BaseModel reqObj) {
-            var uri = new UriBuilder(url);
-            var req = this.createRequestMessage(method, reqObj, uri);
+            var req = this.createRequestMessage(method, uri, model, query);
 
             HttpResponseMessage res = null;
             HttpContent content = null;
@@ -141,33 +109,7 @@ namespace provide
                 // }
             }
 
-            // This should not execute?
             return default(T);
-        }
-        
-        public async Task<(int, string)> Get(string uri, Dictionary<string, object> args) {
-            return await this.sendRequest("GET", buildUrl(uri), args);
-        }
-
-        public async Task<(int, string)> Post(string uri, Dictionary<string, object> args) {
-            return await this.sendRequest("POST", buildUrl(uri), args);
-        }
-
-        public async Task<T> Get2<T>(string uri, BaseModel reqObj) {
-            return await this.SendRequest2<T>("GET", buildUrl(uri), reqObj);
-        }
-
-        // Tmp refactoring method, same as post but with type instead of dict
-        public async Task<T> Post2<T>(string uri, BaseModel reqObj) {
-            return await this.SendRequest2<T>("POST", buildUrl(uri), reqObj);
-        }
-
-        public async Task<(int, string)> Put(string uri, Dictionary<string, object> args) {
-            return await this.sendRequest("PUT", buildUrl(uri), args);
-        }
-
-        public async Task<(int, string)> Delete(string uri) {
-            return await this.sendRequest("DELETE", buildUrl(uri), null);
         }
 
         private string buildUrl(string uri) {
@@ -179,18 +121,12 @@ namespace provide
                 uri.TrimStart('/').TrimEnd('/')
             );
         }
-        
-        private async Task throwErrorException(HttpContent content, HttpStatusCode statusCode) {
-            var raw = await content.ReadAsByteArrayAsync();
-            var str = System.Text.Encoding.Default.GetString(raw);
-            throw new Exception(str);
-        }
 
-        private HttpRequestMessage createRequestMessage(string method, BaseModel model, UriBuilder uri) {
+        private HttpRequestMessage createRequestMessage(string method, UriBuilder uri, BaseModel model, Dictionary<string, object> query = null) {
             var mthd = method.ToUpper();
 
-            if (mthd == "GET" && model != null) {
-                uri.Query = createQueryString(model);
+            if (mthd == "GET" && query != null) {
+                uri.Query = string.Join("&", query.Select(kvp => string.Format("{0}={1}", kvp.Key, kvp.Value)));
             }
 
             var req = new HttpRequestMessage(new HttpMethod(mthd), uri.ToString());
@@ -198,20 +134,13 @@ namespace provide
                 req.Headers.Authorization = new AuthenticationHeaderValue("bearer", token);
             }
 
-            var serializedObj = serializeObject(model);
+            var serializedObj = this.serializeObject(model);
 
-            if (mthd == "POST" || mthd == "PUT") {
+            if (mthd == "POST" || mthd == "PUT" || mthd == "PATCH") {
                 req.Content = new StringContent(serializedObj, Encoding.UTF8, "application/json");
             }
 
             return req;
-        }
-
-        private string createQueryString(BaseModel model) {
-            var json = serializeObject(model);
-            var dict = JsonConvert.DeserializeObject<IDictionary<string, string>>(json);
-            return string.Join("&", dict.Where(x => !string.IsNullOrEmpty(x.Value))
-                .Select((x => HttpUtility.UrlEncode(x.Key) + "=" + HttpUtility.UrlEncode(x.Value))));
         }
 
         private string serializeObject(BaseModel model) {
@@ -221,6 +150,12 @@ namespace provide
                 },
                 Formatting = Formatting.Indented
             });
+        }
+
+        private async Task throwErrorException(HttpContent content, HttpStatusCode statusCode) {
+            var raw = await content.ReadAsByteArrayAsync();
+            var str = System.Text.Encoding.Default.GetString(raw);
+            throw new Exception(str);
         }
     }
 }
