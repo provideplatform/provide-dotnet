@@ -1,4 +1,4 @@
-namespace provide.Model.GoldMine
+namespace provide.Model.NChain
 {
     public class Message: BaseModel
     {
