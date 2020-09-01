@@ -1,13 +1,19 @@
-using provide.Model;
+using Newtonsoft.Json;
 using System;
 
 namespace provide.Model.Vault
 {
     public class Secret: BaseModel
     {
-        public Guid VaultId { get; set; }
+        [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
+        public Guid? VaultId { get; set; }
+
+        [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
         public string Type { get; set; }
+
+        [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
         public string Name { get; set; }
+
         public string Description { get; set; }
     }
 }
