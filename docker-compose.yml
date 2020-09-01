@@ -131,6 +131,7 @@ services:
       - DATABASE_NAME=ident_dev
       - DATABASE_USER=ident
       - DATABASE_PASSWORD=ident
+      - JWT_AUTHORIZATION_AUDIENCE=http://localhost:8081/api/v1
       - NATS_CLIENT_PREFIX=prvd-ident
       - NATS_URL=nats://prvd-nats:4222
       - NATS_STREAMING_URL=nats://prvd-nats-streaming:4222

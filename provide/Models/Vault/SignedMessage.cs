@@ -4,7 +4,7 @@ namespace provide.Model.Vault
     public class SignedMessage: BaseModel
     {
         public string Message { get; set; }
-        
+
         public string Signature { get; set; }
     }
 }

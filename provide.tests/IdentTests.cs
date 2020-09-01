@@ -14,7 +14,7 @@ namespace provide.tests
         public Ident Ident { get; private set; }
 
         private const string TestUserPwd = "testp4ss";
-        
+    
         public async Task InitializeAsync()
         {
             await this.CreateTestInstance();
@@ -47,7 +47,7 @@ namespace provide.tests
             });
         }
 
-        private async Task CreateTestInstance()
+        public async Task CreateTestInstance()
         {
             await this.CreateUser();
 
@@ -58,7 +58,7 @@ namespace provide.tests
                 }
             );
 
-            this.Ident = new Ident(authResponse.Token.Token);
+            this.Ident = Ident.InitIdent(authResponse.Token.Token);
         }
     }
 
@@ -70,6 +70,7 @@ namespace provide.tests
         {
             this.fixture = fixture;
         }
+
         // [Fact]
         // public void TestIdentJwtInit()
         // {

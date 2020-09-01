@@ -66,9 +66,10 @@ namespace provide
         }
 
         // GetAccountBalance
-        public async Task<(int, string)> GetAccountBalance(string accountID, string tokenID, Dictionary<string, object> args) {
+        // FIXME!!! this Account object may not return the balance properly...
+        public async Task<Account> GetAccountBalance(string accountID, string tokenID, Dictionary<string, object> args) {
             var uri = String.Format("accounts/{0}/balances/{1}", accountID, tokenID);
-            return await this.Get(uri, args);
+            return await this.Get<Account>(uri, args);
         }
 
         // CreateBridge
@@ -146,10 +147,9 @@ namespace provide
         }
 
         // ExecuteContract
-        public async Task<(int, string)> ExecuteContract(string contractID, Dictionary<string, object> args) {
+        public async Task<ContractExecution> ExecuteContract(string contractID, Transaction tx) {
             var uri = String.Format("contracts/{0}/execute", contractID);
-            // FIXME execute contract type
-            return await this.Post(uri, args);
+            return await this.Post<ContractExecution>(uri, tx);
         }
 
         // ListContracts
@@ -193,11 +193,11 @@ namespace provide
         }
 
         // ListNetworkBlocks
-        public async Task<(int, string)> ListNetworkBlocks(string networkID, Dictionary<string, object> args) {
-            // FIXME block type
-            var uri = String.Format("networks/{0}/blocks", networkID);
-            return await this.Get(uri, args);
-        }
+        // public async Task<(int, string)> ListNetworkBlocks(string networkID, Dictionary<string, object> args) {
+        //     // FIXME block type
+        //     var uri = String.Format("networks/{0}/blocks", networkID);
+        //     return await this.Get(uri, args);
+        // }
 
         // ListNetworkBridges
         public async Task<List<Bridge>> ListNetworkBridges(string networkID, Dictionary<string, object> args) {
@@ -250,9 +250,9 @@ namespace provide
         }
 
         // GetNetworkStatusMeta
-        public async Task<(int, string)> GetNetworkStatusMeta(string networkID, string txID, Dictionary<string, object> args) {
+        public async Task<NetworkStats> GetNetworkStatusMeta(string networkID, string txID, Dictionary<string, object> args) {
             var uri = String.Format("networks/{0}/status", networkID, txID);
-            return await this.Get(uri, args);
+            return await this.Get<NetworkStats>(uri, args);
         }
 
         // ListNetworkNodes
@@ -274,10 +274,10 @@ namespace provide
         }
 
         // GetNetworkNodeLogs
-        public async Task<(int, string)> GetNetworkNodeLogs(string networkID, string nodeID, Dictionary<string, object> args) {
+        public async Task<NodeLogs> GetNetworkNodeLogs(string networkID, string nodeID, Dictionary<string, object> args) {
             // FIXME network node type
             var uri = String.Format("networks/{0}/nodes/{1}/logs", networkID, nodeID);
-            return await this.Get(uri, args);
+            return await this.Get<NodeLogs>(uri, args);
         }
 
         // DeleteNetworkNode

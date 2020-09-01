@@ -66,16 +66,13 @@ namespace provide
 
         // CreateAgreement creates a new agreement and sends it to the named recipients; a witness is calculated
         // using a generic zkSNARK agreement circuit at this time but a specific circuit may be specified in the future.
-        public async Task<(int, string)> CreateAgreement(Dictionary<string, object> args, string[] recipients) {
-            return await this.nchain.CreateConnectedEntity(this.connectorID, new Dictionary<string, object> {
-                { "payload", args },
-                { "recipients", recipients }
-            });
+        public async Task<ConnectedEntity> CreateAgreement(ConnectedEntity entity, string[] recipients) {
+            return await this.nchain.CreateConnectedEntity(this.connectorID, entity);
         }
 
-        // UpdateAgreement attempts to updates an in-progress Baseline agreement.
-        public async Task<(int, string)> UpdateAgreement(string entityID, Dictionary<string, object> args) {
-            return await this.nchain.UpdateConnectedEntity(this.connectorID, entityID, args);
+        // UpdateAgreement attem    pts to updates an in-progress Baseline agreement.
+        public async Task<ConnectedEntity> UpdateAgreement(string entityID, ConnectedEntity entity) {
+            return await this.nchain.UpdateConnectedEntity(this.connectorID, entityID, entity);
         }
 
         // GetAgreement retrieves a specific Baseline agreement by id.

@@ -3,7 +3,7 @@ using Newtonsoft.Json;
 
 namespace provide.Model.Ident {
     public class JWTToken: BaseModel {
-    
+
         [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
         public string Token { get; set; }
 

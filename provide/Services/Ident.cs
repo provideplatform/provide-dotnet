@@ -95,11 +95,10 @@ namespace provide
         }
 
         // CreateApplicationToken creates a new API token for the given application ID.
-        public async Task<(int, string)>CreateApplicationToken(string applicationID, Dictionary<string, object> args)
+        public async Task<JWTToken>CreateApplicationToken(string applicationID, JWTToken token)
         {
-            // FIXME: Application id on token
-            args["application_id"] = applicationID;
-            return await this.Post("tokens", args);
+            // FIXME... set ApplicationID
+            return await this.Post<JWTToken>("tokens", token);
         }
 
         // CreateOrganization on behalf of the given user

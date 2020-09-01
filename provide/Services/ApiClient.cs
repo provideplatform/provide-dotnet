@@ -34,12 +34,14 @@ namespace provide
             var jwtHandler = new JwtSecurityTokenHandler();
             var jwt = jwtHandler.ReadToken(token) as JwtSecurityToken;
 
-            var audience = new Uri(jwt.Audiences.First());
-            this.scheme = audience.Scheme;
-            this.host = audience.Host;
-            this.path = audience.AbsolutePath;
-            if (!audience.IsDefaultPort) {
-                this.host = string.Format("{0}:{1}", this.host, audience.Port);
+            if (jwt.Audiences.Count() > 0) {
+                var audience = new Uri(jwt.Audiences.First());
+                this.scheme = audience.Scheme;
+                this.host = audience.Host;
+                this.path = audience.AbsolutePath;
+                if (!audience.IsDefaultPort) {
+                    this.host = string.Format("{0}:{1}", this.host, audience.Port);
+                }
             }
 
             this.token = token;
