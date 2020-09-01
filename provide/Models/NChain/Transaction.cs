@@ -23,6 +23,9 @@ namespace provide.Model.NChain
         public Guid? UserId  { get; set; }
 
         [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
+        public Guid? KeyId  { get; set; }
+
+        [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
         public string Signer  { get; set; }
 
         [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
