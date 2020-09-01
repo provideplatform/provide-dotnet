@@ -31,11 +31,12 @@ namespace provide.Model.NChain
         [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
         public string To  { get; set; }
 
-        // Is BigInteger ok here?
         public BigInteger Value  { get; set; }
 
+        [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
         public string Data { get; set; }
 
+        [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
         public string Hash { get; set; }
 
         [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
@@ -44,14 +45,17 @@ namespace provide.Model.NChain
         [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
         public string Ref { get; set; }
 
+        [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
         public string Description { get; set; }
 
         // check what traces is
         [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
         public object Traces { get; set; }
 
+        [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
         public int Block { get; set; }
 
+        [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
         public string BlockTimestamp { get; set; }
 
         [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
