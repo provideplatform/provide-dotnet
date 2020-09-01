@@ -45,15 +45,15 @@ namespace provide
         }
         
         // CreateVault creates a new vault available within the key management service
-        public async Task<(int, string)>CreateVault(string token, Dictionary<string, object> args) {
+        public async Task<Vault>CreateVault(string token, provide.Model.Vault.Vault vault) {
             var uri = "vaults";
-            return await this.Post(uri, args);
+            return await this.Post<Vault>(uri, vault);
         }
 
         // ListVaults lists available vaults available within the key management service
-        public async Task<(int, string)>ListVaults(string token, Dictionary<string, object> args) {
+        public async Task<List<provide.Model.Vault.Vault>>ListVaults(string token, Dictionary<string, object> args) {
             var uri = "vaults";
-            return await this.Get(uri, args);
+            return await this.Get<List<provide.Model.Vault.Vault>>(uri, args);
         }
         
         // DeleteVault permanently removes specified vault from the key management service
@@ -63,15 +63,15 @@ namespace provide
         }
 
         // ListVaultKeys retrieves a list of the symmetric keys and asymmetric key pairs secured within the vault key management service
-        public async Task<(int, string)>ListVaultKeys(string token, string vaultID, Dictionary<string, object> args) {
+        public async Task<List<provide.Model.Vault.Key>>ListVaultKeys(string token, string vaultID, Dictionary<string, object> args) {
             var uri = $"vaults/{vaultID}/keys";
-            return await this.Get(uri, args);
+            return await this.Get<List<provide.Model.Vault.Key>>(uri, args);
         }
 
         // CreateVaultKey creates a new key available within the vault key management service
-        public async Task<(int, string)>CreateVaultKey(string token, string vaultID, Dictionary<string, object> args) {
+        public async Task<provide.Model.Vault.Key>CreateVaultKey(string token, string vaultID, provide.Model.Vault.Key key) {
             var uri = $"vaults/{vaultID}/keys";
-            return await this.Post(uri, args);
+            return await this.Post<provide.Model.Vault.Key>(uri, key);
         }
 
         // DeleteVaultKey permanently removes the specified key material from within the vault key management service
@@ -81,15 +81,15 @@ namespace provide
         }
 
         // ListVaultSecrets retrieves a list of the secrets secured within the vault
-        public async Task<(int, string)>ListVaultSecrets(string token, string vaultID, Dictionary<string, object> args) {
+        public async Task<List<provide.Model.Vault.Secret>>ListVaultSecrets(string token, string vaultID, Dictionary<string, object> args) {
             var uri = $"vaults/{vaultID}/secrets";
-            return await this.Get(uri, args);
+            return await this.Get<List<provide.Model.Vault.Secret>>(uri, args);
         }
 
         // CreateVaultSecret creates a new secret within the vault
-        public async Task<(int, string)>CreateVaultSecret(string token, string vaultID, Dictionary<string, object> args) {
+        public async Task<provide.Model.Vault.Secret>CreateVaultSecret(string token, string vaultID, provide.Model.Vault.Secret secret) {
             var uri = $"vaults/{vaultID}/secrets";
-            return await this.Post(uri, args);
+            return await this.Post<provide.Model.Vault.Secret>(uri, secret);
         }
 
         // DeleteVaultSecret permanently removes the specified secret from the vault

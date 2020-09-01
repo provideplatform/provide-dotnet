@@ -52,8 +52,8 @@ namespace provide
             this.token = token;
         }
 
-        public async Task<T> Get<T>(string uri, Dictionary<string, object> args) {
-            return await this.sendRequest<T>("GET", buildUrl(uri), args);
+        public async Task<T> Get<T>(string uri, Dictionary<string, object> query) {
+            return await this.sendRequest<T>("GET", buildUrl(uri), null, query);
         }
 
         public async Task<T> Post<T>(string uri, BaseModel model) {
@@ -135,9 +135,8 @@ namespace provide
                 req.Headers.Authorization = new AuthenticationHeaderValue("bearer", token);
             }
 
-            var serializedObj = this.serializeObject(model);
-
             if (mthd == "POST" || mthd == "PUT" || mthd == "PATCH") {
+                var serializedObj = this.serializeObject(model);
                 req.Content = new StringContent(serializedObj, Encoding.UTF8, "application/json");
             }
 

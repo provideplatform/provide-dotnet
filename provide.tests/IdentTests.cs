@@ -1,5 +1,6 @@
 
 using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using provide.Model.Ident;
 using Xunit;
@@ -111,8 +112,8 @@ namespace provide.tests
         public async void TestListApplications()
         {
             // TODO: checks args for list methods
-            var res = await this.fixture.Ident.ListApplications(new Application());
-            var res2 = await this.fixture.Ident.GetApplicationDetails(res[0].Id, new Application());
+            var res = await this.fixture.Ident.ListApplications(new Dictionary<string, object>{});
+            var res2 = await this.fixture.Ident.GetApplicationDetails(res[0].Id, new Dictionary<string, object>{});
         }
     }
 }

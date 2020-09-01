@@ -1,6 +1,8 @@
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using provide.Model.Ident;
+using provide.Model.NChain;
 
 namespace provide
 {
@@ -48,19 +50,19 @@ namespace provide
         }
 
         // CreateAccount
-        public async Task<(int, string)> CreateAccount(Dictionary<string, object> args) {
-            return await this.Post("accounts", args);
+        public async Task<Account> CreateAccount(Account account) {
+            return await this.Post<Account>("accounts", account);
         }
 
         // ListAccounts
-        public async Task<(int, string)> ListAccounts(Dictionary<string, object> args) {
-            return await this.Get("accounts", args);
+        public async Task<List<Account>> ListAccounts(Dictionary<string, object> args) {
+            return await this.Get<List<Account>>("accounts", args);
         }
 
         // GetAccountDetails
-        public async Task<(int, string)> GetAccountDetails(string accountID, Dictionary<string, object> args) {
+        public async Task<Account> GetAccountDetails(string accountID, Dictionary<string, object> args) {
             var uri = String.Format("accounts/{0}", accountID);
-            return await this.Get(uri, args);
+            return await this.Get<Account>(uri, args);
         }
 
         // GetAccountBalance
@@ -70,23 +72,24 @@ namespace provide
         }
 
         // CreateBridge
-        public async Task<(int, string)> CreateBridge(Dictionary<string, object> args) {
-            return await this.Post("bridges", args);
+        public async Task<Bridge> CreateBridge(Bridge bridge) {
+            return await this.Post<Bridge>("bridges", bridge);
         }
 
         // ListBridges
-        public async Task<(int, string)> ListBridges(Dictionary<string, object> args) {
-            return await this.Get("bridges", args);
+        public async Task<List<Bridge>> ListBridges(Dictionary<string, object> args) {
+            return await this.Get<List<Bridge>>("bridges", args);
         }
 
         // GetBridgeDetails
-        public async Task<(int, string)> GetBridgeDetails(string bridgeID, Dictionary<string, object> args) {
+        public async Task<Bridge> GetBridgeDetails(string bridgeID, Dictionary<string, object> args) {
             var uri = String.Format("bridges/{0}", bridgeID);
-            return await this.Get(uri, args);
+            return await this.Get<Bridge>(uri, args);
         }
 
         // CreateConnector
         public async Task<(int, string)> CreateConnector(Dictionary<string, object> args) {
+            // FIXME connector type
             return await this.Post("connectors", args);
         }
 
@@ -138,65 +141,69 @@ namespace provide
         }
 
         // CreateContract
-        public async Task<(int, string)> CreateContract(Dictionary<string, object> args) {
-            return await this.Post("contracts", args);
+        public async Task<Contract> CreateContract(Contract contract) {
+            return await this.Post<Contract>("contracts", contract);
         }
 
         // ExecuteContract
         public async Task<(int, string)> ExecuteContract(string contractID, Dictionary<string, object> args) {
             var uri = String.Format("contracts/{0}/execute", contractID);
+            // FIXME execute contract type
             return await this.Post(uri, args);
         }
 
         // ListContracts
-        public async Task<(int, string)> ListContracts(Dictionary<string, object> args) {
-            return await this.Get("contracts", args);
+        public async Task<List<Contract>> ListContracts(Dictionary<string, object> args) {
+            return await this.Get<List<Contract>>("contracts", args);
         }
 
         // GetContractDetails
-        public async Task<(int, string)> GetContractDetails(string contractID, Dictionary<string, object> args) {
+        public async Task<Contract> GetContractDetails(string contractID, Dictionary<string, object> args) {
             var uri = String.Format("contracts/{0}", contractID);
-            return await this.Get(uri, args);
+            return await this.Get<Contract>(uri, args);
         }
 
         // CreateNetwork
-        public async Task<(int, string)> CreateNetwork(Dictionary<string, object> args) {
-            return await this.Post("networks", args);
+        public async Task<Network> CreateNetwork(Network network) {
+            return await this.Post<Network>("networks", network);
         }
 
         // UpdateNetwork updates an existing network
-        public async Task<(int, string)> UpdateNetwork(string networkID, Dictionary<string, object> args) {
+        public async Task<Network> UpdateNetwork(string networkID, Network network) {
             var uri = String.Format("networks/{0}", networkID);
-            return await this.Put(uri, args);
+            return await this.Put<Network>(uri, network);
         }
 
         // ListNetworks
-        public async Task<(int, string)> ListNetworks(Dictionary<string, object> args) {
-            return await this.Get("networks", args);
+        public async Task<List<Network>> ListNetworks(Dictionary<string, object> args) {
+            return await this.Get<List<Network>>("networks", args);
         }
 
         // GetNetworkDetails
-        public async Task<(int, string)> GetNetworkDetails(string networkID, Dictionary<string, object> args) {
+        public async Task<Network> GetNetworkDetails(string networkID, Dictionary<string, object> args) {
             var uri = String.Format("networks/{0}", networkID);
-            return await this.Get(uri, args);
+            return await this.Get<Network>(uri, args);
         }
 
         // ListNetworkAccounts
-        public async Task<(int, string)> ListNetworkAccounts(string networkID, Dictionary<string, object> args) {
+        public async Task<List<Account>> ListNetworkAccounts(string networkID, Dictionary<string, object> args) {
             var uri = String.Format("networks/{0}/accounts", networkID);
-            return await this.Get(uri, args);
+            // FIXME is network account also account type?
+            return await this.Get<List<Account>>(uri, args);
         }
 
         // ListNetworkBlocks
         public async Task<(int, string)> ListNetworkBlocks(string networkID, Dictionary<string, object> args) {
+            // FIXME block type
             var uri = String.Format("networks/{0}/blocks", networkID);
             return await this.Get(uri, args);
         }
 
         // ListNetworkBridges
-        public async Task<(int, string)> ListNetworkBridges(string networkID, Dictionary<string, object> args) {
+        public async Task<List<Bridge>> ListNetworkBridges(string networkID, Dictionary<string, object> args) {
             var uri = String.Format("networks/{0}/bridges", networkID);
-            return await this.Get(uri, args);
+            // FIXME is network bridge same bridge type?
+            return await this.Get<List<Bridge>>(uri, args);
         }
 
         // ListNetworkConnectors
@@ -206,39 +213,40 @@ namespace provide
         }
 
         // ListNetworkContracts
-        public async Task<(int, string)> ListNetworkContracts(string networkID, Dictionary<string, object> args) {
+        public async Task<List<Contract>> ListNetworkContracts(string networkID, Dictionary<string, object> args) {
             var uri = String.Format("networks/{0}/contracts", networkID);
-            return await this.Get(uri, args);
+            // FIXME is network contract same contract type?
+            return await this.Get<List<Contract>>(uri, args);
         }
 
         // GetNetworkContractDetails
-        public async Task<(int, string)> GetNetworkContractDetails(string networkID, string contractID, Dictionary<string, object> args) {
+        public async Task<Contract> GetNetworkContractDetails(string networkID, string contractID, Dictionary<string, object> args) {
             var uri = String.Format("networks/{0}/contracts/{1}", networkID, contractID);
-            return await this.Get(uri, args);
+            return await this.Get<Contract>(uri, args);
         }
 
         // ListNetworkOracles
-        public async Task<(int, string)> ListNetworkOracles(string networkID, Dictionary<string, object> args) {
+        public async Task<List<Oracle>> ListNetworkOracles(string networkID, Dictionary<string, object> args) {
             var uri = String.Format("networks/{0}/oracles", networkID);
-            return await this.Get(uri, args);
+            return await this.Get<List<Oracle>>(uri, args);
         }
 
         // ListNetworkTokens
-        public async Task<(int, string)> ListNetworkTokens(string networkID, Dictionary<string, object> args) {
+        public async Task<JWTToken> ListNetworkTokens(string networkID, Dictionary<string, object> args) {
             var uri = String.Format("networks/{0}/tokens", networkID);
-            return await this.Get(uri, args);
+            return await this.Get<JWTToken>(uri, args);
         }
 
         // ListNetworkTransactions
-        public async Task<(int, string)> ListNetworkTransactions(string networkID, Dictionary<string, object> args) {
+        public async Task<List<Transaction>> ListNetworkTransactions(string networkID, Dictionary<string, object> args) {
             var uri = String.Format("networks/{0}/transactions", networkID);
-            return await this.Get(uri, args);
+            return await this.Get<List<Transaction>>(uri, args);
         }
 
         // GetNetworkTransactionDetails
-        public async Task<(int, string)> GetNetworkTransactionDetails(string networkID, string txID, Dictionary<string, object> args) {
+        public async Task<Transaction> GetNetworkTransactionDetails(string networkID, string txID, Dictionary<string, object> args) {
             var uri = String.Format("networks/{0}/transactions/{1}", networkID, txID);
-            return await this.Get(uri, args);
+            return await this.Get<Transaction>(uri, args);
         }
 
         // GetNetworkStatusMeta
@@ -248,25 +256,26 @@ namespace provide
         }
 
         // ListNetworkNodes
-        public async Task<(int, string)> ListNetworkNodes(string networkID, Dictionary<string, object> args) {
+        public async Task<List<Node>> ListNetworkNodes(string networkID, Dictionary<string, object> args) {
             var uri = String.Format("networks/{0}/nodes", networkID);
-            return await this.Get(uri, args);
+            return await this.Get<List<Node>>(uri, args);
         }
 
         // CreateNetworkNode
-        public async Task<(int, string)> CreateNetworkNode(string networkID, Dictionary<string, object> args) {
+        public async Task<Node> CreateNetworkNode(string networkID, Node node) {
             var uri = String.Format("networks/{0}/nodes", networkID);
-            return await this.Post(uri, args);
+            return await this.Post<Node>(uri, node);
         }
 
         // GetNetworkNodeDetails
-        public async Task<(int, string)> GetNetworkNodeDetails(string networkID, string nodeID, Dictionary<string, object> args) {
+        public async Task<Node> GetNetworkNodeDetails(string networkID, string nodeID, Dictionary<string, object> args) {
             var uri = String.Format("networks/{0}/nodes/{1}", networkID, nodeID);
-            return await this.Get(uri, args);
+            return await this.Get<Node>(uri, args);
         }
 
         // GetNetworkNodeLogs
         public async Task<(int, string)> GetNetworkNodeLogs(string networkID, string nodeID, Dictionary<string, object> args) {
+            // FIXME network node type
             var uri = String.Format("networks/{0}/nodes/{1}/logs", networkID, nodeID);
             return await this.Get(uri, args);
         }
@@ -278,73 +287,73 @@ namespace provide
         }
 
         // CreateOracle
-        public async Task<(int, string)> CreateOracle(Dictionary<string, object> args) {
-            return await this.Post("oracles", args);
+        public async Task<Oracle> CreateOracle(Oracle oracle) {
+            return await this.Post<Oracle>("oracles", oracle);
         }
 
         // ListOracles
-        public async Task<(int, string)> ListOracles(Dictionary<string, object> args) {
-            return await this.Get("oracles", args);
+        public async Task<List<Oracle>> ListOracles(Dictionary<string, object> args) {
+            return await this.Get<List<Oracle>>("oracles", args);
         }
 
         // GetOracleDetails
-        public async Task<(int, string)> GetOracleDetails(string oracleID, Dictionary<string, object> args) {
+        public async Task<Oracle> GetOracleDetails(string oracleID, Dictionary<string, object> args) {
             var uri = String.Format("oracles/{0}", oracleID);
-            return await this.Get(uri, args);
+            return await this.Get<Oracle>(uri, args);
         }
 
         // CreateTokenContract
-        public async Task<(int, string)> CreateTokenContract(Dictionary<string, object> args) {
-            return await this.Post("tokens", args);
+        public async Task<TokenContract> CreateTokenContract(TokenContract tokenContract) {
+            return await this.Post<TokenContract>("tokens", tokenContract);
         }
 
         // ListTokenContracts
-        public async Task<(int, string)> ListTokenContracts(Dictionary<string, object> args) {
-            return await this.Get("tokens", args);
+        public async Task<List<TokenContract>> ListTokenContracts(Dictionary<string, object> args) {
+            return await this.Get<List<TokenContract>>("tokens", args);
         }
 
         // GetTokenContractDetails
-        public async Task<(int, string)> GetTokenContractDetails(string tokenID, Dictionary<string, object> args) {
+        public async Task<TokenContract> GetTokenContractDetails(string tokenID, Dictionary<string, object> args) {
             var uri = String.Format("tokens/{0}", tokenID);
-            return await this.Get(uri, args);
+            return await this.Get<TokenContract>(uri, args);
         }
 
         // CreateTransaction
-        public async Task<(int, string)> CreateTransaction(Dictionary<string, object> args) {
-            return await this.Post("transactions", args);
+        public async Task<Transaction> CreateTransaction(Transaction transaction) {
+            return await this.Post<Transaction>("transactions", transaction);
         }
 
         // ListTransactions
-        public async Task<(int, string)> ListTransactions(Dictionary<string, object> args) {
-            return await this.Get("transactions", args);
+        public async Task<List<Transaction>> ListTransactions(Dictionary<string, object> args) {
+            return await this.Get<List<Transaction>>("transactions", args);
         }
 
         // GetTransactionDetails
-        public async Task<(int, string)> GetTransactionDetails(string txID, Dictionary<string, object> args) {
+        public async Task<Transaction> GetTransactionDetails(string txID, Dictionary<string, object> args) {
             var uri = String.Format("transactions/{0}", txID);
-            return await this.Get(uri, args);
+            return await this.Get<Transaction>(uri, args);
         }
 
         // CreateWallet
-        public async Task<(int, string)> CreateWallet(Dictionary<string, object> args) {
-            return await this.Post("wallets", args);
+        public async Task<Wallet> CreateWallet(Wallet wallet) {
+            return await this.Post<Wallet>("wallets", wallet);
         }
 
         // ListWallets
-        public async Task<(int, string)> ListWallets(Dictionary<string, object> args) {
-            return await this.Get("wallets", args);
+        public async Task<List<Wallet>> ListWallets(Dictionary<string, object> args) {
+            return await this.Get<List<Wallet>>("wallets", args);
         }
 
         // ListWalletAccounts
-        public async Task<(int, string)> ListWalletAccounts(string walletID, Dictionary<string, object> args) {
+        public async Task<List<Account>> ListWalletAccounts(string walletID, Dictionary<string, object> args) {
             var uri = String.Format("wallets/{0}/accounts", walletID);
-            return await this.Get(uri, args);
+            return await this.Get<List<Account>>(uri, args);
         }
 
         // GetWalletDetails
-        public async Task<(int, string)> GetWalletDetails(string walletID, Dictionary<string, object> args) {
+        public async Task<Wallet> GetWalletDetails(string walletID, Dictionary<string, object> args) {
             var uri = String.Format("wallets/{0}", walletID);
-            return await this.Get(uri, args);
+            return await this.Get<Wallet>(uri, args);
         }
     }
 }
