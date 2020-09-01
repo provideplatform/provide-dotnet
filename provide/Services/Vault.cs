@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using provide.Model.Vault;
 
 namespace provide
 {
@@ -57,9 +58,9 @@ namespace provide
         }
         
         // DeleteVault permanently removes specified vault from the key management service
-        public async Task<(int, string)>DeleteVault(string token, string vaultID) {
+        public async Task<Vault>DeleteVault(string token, string vaultID) {
             var uri = $"vaults/{vaultID}";
-            return await this.Delete(uri);
+            return await this.Delete<Vault>(uri);
         }
 
         // ListVaultKeys retrieves a list of the symmetric keys and asymmetric key pairs secured within the vault key management service
@@ -75,9 +76,9 @@ namespace provide
         }
 
         // DeleteVaultKey permanently removes the specified key material from within the vault key management service
-        public async Task<(int, string)>DeleteVaultKey(string token, string vaultID, string keyID) {
+        public async Task<provide.Model.Vault.Key>DeleteVaultKey(string token, string vaultID, string keyID) {
             var uri = $"vaults/{vaultID}/keys/{keyID}";
-            return await this.Delete(uri);
+            return await this.Delete<provide.Model.Vault.Key>(uri);
         }
 
         // ListVaultSecrets retrieves a list of the secrets secured within the vault
@@ -93,21 +94,21 @@ namespace provide
         }
 
         // DeleteVaultSecret permanently removes the specified secret from the vault
-        public async Task<(int, string)>DeleteVaultSecret(string token, string vaultID, string secretID) {
+        public async Task<provide.Model.Vault.Secret>DeleteVaultSecret(string token, string vaultID, string secretID) {
             var uri = $"vaults/{vaultID}/secrets/{secretID}";
-            return await this.Delete(uri);
+            return await this.Delete<provide.Model.Vault.Secret>(uri);
         }
 
         // SignMessage securely signs the given message
-        public async Task<(int, string)>SignMessage(string token, string vaultID, string keyID, string msg) {
+        public async Task<SignedMessage>SignMessage(string token, string vaultID, string keyID, string msg) {
             var uri = $"vaults/{vaultID}/keys/{keyID}/sign";
-            return await this.Post(uri, new Dictionary<string, object> { { "message", msg } });
+            return await this.Post<SignedMessage>(uri, new SignedMessage { Message = msg });
         }
 
         // VerifySignature verifies that a message was previously signed with a given key
-        public async Task<(int, string)>VerifySignature(string token, string vaultID, string keyID, string msg, string sig) {
+        public async Task<SignedMessage>VerifySignature(string token, string vaultID, string keyID, string msg, string sig) {
             var uri = $"vaults/{vaultID}/keys/{keyID}/verify";
-            return await this.Post(uri, new Dictionary<string, object> { { "message", msg }, { "signature", sig } });
+            return await this.Post<SignedMessage>(uri, new SignedMessage { Message = msg, Signature = sig });
         }
     }
 }

@@ -148,11 +148,11 @@ namespace provide
         }
 
         // DeleteToken removes a previously authorized API token, effectively deauthorizing future calls using the token
-        public async Task<(int, string)>DeleteToken(string tokenID)
+        public async Task<JWTToken>DeleteToken(string tokenID)
         {
             // FIXME delete return type
             var uri = String.Format("tokens/{0}", tokenID);
-            return await this.Delete(uri);
+            return await this.Delete<JWTToken>(uri);
         }
 
         // CreateUser creates a new user for which API tokens and managed signing identities can be authorized

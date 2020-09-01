@@ -4,6 +4,7 @@ using System.IdentityModel.Tokens.Jwt;
 using System.Threading.Tasks;
 
 using Newtonsoft.Json;
+using provide.Model.NChain;
 
 namespace provide
 {
@@ -50,15 +51,15 @@ namespace provide
             task.Wait();
 
             var connector = awaiter.GetResult();
-            if (connector.Item1 == 200 && connector.Item2 != null) {
-                var resp = JsonConvert.DeserializeObject<Dictionary<string, object>>(connector.Item2);
-                var connectorType = resp["type"];
-                if (connectorType == null || !connectorType.Equals("baseline")) {
+            if (connector != null) {
+                // FIXME: Please check this
+                if (connector.Type == null || !connector.Type.Equals("baseline")) {
                     throw new ApplicationException(CONNECTOR_TYPE_INVALID_MESSAGE);
                 }
                 System.Diagnostics.Debug.WriteLine("Resolved valid baseline api connector: {0}", this.connectorID);
             } else {
-                System.Diagnostics.Debug.WriteLine("Failed to fetch connector: {0}; status: {1}", this.connectorID, connector.Item1);
+                // this should fail in ApiClient? FIXME if needed
+                System.Diagnostics.Debug.WriteLine("Failed to fetch connector: {0}; status: {1}", this.connectorID);
                 throw new ApplicationException(CONNECTOR_TYPE_INVALID_MESSAGE);
             }
         }
@@ -78,13 +79,13 @@ namespace provide
         }
 
         // GetAgreement retrieves a specific Baseline agreement by id.
-        public async Task<(int, string)> GetAgreement(string entityID, Dictionary<string, object> args) {
+        public async Task<ConnectedEntity> GetAgreement(string entityID, Dictionary<string, object> args) {
             return await this.nchain.GetConnectedEntityDetails(this.connectorID, entityID, args);
         }
 
         // ListAgreements retrieves a list of in-progress or previously completed Baseline agreement instances
         // which match the given query params.
-        public async Task<(int, string)> ListAgreements(Dictionary<string, object> args) {
+        public async Task<List<ConnectedEntity>> ListAgreements(Dictionary<string, object> args) {
             return await this.nchain.ListConnectedEntities(this.connectorID, args);
         }
     }

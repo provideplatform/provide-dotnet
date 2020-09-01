@@ -87,6 +87,11 @@ namespace provide
                 res = await client.SendAsync(req);
                 content = res.Content;
                 res.EnsureSuccessStatusCode();
+                // FIXME is this ok for delete? void is not possible here
+                // also if there is no content we can skip this and let deserialize to be skipped?
+                if ((int)res.StatusCode == 204) {
+                    return default(T);
+                }
                 var raw = await content.ReadAsByteArrayAsync();
                 if (raw.Length > 0) {
                     var str = System.Text.Encoding.Default.GetString(raw);

@@ -88,56 +88,56 @@ namespace provide
         }
 
         // CreateConnector
-        public async Task<(int, string)> CreateConnector(Dictionary<string, object> args) {
+        public async Task<Connector> CreateConnector(Connector connector) {
             // FIXME connector type
-            return await this.Post("connectors", args);
+            return await this.Post<Connector>("connectors", connector);
         }
 
         // ListConnectors
-        public async Task<(int, string)> ListConnectors(Dictionary<string, object> args) {
-            return await this.Get("connectors", args);
+        public async Task<List<Connector>> ListConnectors(Dictionary<string, object> args) {
+            return await this.Get<List<Connector>>("connectors", args);
         }
 
         // GetConnectorDetails
-        public async Task<(int, string)> GetConnectorDetails(string connectorID, Dictionary<string, object> args) {
+        public async Task<Connector> GetConnectorDetails(string connectorID, Dictionary<string, object> args) {
             var uri = String.Format("connectors/{0}", connectorID);
-            return await this.Get(uri, args);
+            return await this.Get<Connector>(uri, args);
         }
 
         // DeleteConnector
-        public async Task<(int, string)> DeleteConnector(string connectorID) {
+        public async Task<Connector> DeleteConnector(string connectorID) {
             var uri = String.Format("connectors/{0}", connectorID);
-            return await this.Delete(uri);
+            return await this.Delete<Connector>(uri);
         }
 
         // ListConnectedEntities -- invokes the configured connector proxy in a RESTful manner -- i.e., GET /
-        public async Task<(int, string)> ListConnectedEntities(string connectorID, Dictionary<string, object> args) {
+        public async Task<List<ConnectedEntity>> ListConnectedEntities(string connectorID, Dictionary<string, object> args) {
             var uri = String.Format("connectors/{0}/entities", connectorID);
-            return await this.Get(uri, args);
+            return await this.Get<List<ConnectedEntity>>(uri, args);
         }
 
         // GetConnectedEntityDetails -- invokes the configured connector proxy in a RESTful manner -- i.e., GET /:id
-        public async Task<(int, string)> GetConnectedEntityDetails(string connectorID, string entityID, Dictionary<string, object> args) {
+        public async Task<ConnectedEntity> GetConnectedEntityDetails(string connectorID, string entityID, Dictionary<string, object> args) {
             var uri = String.Format("connectors/{0}/entities/{1}", connectorID, entityID);
-            return await this.Get(uri, args);
+            return await this.Get<ConnectedEntity>(uri, args);
         }
 
         // CreateConnectedEntity -- invokes the configured connector proxy in a RESTful manner -- i.e., POST /
-        public async Task<(int, string)> CreateConnectedEntity(string connectorID, Dictionary<string, object> args) {
+        public async Task<ConnectedEntity> CreateConnectedEntity(string connectorID, ConnectedEntity connectedEntity) {
             var uri = String.Format("connectors/{0}/entities", connectorID);
-            return await this.Post(uri, args);
+            return await this.Post<ConnectedEntity>(uri, connectedEntity);
         }
 
         // UpdateConnectedEntity -- invokes the configured connector proxy in a RESTful manner -- i.e., PUT /:id
-        public async Task<(int, string)> UpdateConnectedEntity(string connectorID, string entityID, Dictionary<string, object> args) {
+        public async Task<ConnectedEntity> UpdateConnectedEntity(string connectorID, string entityID, ConnectedEntity connectedEntity) {
             var uri = String.Format("connectors/{0}/entities/{1}", connectorID, entityID);
-            return await this.Put(uri, args);
+            return await this.Put<ConnectedEntity>(uri, connectedEntity);
         }
 
         // DeleteConnectedEntity -- invokes the configured connector proxy in a RESTful manner -- i.e., DELETE /:id
-        public async Task<(int, string)> DeleteConnectedEntity(string connectorID, string entityID) {
+        public async Task<ConnectedEntity> DeleteConnectedEntity(string connectorID, string entityID) {
             var uri = String.Format("connectors/{0}/entities/{1}", connectorID, entityID);
-            return await this.Delete(uri);
+            return await this.Delete<ConnectedEntity>(uri);
         }
 
         // CreateContract
@@ -207,9 +207,9 @@ namespace provide
         }
 
         // ListNetworkConnectors
-        public async Task<(int, string)> ListNetworkConnectors(string networkID, Dictionary<string, object> args) {
+        public async Task<List<Connector>> ListNetworkConnectors(string networkID, Dictionary<string, object> args) {
             var uri = String.Format("networks/{0}/connectors", networkID);
-            return await this.Get(uri, args);
+            return await this.Get<List<Connector>>(uri, args);
         }
 
         // ListNetworkContracts
@@ -281,9 +281,9 @@ namespace provide
         }
 
         // DeleteNetworkNode
-        public async Task<(int, string)> DeleteNetworkNode(string networkID, string nodeID) {
+        public async Task<Node> DeleteNetworkNode(string networkID, string nodeID) {
             var uri = String.Format("networks/{0}/nodes/{1}", networkID, nodeID);
-            return await this.Delete(uri);
+            return await this.Delete<Node>(uri);
         }
 
         // CreateOracle
