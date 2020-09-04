@@ -56,22 +56,19 @@ namespace provide.tests
                     Name = "TestVault"
                 });
 
-            provide.Model.Vault.Key key = await vlt.CreateVaultKey(
-                vault.Id.ToString(), 
+            var generatedKey = await vlt.CreateVaultKey(
+                vault.Id.ToString(),
                 new Key 
-                { 
-                    Name = "TestKey",
-                    Spec = "TestSpec",
+                {
                     Type = "asymmetric",
-                    PublicKey = @"-----BEGIN PUBLIC KEY-----
-                                  MIGeMA0GCSqGSIb3DQEBAQUAA4GMADCBiAKBgHXYDrWFEdMNJs2VJ8oKd22esreh
-                                  byWApqdGZjBn5K+vWcEcFfU4ImVJZFnik3ZiXfrz1esWLD9nvorXeqoXuut1MfZX
-                                  RUYMeZfzjZDL8J16mtWyyD85MH7RD/CrlVsnG8IGS917mjB6LHkeigjyOFHsCLPM
-                                  ODupQq0UWOz04c0tAgMBAAE=
-                                  -----END PUBLIC KEY-----"
-                });
+                    Usage = "sign/verify",
+                    Spec = "secp256k1",
+                    Name = "TestKey",
+                    Description = "Key used to test signing"
+                }
+            );
             
-            var signedMessage = await vlt.SignMessage(vault.Id.ToString(), key.Name, "message to be signed");
+            var signedMessage = await vlt.SignMessage(vault.Id.ToString(), generatedKey.Name, "message to be signed");
             Assert.NotNull(signedMessage);
         }
     }

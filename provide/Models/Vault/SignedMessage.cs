@@ -12,6 +12,6 @@ namespace provide.Model.Vault
         public string Signature { get; set; }
 
         [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
-        public bool Verified { get; set; }
+        public bool? Verified { get; set; }
     }
 }
