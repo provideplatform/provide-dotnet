@@ -70,9 +70,12 @@ namespace provide.tests
             );
             
             var signedMessage = await vlt.SignMessage(vault.Id.ToString(), generatedKey.Name, message);
-            Assert.NotNull(signedMessage);
+
+            Assert.NotNull(signedMessage.Signature);
+            Assert.NotEmpty(signedMessage.Signature);
 
             var verifiedMessage = await vlt.VerifySignature(vault.Id.ToString(), generatedKey.Id.ToString(), message, signedMessage.Signature);
+            
             Assert.True(verifiedMessage.Verified);
         }
     }
