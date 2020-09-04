@@ -43,5 +43,36 @@ namespace provide.tests
             Assert.NotNull(vault.Id);
             Assert.Equal("TestVault", vault.Name);
         }
+
+        [Fact]
+        public async void TestSingMessage() 
+        {
+            var token = await this.CreateIdentForTestUser();
+            var vlt = Vault.InitVault(token);
+            
+            provide.Model.Vault.Vault vault = await vlt.CreateVault(
+                new provide.Model.Vault.Vault 
+                {
+                    Name = "TestVault"
+                });
+
+            provide.Model.Vault.Key key = await vlt.CreateVaultKey(
+                vault.Id.ToString(), 
+                new Key 
+                { 
+                    Name = "TestKey",
+                    Spec = "TestSpec",
+                    Type = "asymmetric",
+                    PublicKey = @"-----BEGIN PUBLIC KEY-----
+                                  MIGeMA0GCSqGSIb3DQEBAQUAA4GMADCBiAKBgHXYDrWFEdMNJs2VJ8oKd22esreh
+                                  byWApqdGZjBn5K+vWcEcFfU4ImVJZFnik3ZiXfrz1esWLD9nvorXeqoXuut1MfZX
+                                  RUYMeZfzjZDL8J16mtWyyD85MH7RD/CrlVsnG8IGS917mjB6LHkeigjyOFHsCLPM
+                                  ODupQq0UWOz04c0tAgMBAAE=
+                                  -----END PUBLIC KEY-----"
+                });
+            
+            var signedMessage = await vlt.SignMessage(vault.Id.ToString(), key.Name, "message to be signed");
+            Assert.NotNull(signedMessage);
+        }
     }
 }
