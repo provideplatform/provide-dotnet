@@ -43,5 +43,38 @@ namespace provide.tests
             Assert.NotNull(vault.Id);
             Assert.Equal("TestVault", vault.Name);
         }
+
+        [Fact]
+        public async void TestSignAndVerifyMessage() 
+        {
+            var message = "message to be signed";
+            var token = await this.CreateIdentForTestUser();
+            var vlt = Vault.InitVault(token);
+            
+            provide.Model.Vault.Vault vault = await vlt.CreateVault(
+                new provide.Model.Vault.Vault 
+                {
+                    Name = "TestVault"
+                });
+
+            var generatedKey = await vlt.CreateVaultKey(
+                vault.Id.ToString(),
+                new Key 
+                {
+                    Type = "asymmetric",
+                    Usage = "sign/verify",
+                    Spec = "secp256k1",
+                    Name = "TestKey",
+                    Description = "Key used to test signing"
+                }
+            );
+            
+            var signedMessage = await vlt.SignMessage(vault.Id.ToString(), generatedKey.Id.ToString(), message);
+            Assert.NotNull(signedMessage.Signature);
+            Assert.NotEmpty(signedMessage.Signature);
+
+            var verifiedMessage = await vlt.VerifySignature(vault.Id.ToString(), generatedKey.Id.ToString(), message, signedMessage.Signature);
+            Assert.True(verifiedMessage.Verified);
+        }
     }
 }
