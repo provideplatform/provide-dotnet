@@ -45,7 +45,7 @@ namespace provide.tests
         }
 
         [Fact]
-        public async void TestSingAndVerifyMessage() 
+        public async void TestSignAndVerifyMessage() 
         {
             var message = "message to be signed";
             var token = await this.CreateIdentForTestUser();
@@ -69,13 +69,11 @@ namespace provide.tests
                 }
             );
             
-            var signedMessage = await vlt.SignMessage(vault.Id.ToString(), generatedKey.Name, message);
-
+            var signedMessage = await vlt.SignMessage(vault.Id.ToString(), generatedKey.Id.ToString(), message);
             Assert.NotNull(signedMessage.Signature);
             Assert.NotEmpty(signedMessage.Signature);
 
             var verifiedMessage = await vlt.VerifySignature(vault.Id.ToString(), generatedKey.Id.ToString(), message, signedMessage.Signature);
-            
             Assert.True(verifiedMessage.Verified);
         }
     }

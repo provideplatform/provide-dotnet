@@ -92,15 +92,15 @@ namespace provide
         }
 
         // SignMessage securely signs the given message
-        public async Task<SignedMessage>SignMessage(string vaultID, string keyID, string msg) {
+        public async Task<SignMessageResponse>SignMessage(string vaultID, string keyID, string msg) {
             var uri = $"vaults/{vaultID}/keys/{keyID}/sign";
-            return await this.Post<SignedMessage>(uri, new SignedMessage { Message = msg });
+            return await this.Post<SignMessageResponse>(uri, new SignMessageRequest { Message = msg });
         }
 
         // VerifySignature verifies that a message was previously signed with a given key
-        public async Task<SignedMessage>VerifySignature(string vaultID, string keyID, string msg, string sig) {
+        public async Task<SignatureVerificationResponse>VerifySignature(string vaultID, string keyID, string msg, string sig) {
             var uri = $"vaults/{vaultID}/keys/{keyID}/verify";
-            return await this.Post<SignedMessage>(uri, new SignedMessage { Message = msg, Signature = sig });
+            return await this.Post<SignatureVerificationResponse>(uri, new SignatureVerificationRequest { Message = msg, Signature = sig });
         }
     }
 }
