@@ -97,7 +97,7 @@ namespace provide
         // CreateApplicationToken creates a new API token for the given application ID.
         public async Task<JWTToken>CreateApplicationToken(string applicationID, JWTToken token)
         {
-            // FIXME... set ApplicationID
+            token.ApplicationId = Guid.Parse(applicationID);
             return await this.Post<JWTToken>("tokens", token);
         }
 

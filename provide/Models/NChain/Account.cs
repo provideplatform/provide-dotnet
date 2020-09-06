@@ -1,5 +1,6 @@
 using Newtonsoft.Json;
 using System;
+using System.Numerics;
 
 namespace provide.Model.NChain
 {
@@ -28,5 +29,7 @@ namespace provide.Model.NChain
 
         [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
         public string PrivateKey  { get; set; }
+        [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
+        public BigInteger Balance  { get; set; }
     }
 }

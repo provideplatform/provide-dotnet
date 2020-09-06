@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using Newtonsoft.Json;
 
@@ -33,5 +34,7 @@ namespace provide.Model.Ident {
 
         [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
         public Dictionary<string, object> Prvd { get; set; }
+        [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
+        public Guid ApplicationId { get; set; }
     }
 }
