@@ -89,13 +89,12 @@ namespace provide.tests
             {
                 Name = "test organization"
             };
-            // check error: unable to assert arbitrary org permissions
-            // don't send permission
+            // FIXME: "message": "pq: column \"metadata\" of relation \"organizations\" does not exist"
             var res = await this.fixture.Ident.CreateOrganization(organization);
         }
 
         [Fact]
-        public async void TestCreateApplication() 
+        public async void TestCreateAndGetApplications() 
         {
             var application = new Application 
             {
@@ -104,14 +103,15 @@ namespace provide.tests
 
             var res = await this.fixture.Ident.CreateApplication(application);
             Assert.NotNull(res.Application.Id);
-        }
 
-        [Fact]
-        public async void TestListApplications()
-        {
-            // TODO: checks args for list methods
-            var res = await this.fixture.Ident.ListApplications(new Dictionary<string, object>{});
-            var res2 = await this.fixture.Ident.GetApplicationDetails(res[0].Id, new Dictionary<string, object>{});
+            var appList = await this.fixture.Ident.ListApplications(new Dictionary<string, object>());
+            var firstApp = appList[0];
+            Assert.Single(appList);
+            Assert.Equal(application.Name, firstApp.Name);
+
+            var appDetails = await this.fixture.Ident.GetApplicationDetails(firstApp.Id, new Dictionary<string, object>());
+            Assert.NotNull(appDetails.Id);
+            Assert.Equal(application.Name, appDetails.Name);
         }
     }
 }
