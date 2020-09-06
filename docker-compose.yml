@@ -174,7 +174,7 @@ services:
       - VAULT_API_SCHEME=http
       - VAULT_API_HOST=prvd-vault:8080
     healthcheck:
-      test: ["CMD", "curl", "-f", "http://prvd-ident:8080/status"] # FIXME
+      test: ["CMD", "curl", "-f", "http://prvd-ident:8080/status"]
       interval: 1m
       timeout: 1s
       retries: 2
@@ -236,7 +236,7 @@ services:
       - NATS_TOKEN=testtoken
       - REDIS_HOSTS=prvd-redis:6379
     healthcheck:
-      test: ["CMD", "curl", "-f", "http://prvd-nchain:8080/status"] # FIXME
+      test: ["CMD", "curl", "-f", "http://prvd-nchain:8080/status"]
       interval: 1m
       timeout: 1s
       retries: 2
@@ -265,7 +265,7 @@ services:
       - NATS_STREAMING_URL=nats://prvd-nats-streaming:4222
       - REDIS_HOSTS=prvd-redis:6379
     healthcheck:
-      test: ["CMD", "curl", "-f", "http://prvd-nchain:8080/status"] # FIXME
+      test: ["CMD", "curl", "-f", "http://prvd-nchain:8080/status"]
       interval: 1m
       timeout: 1s
       retries: 2
@@ -294,7 +294,7 @@ services:
       - NATS_STREAMING_URL=nats://prvd-nats-streaming:4222
       - REDIS_HOSTS=prvd-redis:6379
     healthcheck:
-      test: ["CMD", "curl", "-f", "http://prvd-nchain:8080/status"] # FIXME
+      test: ["CMD", "curl", "-f", "http://prvd-nchain:8080/status"]
       interval: 1m
       timeout: 1s
       retries: 2

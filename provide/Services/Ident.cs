@@ -149,7 +149,6 @@ namespace provide
         // DeleteToken removes a previously authorized API token, effectively deauthorizing future calls using the token
         public async Task<JWTToken>DeleteToken(string tokenID)
         {
-            // FIXME delete return type
             var uri = String.Format("tokens/{0}", tokenID);
             return await this.Delete<JWTToken>(uri);
         }
