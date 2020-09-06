@@ -27,6 +27,5 @@ namespace provide.Model.NChain
         public LoadBalancer[] LoadBalancers { get; set; }
         [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
         public ConnectorConfig Config { get; set; }
-        [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
     }
 }
