@@ -29,6 +29,7 @@ namespace provide.Model.NChain
 
         [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
         public string PrivateKey  { get; set; }
+
         [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
         public BigInteger Balance  { get; set; }
     }
