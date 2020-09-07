@@ -105,11 +105,10 @@ namespace provide.tests
             Assert.NotNull(res.Application.Id);
 
             var appList = await this.fixture.Ident.ListApplications(new Dictionary<string, object>());
-            var firstApp = appList[0];
             Assert.Single(appList);
-            Assert.Equal(application.Name, firstApp.Name);
+            Assert.Equal(application.Name, appList[0].Name);
 
-            var appDetails = await this.fixture.Ident.GetApplicationDetails(firstApp.Id, new Dictionary<string, object>());
+            var appDetails = await this.fixture.Ident.GetApplicationDetails(appList[0].Id, new Dictionary<string, object>());
             Assert.NotNull(appDetails.Id);
             Assert.Equal(application.Name, appDetails.Name);
         }
