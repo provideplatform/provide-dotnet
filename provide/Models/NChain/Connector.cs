@@ -9,10 +9,10 @@ namespace provide.Model.NChain
         public Guid NetworkId { get; set; }
 
         [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
-        public Guid Applicationid { get; set; }
+        public Guid ApplicationId { get; set; }
 
         [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
-        public Guid Organizationid { get; set; }
+        public Guid OrganizationId { get; set; }
 
         [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
         public string Name { get; set; }
@@ -39,4 +39,3 @@ namespace provide.Model.NChain
         public ConnectorConfig Config { get; set; }
     }
 }
-  

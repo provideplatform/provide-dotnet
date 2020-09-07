@@ -153,12 +153,6 @@ namespace provide
             return await this.Delete<JWTToken>(uri);
         }
 
-        // CreateUser creates a new user for which API tokens and managed signing identities can be authorized
-        // public async Task<User>CreateUser(User user)
-        // {
-        //     return await this.Post2<User>("users", user);
-        // }
-
         // ListUsers retrieves a paginated list of users scoped to the given API token
         public async Task<List<User>>ListUsers(Dictionary<string, object> args)
         {

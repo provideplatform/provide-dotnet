@@ -6,10 +6,10 @@ namespace provide.Model.NChain
     public class ConnectedEntity: BaseModel
     {
         [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
-        public string DataURL  { get; set; }
+        public string DataURL { get; set; }
 
         [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
-        public string Type  { get; set; }
+        public string Type { get; set; }
 
         [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
         public string Hash { get; set; }
