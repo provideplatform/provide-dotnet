@@ -1,36 +1,33 @@
-using Newtonsoft.Json;
 using System;
-using System.Numerics;
+using System.Collections.Generic;
+using Newtonsoft.Json;
 
 namespace provide.Model.NChain
 {
-    public class Account: BaseModel
+    public class ConnectorConfig
     {
         [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
-        public Guid NetworkId { get; set; }
+        public string Container { get; set; }
 
         [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
-        public Guid WalletId { get; set; }
+        public Dictionary<string, object> Credentials { get; set; }
 
         [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
-        public Guid ApplicationId  { get; set; }
+        public Dictionary<string, object> Env { get; set; }
 
         [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
-        public Guid UserId  { get; set; }
+        public Guid EngineId { get; set; }
 
         [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
-        public string Address  { get; set; }
+        public Guid ProviderId { get; set; }
 
         [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
-        public string HdDerivationPath  { get; set; }
+        public string Region { get; set; }
 
         [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
-        public string PublicKey  { get; set; }
+        public string Role { get; set; }
 
         [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
-        public string PrivateKey  { get; set; }
-
-        [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
-        public BigInteger Balance  { get; set; }
+        public Guid TargetId { get; set; }
     }
 }

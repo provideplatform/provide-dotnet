@@ -97,7 +97,7 @@ namespace provide
         // CreateApplicationToken creates a new API token for the given application ID.
         public async Task<JWTToken>CreateApplicationToken(string applicationID, JWTToken token)
         {
-            // FIXME... set ApplicationID
+            token.ApplicationId = Guid.Parse(applicationID);
             return await this.Post<JWTToken>("tokens", token);
         }
 
@@ -149,16 +149,9 @@ namespace provide
         // DeleteToken removes a previously authorized API token, effectively deauthorizing future calls using the token
         public async Task<JWTToken>DeleteToken(string tokenID)
         {
-            // FIXME delete return type
             var uri = String.Format("tokens/{0}", tokenID);
             return await this.Delete<JWTToken>(uri);
         }
-
-        // CreateUser creates a new user for which API tokens and managed signing identities can be authorized
-        // public async Task<User>CreateUser(User user)
-        // {
-        //     return await this.Post2<User>("users", user);
-        // }
 
         // ListUsers retrieves a paginated list of users scoped to the given API token
         public async Task<List<User>>ListUsers(Dictionary<string, object> args)

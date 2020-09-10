@@ -66,7 +66,6 @@ namespace provide
         }
 
         // GetAccountBalance
-        // FIXME!!! this Account object may not return the balance properly...
         public async Task<Account> GetAccountBalance(string accountID, string tokenID, Dictionary<string, object> args) {
             var uri = String.Format("accounts/{0}/balances/{1}", accountID, tokenID);
             return await this.Get<Account>(uri, args);
@@ -90,7 +89,6 @@ namespace provide
 
         // CreateConnector
         public async Task<Connector> CreateConnector(Connector connector) {
-            // FIXME connector type
             return await this.Post<Connector>("connectors", connector);
         }
 
@@ -188,21 +186,12 @@ namespace provide
         // ListNetworkAccounts
         public async Task<List<Account>> ListNetworkAccounts(string networkID, Dictionary<string, object> args) {
             var uri = String.Format("networks/{0}/accounts", networkID);
-            // FIXME is network account also account type?
             return await this.Get<List<Account>>(uri, args);
         }
-
-        // ListNetworkBlocks
-        // public async Task<(int, string)> ListNetworkBlocks(string networkID, Dictionary<string, object> args) {
-        //     // FIXME block type
-        //     var uri = String.Format("networks/{0}/blocks", networkID);
-        //     return await this.Get(uri, args);
-        // }
 
         // ListNetworkBridges
         public async Task<List<Bridge>> ListNetworkBridges(string networkID, Dictionary<string, object> args) {
             var uri = String.Format("networks/{0}/bridges", networkID);
-            // FIXME is network bridge same bridge type?
             return await this.Get<List<Bridge>>(uri, args);
         }
 
@@ -215,7 +204,6 @@ namespace provide
         // ListNetworkContracts
         public async Task<List<Contract>> ListNetworkContracts(string networkID, Dictionary<string, object> args) {
             var uri = String.Format("networks/{0}/contracts", networkID);
-            // FIXME is network contract same contract type?
             return await this.Get<List<Contract>>(uri, args);
         }
 
@@ -275,7 +263,6 @@ namespace provide
 
         // GetNetworkNodeLogs
         public async Task<NodeLogs> GetNetworkNodeLogs(string networkID, string nodeID, Dictionary<string, object> args) {
-            // FIXME network node type
             var uri = String.Format("networks/{0}/nodes/{1}/logs", networkID, nodeID);
             return await this.Get<NodeLogs>(uri, args);
         }
