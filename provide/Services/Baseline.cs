@@ -64,25 +64,25 @@ namespace provide
             }
         }
 
-        // CreateAgreement creates a new agreement and sends it to the named recipients; a witness is calculated
+        // CreateBusinessObject creates a new business object and sends it to the named recipients; a witness is calculated
         // using a generic zkSNARK agreement circuit at this time but a specific circuit may be specified in the future.
-        public async Task<ConnectedEntity> CreateAgreement(ConnectedEntity entity, string[] recipients) {
+        public async Task<ConnectedEntity> CreateBusinessObject(ConnectedEntity entity, string[] recipients) {
             return await this.nchain.CreateConnectedEntity(this.connectorID, entity);
         }
 
-        // UpdateAgreement attem    pts to updates an in-progress Baseline agreement.
-        public async Task<ConnectedEntity> UpdateAgreement(string entityID, ConnectedEntity entity) {
+        // UpdateBusinessObject attempts to updates an in-progress Baseline business object.
+        public async Task<ConnectedEntity> UpdateBusinessObject(string entityID, ConnectedEntity entity) {
             return await this.nchain.UpdateConnectedEntity(this.connectorID, entityID, entity);
         }
 
-        // GetAgreement retrieves a specific Baseline agreement by id.
-        public async Task<ConnectedEntity> GetAgreement(string entityID, Dictionary<string, object> args) {
+        // GetBusinessObject retrieves a specific Baseline business object by id.
+        public async Task<ConnectedEntity> GetBusinessObject(string entityID, Dictionary<string, object> args) {
             return await this.nchain.GetConnectedEntityDetails(this.connectorID, entityID, args);
         }
 
-        // ListAgreements retrieves a list of in-progress or previously completed Baseline agreement instances
+        // ListBusinessObject retrieves a list of in-progress or previously completed Baseline business object instances
         // which match the given query params.
-        public async Task<List<ConnectedEntity>> ListAgreements(Dictionary<string, object> args) {
+        public async Task<List<ConnectedEntity>> ListBusinessObject(Dictionary<string, object> args) {
             return await this.nchain.ListConnectedEntities(this.connectorID, args);
         }
     }
