@@ -40,5 +40,11 @@ namespace provide.Model.Ident {
 
         [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
         public Guid ApplicationId { get; set; }
+
+        [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
+        public Guid OrganizationId { get; set; }
+
+        [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
+        public Guid UserId { get; set; }
     }
 }
