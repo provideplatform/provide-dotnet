@@ -12,6 +12,9 @@ namespace provide.Model.Ident {
         public string AccessToken { get; set; }
 
         [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
+        public string RefreshToken { get; set; }
+
+        [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
         public string Kid { get; set; }
 
         [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
