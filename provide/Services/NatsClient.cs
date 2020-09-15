@@ -15,7 +15,7 @@ namespace provide
 
         private IConnection connection;
 
-        private List<IAsyncSubscription> subscriptions = new List<IAsyncSubscription>();
+        private Dictionary<string, IAsyncSubscription> subscriptions = new Dictionary<string, IAsyncSubscription>();
 
         public NatsClient()
         {
@@ -57,15 +57,30 @@ namespace provide
 
         public IAsyncSubscription Subscribe(string subject, EventHandler<MsgHandlerEventArgs> msgHandler)
         {
-            return this.connection.SubscribeAsync(subject, msgHandler);
+            var subscription = this.connection.SubscribeAsync(subject, msgHandler);
+            this.subscriptions.Add(subject, subscription);
+            return subscription;
         }
 
         // it looks like this is the only way to unsubcribe from specific subscription
         // this method might be redundant but keeping it just to have all functionalities
-        // do we need a way to unsubscribe using subject? we would need to track all subscriptions here
         public void Unsubscribe(IAsyncSubscription subscription)
         {
             subscription.Unsubscribe();
+        }
+
+        // might not be needed
+        public void Unsubscribe(string subject)
+        {
+            IAsyncSubscription subscription;
+            if (this.subscriptions.TryGetValue(subject, out subscription) && subscription != null)
+            {
+                subscription.Unsubscribe();
+            }
+            else 
+            {
+                throw new NATSBadSubscriptionException("Can not find subscription to unsubscribe");
+            }
         }
 
         public async Task<Msg> RequestAsync(string subject, int timeout, byte[] payload)
