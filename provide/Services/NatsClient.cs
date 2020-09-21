@@ -17,9 +17,9 @@ namespace provide
 
         private Dictionary<string, IAsyncSubscription> subscriptions = new Dictionary<string, IAsyncSubscription>();
 
-        public NatsClient()
+        public NatsClient(string token)
         {
-            this.natsUrl = "nats://localhost:4222";
+            this.token = token;
         }
 
         public NatsClient(string host, string path, string scheme, string token)
@@ -28,16 +28,32 @@ namespace provide
             this.path = path;
             this.scheme = scheme;
             this.token = token;
-            this.natsUrl =  $"{scheme}://${host}/${path}/";
+            this.natsUrl = $"{scheme}://${host}/${path}/";
         }
 
         public void Connect() 
         {
-            // are default options good enough?
             var opts = ConnectionFactory.GetDefaultOptions();
-            opts.Token = this.token;
+            EventHandler<UserJWTEventArgs> jwtEh = (sender, args) =>
+            {
+                args.JWT = this.token;
+            };
+
+            EventHandler<UserSignatureEventArgs> sigEh = (sender, args) =>
+            {
+                // nats.net requires this to be set, setting it to empty so we don't get exception
+                args.SignedNonce = new byte[64];
+            };
+            opts.SetJWTEventHandlers(jwtEh, sigEh);
+            // if not provided it will use default local server url
             opts.Url = this.natsUrl;
+            // add try catch?
             this.connection = new ConnectionFactory().CreateConnection(opts);
+        }
+
+        public ConnState IsConnected()
+        {
+            return this.connection.State;
         }
 
         public void Close()
@@ -53,6 +69,11 @@ namespace provide
         public void Publish(string subject, string reply, byte[] payload)
         {
             this.connection.Publish(subject, reply, payload);
+        }
+
+        public void Publish(string subject, byte[] payload)
+        {
+            this.connection.Publish(subject, payload);
         }
 
         public IAsyncSubscription Subscribe(string subject, EventHandler<MsgHandlerEventArgs> msgHandler)
