@@ -12,9 +12,7 @@ namespace provide
         private string scheme;
         private string token;
         private readonly string natsUrl;
-
         private IConnection connection;
-
         private Dictionary<string, IAsyncSubscription> subscriptions = new Dictionary<string, IAsyncSubscription>();
 
         public NatsClient(string token)
@@ -31,27 +29,17 @@ namespace provide
             this.natsUrl = $"{scheme}://${host}/${path}/";
         }
 
-        public void Connect() 
+        public void Connect()
         {
             var opts = ConnectionFactory.GetDefaultOptions();
-            EventHandler<UserJWTEventArgs> jwtEh = (sender, args) =>
-            {
-                args.JWT = this.token;
-            };
-
-            EventHandler<UserSignatureEventArgs> sigEh = (sender, args) =>
-            {
-                // nats.net requires this to be set, setting it to empty so we don't get exception
-                args.SignedNonce = new byte[64];
-            };
-            opts.SetJWTEventHandlers(jwtEh, sigEh);
+            SetJWTAndNKeyHandlers(opts);
             // if not provided it will use default local server url
             opts.Url = this.natsUrl;
             // add try catch?
             this.connection = new ConnectionFactory().CreateConnection(opts);
         }
 
-        public ConnState IsConnected()
+        public ConnState GetConnectionState()
         {
             return this.connection.State;
         }
@@ -108,28 +96,20 @@ namespace provide
         {
             return await this.connection.RequestAsync(subject, payload, timeout);
         }
-
-        // not sure if needed, just for testing purpose
-        private void WireUpGenericHandler(Options opts) 
+        
+        private void SetJWTAndNKeyHandlers(Options opts)
         {
-            opts.ClosedEventHandler += OnCloseEvent;
-            opts.DisconnectedEventHandler += OnDisconnectEvent;
-            opts.ReconnectedEventHandler += OnReconnectedEvent;
-        }
+            EventHandler<UserJWTEventArgs> jwtEh = (sender, args) =>
+            {
+                args.JWT = this.token;
+            };
 
-        private void OnReconnectedEvent(object sender, ConnEventArgs e)
-        {
-            Console.WriteLine("reconnect event", sender, e);
-        }
-
-        private void OnDisconnectEvent(object sender, ConnEventArgs e)
-        {
-            Console.WriteLine("disconnect event", sender, e);
-        }
-
-        private void OnCloseEvent(object sender, ConnEventArgs e)
-        {
-            Console.WriteLine("close event", sender, e);
+            EventHandler<UserSignatureEventArgs> sigEh = (sender, args) =>
+            {
+                // nats.net requires this to be set, setting it to empty so we don't get exception
+                args.SignedNonce = new byte[64];
+            };
+            opts.SetJWTEventHandlers(jwtEh, sigEh);
         }
     }    
 }
