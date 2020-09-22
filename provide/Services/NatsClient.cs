@@ -54,6 +54,11 @@ namespace provide
             this.connection.Close();
         }
 
+        public int GetSubscriptionCount() 
+        {
+            return this.connection.SubscriptionCount;
+        }
+
         public void Publish(string subject, string reply, byte[] payload)
         {
             this.connection.Publish(subject, reply, payload);
