@@ -32,11 +32,19 @@ namespace provide
         public void Connect()
         {
             var opts = ConnectionFactory.GetDefaultOptions();
-            SetJWTAndNKeyHandlers(opts);
+            SetJWTHandler(opts);
             // if not provided it will use default local server url
             opts.Url = this.natsUrl;
             // add try catch?
-            this.connection = new ConnectionFactory().CreateConnection(opts);
+            try
+            {
+                this.connection = new ConnectionFactory().CreateConnection(opts);
+            }
+            catch(Exception ex)
+            {
+                System.Diagnostics.Debug.WriteLine($"Failed to establish nats connection: {ex}");
+                throw ex;
+            }
         }
 
         public ConnState GetConnectionState()
@@ -93,7 +101,7 @@ namespace provide
             }
             else 
             {
-                throw new NATSBadSubscriptionException("Can not find subscription to unsubscribe");
+                throw new Exception("Can not find subscription to unsubscribe");
             }
         }
 
@@ -102,7 +110,7 @@ namespace provide
             return await this.connection.RequestAsync(subject, payload, timeout);
         }
         
-        private void SetJWTAndNKeyHandlers(Options opts)
+        private void SetJWTHandler(Options opts)
         {
             EventHandler<UserJWTEventArgs> jwtEh = (sender, args) =>
             {

@@ -1,5 +1,4 @@
-using System;
-using System.Threading.Tasks;
+using System.Threading;
 using NATS.Client;
 using Xunit;
 
@@ -7,42 +6,68 @@ namespace provide.tests
 {
     public class NatsClientTests
     {
-        private async Task<NatsClient> SetupNatsClient()
+        const string TestSubject = "my.pub.subject";
+        private NatsClient SetupNatsClient()
         {
-            var token = await IdentTestUtil.CreateIdentForTestUser();
+            var token = TestUtil.GetTempNatsToken();
             return new NatsClient(token);
         }
 
         [Fact]
-        public async void TestConnection()
+        public void TestConnection()
         {
-            var client = await SetupNatsClient();
+            var client = SetupNatsClient();
             client.Connect();
 
             Assert.Equal(ConnState.CONNECTED, client.GetConnectionState());
         }
 
         [Fact]
-        public async void TestSubscribeAndUnsubscribe() 
+        public void TestSubscribeAndUnsubscribe() 
         {
-            var client = await SetupNatsClient();
+            var client = SetupNatsClient();
             client.Connect();
 
             Assert.Equal(0, client.GetSubscriptionCount());
-            client.Subscribe("network.*.status", (sender, args) => {});
+            client.Subscribe(TestSubject, (sender, args) => {});
             Assert.Equal(1, client.GetSubscriptionCount());
-            client.Unsubscribe("network.*.status");
+            client.Unsubscribe(TestSubject);
             Assert.Equal(0, client.GetSubscriptionCount());
         }
 
         [Fact]
-        public async void TestConnectionClose()
+        public void TestPublish()
         {
-            var client = await SetupNatsClient();
+            var autoResetEvent = new AutoResetEvent(false);
+            var client = new NatsClient(TestUtil.GetTempNatsToken());
+
             client.Connect();
+            byte[] actualPayload = new byte[3];
+            var expectedPayload = new byte[3] { 1, 2, 3};
+            var actualSubject = "";
+            client.Subscribe(TestSubject, (sender, args) =>
+            {
+                actualSubject = args.Message.Subject;
+                actualPayload = args.Message.Data;
+                autoResetEvent.Set();
+            });
+            client.Publish(TestSubject, expectedPayload);
+            autoResetEvent.WaitOne();
+
+            Assert.Equal(expectedPayload, actualPayload);
+            Assert.Equal(TestSubject, actualSubject);
+        }
+
+        [Fact]
+        public void TestConnectionClose()
+        {
+            var client = SetupNatsClient();
+            client.Connect();
+            client.Subscribe(TestSubject, (sender, args) => {});
 
             client.Close();
             Assert.Equal(ConnState.CLOSED, client.GetConnectionState());
+            Assert.Equal(0, client.GetSubscriptionCount());
         }
     }
 

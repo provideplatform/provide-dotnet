@@ -8,7 +8,7 @@ namespace provide.tests
         [Fact]
         public async void TestCreateVault() 
         {
-            var token = await IdentTestUtil.CreateIdentForTestUser();
+            var token = await TestUtil.CreateIdentForTestUser();
             var vlt = Vault.InitVault(token);
             provide.Model.Vault.Vault vault = await vlt.CreateVault(new provide.Model.Vault.Vault {
                 Name = "TestVault",
@@ -20,7 +20,7 @@ namespace provide.tests
         [Fact]
         public async void TestCreateSecp256k1Key() 
         {
-            var token = await IdentTestUtil.CreateIdentForTestUser();
+            var token = await TestUtil.CreateIdentForTestUser();
             var vlt = Vault.InitVault(token);
             provide.Model.Vault.Vault vault = await vlt.CreateVault(
                 new provide.Model.Vault.Vault 
@@ -49,7 +49,7 @@ namespace provide.tests
         public async void TestSignAndVerifyMessage() 
         {
             var message = "message to be signed";
-            var token = await IdentTestUtil.CreateIdentForTestUser();
+            var token = await TestUtil.CreateIdentForTestUser();
             var vlt = Vault.InitVault(token);
             
             provide.Model.Vault.Vault vault = await vlt.CreateVault(
@@ -82,7 +82,7 @@ namespace provide.tests
         [Fact]
         public async void TestCreateSecret() 
         {
-            var token = await IdentTestUtil.CreateIdentForTestUser();
+            var token = await TestUtil.CreateIdentForTestUser();
             var vlt = Vault.InitVault(token);
             provide.Model.Vault.Vault vault = await vlt.CreateVault(
                 new provide.Model.Vault.Vault 
