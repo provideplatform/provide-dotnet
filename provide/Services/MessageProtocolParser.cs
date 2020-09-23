@@ -1,4 +1,3 @@
-
 using System.IO;
 using System.Text;
 
@@ -53,6 +52,7 @@ public static class MessageProtocolParser
                 bw.Write(msg.Payload);
             }
         }
+    
         return buffer;
     }
 
