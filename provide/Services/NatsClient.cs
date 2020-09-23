@@ -35,7 +35,6 @@ namespace provide
             SetJWTHandler(opts);
             // if not provided it will use default local server url
             opts.Url = this.natsUrl;
-            // add try catch?
             try
             {
                 this.connection = new ConnectionFactory().CreateConnection(opts);
@@ -58,7 +57,6 @@ namespace provide
             {
                 return;
             }
-            // should we do drain instead?
             this.connection.Close();
         }
 
@@ -91,7 +89,6 @@ namespace provide
             subscription.Unsubscribe();
         }
 
-        // might not be needed
         public void Unsubscribe(string subject)
         {
             IAsyncSubscription subscription;
