@@ -39,7 +39,7 @@ namespace provide.tests
         public void TestPublish()
         {
             var autoResetEvent = new AutoResetEvent(false);
-            var client = new NatsClient(TestUtil.GetTempNatsToken());
+            var client = SetupNatsClient();
 
             client.Connect();
             byte[] actualPayload = new byte[3];
