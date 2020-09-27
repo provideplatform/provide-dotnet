@@ -2,8 +2,10 @@ using System;
 using System.Collections.Generic;
 using Newtonsoft.Json;
 
-namespace provide.Model.Ident {
-    public class JWTToken: BaseModel {
+namespace provide.Model.Ident
+{
+    public class JWTToken : BaseModel
+    {
 
         [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
         public string Token { get; set; }
