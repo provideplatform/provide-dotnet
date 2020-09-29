@@ -20,6 +20,9 @@ namespace provide.Model.Ident
         public string Kid { get; set; }
 
         [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
+        public string Scope { get; set; }
+
+        [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
         public string Audience { get; set; }
 
         [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
@@ -41,12 +44,12 @@ namespace provide.Model.Ident
         public Dictionary<string, object> Prvd { get; set; }
 
         [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
-        public Guid ApplicationId { get; set; }
+        public Guid? ApplicationId { get; set; }
 
         [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
-        public Guid OrganizationId { get; set; }
+        public Guid? OrganizationId { get; set; }
 
         [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
-        public Guid UserId { get; set; }
+        public Guid? UserId { get; set; }
     }
 }
