@@ -23,6 +23,9 @@ namespace provide.Model.Ident
         public string Scope { get; set; }
 
         [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
+        public string GrantType { get; set; }
+
+        [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
         public string Audience { get; set; }
 
         [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]

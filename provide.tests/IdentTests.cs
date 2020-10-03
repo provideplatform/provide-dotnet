@@ -89,8 +89,8 @@ namespace provide.tests
             {
                 Name = "test organization"
             };
-            // FIXME: "message": "pq: column \"metadata\" of relation \"organizations\" does not exist"
             var res = await this.fixture.Ident.CreateOrganization(organization);
+            Assert.NotNull(res.Id);
         }
 
         [Fact]
@@ -111,6 +111,35 @@ namespace provide.tests
             var appDetails = await this.fixture.Ident.GetApplicationDetails(appList[0].Id, new Dictionary<string, object>());
             Assert.NotNull(appDetails.Id);
             Assert.Equal(application.Name, appDetails.Name);
+        }
+
+        [Fact]
+        public async void TestRefreshAndAccessTokens()
+        {
+            var org = await this.fixture.Ident.CreateOrganization(new Organization
+            {
+                Name = "test organization"
+            });
+
+            var refreshToken = await this.fixture.Ident.CreateToken(new JWTToken
+            {
+                Scope = "offline_access",
+                OrganizationId = org.Id
+            });
+
+            Assert.NotNull(refreshToken.Id);
+            Assert.NotNull(refreshToken.Token);
+            Assert.Equal(refreshToken.Scope, "offline_access");
+
+            var accessTokenIdent = new Ident(refreshToken.Token);
+
+            var accessToken = await accessTokenIdent.CreateToken(new JWTToken
+            {
+                GrantType = "refresh_token"
+            });
+
+            Assert.NotNull(accessToken.Id);
+            Assert.NotNull(accessToken.Token);
         }
     }
 }
