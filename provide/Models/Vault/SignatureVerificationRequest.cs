@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using Newtonsoft.Json;
 
 namespace provide.Model.Vault
@@ -9,5 +10,8 @@ namespace provide.Model.Vault
 
         [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
         public string Signature { get; set; }
+
+        [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
+        public Dictionary<string, object> Options { get; set; }
     }
 }

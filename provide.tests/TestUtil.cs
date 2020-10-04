@@ -70,4 +70,17 @@ public static class TestUtil
 
         return handler.WriteToken(jwtSecurityToken);
     }
+    
+    public static async Task<Vault> InitVaultWithOrgToken()
+    {
+        var token = await TestUtil.CreateIdentForTestUser();
+        var ident = Ident.InitIdent(token);
+        var org = await ident.CreateOrganization(new Organization
+        {
+            Name = "test org"
+        });
+        var orgToken = await ident.CreateToken(new JWTToken { OrganizationId = org.Id });
+
+        return Vault.InitVault(orgToken.Token);
+    }
 }

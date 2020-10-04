@@ -1,5 +1,5 @@
+using System.Collections.Generic;
 using System.Text;
-using System.Threading.Tasks;
 using provide.Model.Vault;
 using Xunit;
 
@@ -74,11 +74,24 @@ namespace provide.tests
                 }
             );
 
-            var signedMessage = await vlt.SignMessage(vault.Id.ToString(), generatedKey.Id.ToString(), message);
+            // sign and assert
+            var signReq = new SignMessageRequest
+            {
+                Message = message,
+                Options = new Dictionary<string, object>()
+            };
+            var signedMessage = await vlt.SignMessage(vault.Id.ToString(), generatedKey.Id.ToString(), signReq);
             Assert.NotNull(signedMessage.Signature);
             Assert.NotEmpty(signedMessage.Signature);
 
-            var verifiedMessage = await vlt.VerifySignature(vault.Id.ToString(), generatedKey.Id.ToString(), message, signedMessage.Signature);
+            // verify and assert
+            var verificationReq = new SignatureVerificationRequest
+            {
+                Message = message,
+                Signature = signedMessage.Signature,
+                Options = new Dictionary<string, object>()
+            };
+            var verifiedMessage = await vlt.VerifySignature(vault.Id.ToString(), generatedKey.Id.ToString(), verificationReq);
             Assert.True(verifiedMessage.Verified);
         }
 
@@ -108,46 +121,57 @@ namespace provide.tests
         }
 
         [Fact]
-        public async void TestSignUsingHdWallet()
+        public async void TestSignAndVerifyUsingBIP39Key()
         {
-            var token = await TestUtil.CreateIdentForTestUser();
-            var ident = Ident.InitIdent(token);
-            var org = await ident.CreateOrganization(new Model.Ident.Organization
-            {
-                Name = "test org"
-            });
-            var orgToken = await ident.CreateToken(new Model.Ident.JWTToken { OrganizationId = org.Id });
-
-            var vlt = Vault.InitVault(orgToken.Token);
+            var vlt = await TestUtil.InitVaultWithOrgToken();
             var vault = await vlt.CreateVault(new provide.Model.Vault.Vault
             {
                 Name = "test vault"
             });
 
-            var hdWallet = await CreateVaultKey(vlt, vault.Id.ToString(), "BIP39", "hdwallet", "EthHdWallet");
+            var orgName = "test org";
+            var hdWallet = await vlt.CreateVaultKey(vault.Id.ToString(), new Key
+            {
+                Type = "hdwallet",
+                Usage = "EthHdWallet",
+                Spec = "BIP39",
+                Name = $"{orgName} BIP39 keypair",
+                Description = $"{orgName} BIP39 keypair"
+            });
+            var message = Encoding.UTF8.GetString(new byte[3] { 1, 2, 3 });
 
-            var payload = new byte[3] { 1, 2, 3 };
-            var message = Encoding.UTF8.GetString(payload);
-            var signedMessage = await vlt.SignMessage(vault.Id.ToString(), hdWallet.Id.ToString(), message);
+            var hdWalletReqOptions = new Dictionary<string, object>
+            {
+                { "coin", "ETH" },
+                { "index", 0 }
+            };
+
+            // sign and assert
+            var signReq = new SignMessageRequest
+            {
+                Message = message,
+                Options = new Dictionary<string, object> 
+                {
+                    { "hdwallet", hdWalletReqOptions }
+                }
+            };
+            var signedMessage = await vlt.SignMessage(vault.Id.ToString(), hdWallet.Id.ToString(), signReq);
 
             Assert.NotNull(signedMessage.Signature);
             Assert.NotEmpty(signedMessage.Signature);
 
-            var verifiedMessage = await vlt.VerifySignature(vault.Id.ToString(), hdWallet.Id.ToString(), message, signedMessage.Signature);
-            // this assert fails
-            Assert.True(verifiedMessage.Verified);
-        }
-
-        private async Task<Key> CreateVaultKey(Vault vlt, string vltId, string spec, string type = null, string usage = null)
-        {
-            return await vlt.CreateVaultKey(vltId, new Key
+            // verify and assert
+            var verificationReq = new SignatureVerificationRequest
             {
-                Type = type != null ? type : "asymmetric",
-                Usage = usage != null ? usage : "sign/verify",
-                Spec = spec,
-                Name = $"test org {spec} keypair",
-                Description = $"test org {spec} keypair"
-            });
+                Message = message,
+                Signature = signedMessage.Signature,
+                Options = new Dictionary<string, object> 
+                {
+                    { "hdwallet", hdWalletReqOptions }
+                }
+            };
+            var verifiedMessage = await vlt.VerifySignature(vault.Id.ToString(), hdWallet.Id.ToString(), verificationReq);
+            Assert.True(verifiedMessage.Verified);
         }
     }
 }
