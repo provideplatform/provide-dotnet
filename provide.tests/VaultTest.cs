@@ -132,8 +132,8 @@ namespace provide.tests
             var orgName = "test org";
             var hdWallet = await vlt.CreateVaultKey(vault.Id.ToString(), new Key
             {
-                Type = "hdwallet",
-                Usage = "EthHdWallet",
+                Type = "asymmetric",
+                Usage = "sign/verify",
                 Spec = "BIP39",
                 Name = $"{orgName} BIP39 keypair",
                 Description = $"{orgName} BIP39 keypair"
@@ -142,7 +142,7 @@ namespace provide.tests
 
             var hdWalletReqOptions = new Dictionary<string, object>
             {
-                { "coin", "ETH" },
+                { "coin", 60 }, // ETH
                 { "index", 0 }
             };
 
