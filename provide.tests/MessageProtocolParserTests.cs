@@ -1,4 +1,5 @@
 using Xunit;
+using provide.Model;
 
 public class MessageProtocolParserTests
 {
@@ -13,6 +14,8 @@ public class MessageProtocolParserTests
         var payload = new byte[3] { 1, 2, 3 };
         var msg = new Message
         {
+            OpCode = Constants.BLINE_OPCODE,
+            Type = Constants.TEXT_PAYLOAD_TYPE,
             Sender = sender,
             Recipient = recipient,
             Shield = shield,
@@ -26,8 +29,8 @@ public class MessageProtocolParserTests
         var unmarshaled = MessageProtocolParser.UnmarshalProtocolMessage(marshaled);
 
         // checking if marshaling and unmarshaling results in initial message
-        Assert.Equal("BLINE", unmarshaled.OpCode);
-        Assert.Equal("1", unmarshaled.Type);
+        Assert.Equal(Constants.BLINE_OPCODE, unmarshaled.OpCode);
+        Assert.Equal(Constants.TEXT_PAYLOAD_TYPE, unmarshaled.Type);
         Assert.Equal(sender, unmarshaled.Sender);
         Assert.Equal(recipient, unmarshaled.Recipient);
         Assert.Equal(shield, unmarshaled.Shield);
