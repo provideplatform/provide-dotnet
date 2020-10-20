@@ -38,6 +38,9 @@ namespace provide.Model.Ident
         public string ExpiresAt { get; set; }
 
         [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
+        public int? ExpiresIn { get; set; }
+
+        [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
         public string Subject { get; set; }
 
         [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]

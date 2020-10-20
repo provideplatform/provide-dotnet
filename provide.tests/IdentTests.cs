@@ -104,6 +104,11 @@ namespace provide.tests
             var res = await this.fixture.Ident.CreateApplication(application);
             Assert.NotNull(res.Id);
 
+            var appToken = await this.fixture.Ident.CreateToken(new JWTToken
+            {
+                ApplicationId = res.Id
+            });
+
             var appList = await this.fixture.Ident.ListApplications(new Dictionary<string, object>());
             Assert.Single(appList);
             Assert.Equal(application.Name, appList[0].Name);
@@ -121,25 +126,25 @@ namespace provide.tests
                 Name = "test organization"
             });
 
-            var refreshToken = await this.fixture.Ident.CreateToken(new JWTToken
+            var accessRefreshToken = await this.fixture.Ident.CreateToken(new JWTToken
             {
                 Scope = "offline_access",
                 OrganizationId = org.Id
             });
 
-            Assert.NotNull(refreshToken.Id);
-            Assert.NotNull(refreshToken.Token);
-            Assert.Equal("offline_access", refreshToken.Scope);
+            Assert.NotNull(accessRefreshToken.AccessToken);
+            Assert.NotNull(accessRefreshToken.RefreshToken);
+            Assert.NotNull(accessRefreshToken.ExpiresIn);
+            Assert.Equal("offline_access", accessRefreshToken.Scope);
 
-            var accessTokenIdent = new Ident(refreshToken.Token);
-
+            var accessTokenIdent = new Ident(accessRefreshToken.RefreshToken);
             var accessToken = await accessTokenIdent.CreateToken(new JWTToken
             {
                 GrantType = "refresh_token"
             });
 
-            Assert.NotNull(accessToken.Id);
-            Assert.NotNull(accessToken.Token);
+            Assert.NotNull(accessToken.RefreshToken);
+            Assert.NotNull(accessRefreshToken.ExpiresIn);
         }
     }
 }
