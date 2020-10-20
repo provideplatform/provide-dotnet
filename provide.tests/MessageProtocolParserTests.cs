@@ -1,5 +1,6 @@
 using Xunit;
-using provide.Model;
+using provide.Baseline.Model;
+using provide.Baseline.Services;
 
 public class MessageProtocolParserTests
 {

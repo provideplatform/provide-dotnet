@@ -1,4 +1,4 @@
-namespace  provide.Model
+namespace  provide.Baseline.Model
 {
     public static class Constants 
     {
@@ -19,4 +19,3 @@ namespace  provide.Model
         public const string TEXT_PAYLOAD_TYPE = "1";
     }
 }
-

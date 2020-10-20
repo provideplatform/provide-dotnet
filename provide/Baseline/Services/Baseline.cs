@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 using Newtonsoft.Json;
 using provide.Model.NChain;
 
-namespace provide
+namespace provide.Baseline.Services
 {
     public class Baseline
     {
