@@ -102,7 +102,7 @@ namespace provide.tests
             };
 
             var res = await this.fixture.Ident.CreateApplication(application);
-            Assert.NotNull(res.Application.Id);
+            Assert.NotNull(res.Id);
 
             var appList = await this.fixture.Ident.ListApplications(new Dictionary<string, object>());
             Assert.Single(appList);
@@ -129,7 +129,7 @@ namespace provide.tests
 
             Assert.NotNull(refreshToken.Id);
             Assert.NotNull(refreshToken.Token);
-            Assert.Equal(refreshToken.Scope, "offline_access");
+            Assert.Equal("offline_access", refreshToken.Scope);
 
             var accessTokenIdent = new Ident(refreshToken.Token);
 
