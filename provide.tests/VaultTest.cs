@@ -51,7 +51,7 @@ namespace provide.tests
         [Fact]
         public async void TestSignAndVerifyMessage()
         {
-            var message = "message to be signed";
+            var message = "02a285b1a277f7602dc115a3bf627a8b7603a4a1be9a72b3ab0284878afe443d"; // secp256k1 signing requests must send 32-byte `message` (ie hash the data first...)
             var token = await TestUtil.CreateIdentForTestUser();
             var vlt = Vault.InitVault(token);
 
@@ -138,12 +138,11 @@ namespace provide.tests
                 Name = $"{orgName} BIP39 keypair",
                 Description = $"{orgName} BIP39 keypair"
             });
-            var message = Encoding.UTF8.GetString(new byte[3] { 1, 2, 3 });
+            var message = "02a285b1a277f7602dc115a3bf627a8b7603a4a1be9a72b3ab0284878afe443d"; // secp256k1 signing requests must send 32-byte `message` (ie hash the data first...)
 
             var hdWalletReqOptions = new Dictionary<string, object>
             {
                 { "coin", 60 }, // ETH
-                { "index", 0 }
             };
 
             // sign and assert
