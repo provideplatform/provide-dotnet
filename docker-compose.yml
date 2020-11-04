@@ -197,7 +197,7 @@ services:
       - DATABASE_NAME=nchain_dev
       - DATABASE_USER=nchain
       - DATABASE_PASSWORD=nchain
-      - IDENT_API_HOST=ident:8080
+      - IDENT_API_HOST=prvd-ident:8080
       - IDENT_API_SCHEME=http
       - LOG_LEVEL=DEBUG
       - NATS_CLIENT_PREFIX=prvd-nchain
@@ -237,7 +237,7 @@ services:
       - DATABASE_NAME=nchain_dev
       - DATABASE_USER=nchain
       - DATABASE_PASSWORD=nchain
-      - IDENT_API_HOST=ident:8080
+      - IDENT_API_HOST=prvd-ident:8080
       - IDENT_API_SCHEME=http
       - LOG_LEVEL=DEBUG
       - NATS_CLIENT_PREFIX=prvd-nchain-consumer
@@ -274,7 +274,7 @@ services:
       - DATABASE_NAME=nchain_dev
       - DATABASE_USER=nchain
       - DATABASE_PASSWORD=nchain
-      - IDENT_API_HOST=ident:8080
+      - IDENT_API_HOST=prvd-ident:8080
       - IDENT_API_SCHEME=http
       - LOG_LEVEL=DEBUG
       - NATS_CLIENT_PREFIX=reachabilitydaemon
@@ -309,7 +309,7 @@ services:
       - DATABASE_NAME=nchain_dev
       - DATABASE_USER=nchain
       - DATABASE_PASSWORD=nchain
-      - IDENT_API_HOST=ident:8080
+      - IDENT_API_HOST=prvd-ident:8080
       - IDENT_API_SCHEME=http
       - LOG_LEVEL=DEBUG
       - NATS_CLIENT_PREFIX=statsdaemon
