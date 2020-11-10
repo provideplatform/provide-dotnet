@@ -97,7 +97,12 @@ namespace provide
                 var raw = await content.ReadAsByteArrayAsync();
                 if (raw.Length > 0) {
                     var str = System.Text.Encoding.Default.GetString(raw);
-                    return JsonConvert.DeserializeObject<T>(str);
+                    return JsonConvert.DeserializeObject<T>(str, new JsonSerializerSettings {
+                        ContractResolver = new DefaultContractResolver {
+                            NamingStrategy = new SnakeCaseNamingStrategy(),
+                        },
+                        Formatting = Formatting.Indented
+                    });
                 }
             }
             catch (Exception e) {

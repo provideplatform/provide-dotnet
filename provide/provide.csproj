@@ -2,7 +2,7 @@
   <PropertyGroup>
     <TargetFramework>netcoreapp3.1</TargetFramework>
     <PackageId>Provide</PackageId>
-    <Version>2.2.0</Version>
+    <Version>2.2.1</Version>
     <Authors>Kyle Thomas</Authors>
     <Company>Provide Technologies Inc.</Company>
   </PropertyGroup>
