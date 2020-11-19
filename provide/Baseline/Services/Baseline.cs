@@ -4,6 +4,7 @@ using System.IdentityModel.Tokens.Jwt;
 using System.Threading.Tasks;
 
 using Newtonsoft.Json;
+using provide.Baseline.Model;
 using provide.Model.NChain;
 
 namespace provide.Baseline.Services
@@ -102,12 +103,12 @@ namespace provide.Baseline.Services
             return await this.nchain.ListConnectedEntities(this.connectorID, args);
         }
 
-        public byte[] MarshalProtocolMessage(Message msg)
+        public byte[] MarshalProtocolMessage(ProtocolMessage msg)
         {
             return MessageProtocolParser.MarshalProtocolMessage(msg);
         }
 
-        public Message UnmarshalProtocolMessage(byte[] msg)
+        public ProtocolMessage UnmarshalProtocolMessage(byte[] msg)
         {
             return MessageProtocolParser.UnmarshalProtocolMessage(msg);
         }

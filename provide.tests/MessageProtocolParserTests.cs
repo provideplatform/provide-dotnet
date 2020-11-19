@@ -13,7 +13,7 @@ public class MessageProtocolParserTests
         var identifier = "123e4567-e89b-12d3-a456-426655440000";
         var signature = "2f04ca19aa525862b827c55feec2f9a3743aaf6fa75f2d140733922cb05665f2";
         var payload = new byte[3] { 1, 2, 3 };
-        var msg = new Message
+        var msg = new ProtocolMessage
         {
             OpCode = Constants.BLINE_OPCODE,
             Type = Constants.TEXT_PAYLOAD_TYPE,

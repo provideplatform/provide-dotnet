@@ -1,31 +1,22 @@
 using System.IO;
 using System.Text;
+using provide.Baseline.Model;
 
 namespace provide.Baseline.Services
 {
-    public class Message
-    {
-        public string OpCode { get; set; } // up to 40 bits
-        public string Sender { get; set; } // up to 336 bits
-        public string Recipient { get; set; } // up to 336 bits
-        public string Shield { get; set; } // up to 336 bits
-        public string Identifier { get; set; } // up to 288 bits (i.e., UUIDv4 circuit/workflow identifier)
-        public string Signature { get; set; } // 512 bits
-        public string Type { get; set; }  // 1 bit
-        public byte[] Payload { get; set; } // arbitrary length
-    }
+
 
     public static class MessageProtocolParser
     {
         const int MessageReservedBitsLength = 512;
-        public static byte[] MarshalProtocolMessage(Message msg)
+        public static byte[] MarshalProtocolMessage(ProtocolMessage msg)
         {
             var reservedBits = new byte[MessageReservedBitsLength / 8];
             var buffer = new byte[5 + 42 + 42 + 42 + 36 + 64 + 1 + reservedBits.Length + msg.Payload.Length];
 
             using (MemoryStream ms = new MemoryStream(buffer))
             {
-                using(BinaryWriter bw = new BinaryWriter(ms, Encoding.UTF8))
+                using (BinaryWriter bw = new BinaryWriter(ms, Encoding.UTF8))
                 {
                     bw.Write(msg.OpCode.ToCharArray());
 
@@ -54,11 +45,11 @@ namespace provide.Baseline.Services
                     bw.Write(msg.Payload);
                 }
             }
-        
+
             return buffer;
         }
 
-        public static Message UnmarshalProtocolMessage (byte[] msg)
+        public static ProtocolMessage UnmarshalProtocolMessage(byte[] msg)
         {
             var reservedSize = MessageReservedBitsLength / 8;
 
@@ -76,7 +67,7 @@ namespace provide.Baseline.Services
                     var type = Encoding.UTF8.GetString(br.ReadBytes(1));
                     var payload = br.ReadBytes(msg.Length - (5 + 42 + 42 + 42 + 36 + 64 + 1 + reservedSize));
 
-                    return new Message
+                    return new ProtocolMessage
                     {
                         OpCode = opCode,
                         Type = type,
