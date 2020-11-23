@@ -137,14 +137,14 @@ namespace provide.tests
             Assert.NotNull(accessRefreshToken.ExpiresIn);
             Assert.Equal("offline_access", accessRefreshToken.Scope);
 
-            var accessTokenIdent = new Ident(accessRefreshToken.RefreshToken);
+            var accessTokenIdent = Ident.InitIdent(accessRefreshToken.RefreshToken);
             var accessToken = await accessTokenIdent.CreateToken(new JWTToken
             {
                 GrantType = "refresh_token"
             });
 
-            Assert.NotNull(accessToken.RefreshToken);
-            Assert.NotNull(accessRefreshToken.ExpiresIn);
+            Assert.NotNull(accessToken.AccessToken);
+            Assert.NotNull(accessToken.ExpiresIn);
         }
     }
 }
