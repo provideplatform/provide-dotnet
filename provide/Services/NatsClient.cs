@@ -26,7 +26,7 @@ namespace provide
             this.path = path;
             this.scheme = scheme;
             this.token = token;
-            this.natsUrl = $"{scheme}://${host}/${path}/";
+            this.natsUrl = $"{scheme}://{host}/{path}";
         }
 
         public void Connect()
