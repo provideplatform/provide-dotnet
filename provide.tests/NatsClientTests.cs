@@ -1,4 +1,5 @@
 using System.Threading;
+using System.Threading.Tasks;
 using NATS.Client;
 using Xunit;
 
@@ -23,13 +24,13 @@ namespace provide.tests
         }
 
         [Fact]
-        public void TestSubscribeAndUnsubscribe() 
+        public void TestSubscribeAndUnsubscribe()
         {
             var client = SetupNatsClient();
             client.Connect();
 
             Assert.Equal(0, client.GetSubscriptionCount());
-            client.Subscribe(TestSubject, (sender, args) => {});
+            client.Subscribe(TestSubject, (sender, args) => { });
             Assert.Equal(1, client.GetSubscriptionCount());
             client.Unsubscribe(TestSubject);
             Assert.Equal(0, client.GetSubscriptionCount());
@@ -43,7 +44,7 @@ namespace provide.tests
 
             client.Connect();
             byte[] actualPayload = new byte[3];
-            var expectedPayload = new byte[3] { 1, 2, 3};
+            var expectedPayload = new byte[3] { 1, 2, 3 };
             var actualSubject = "";
             client.Subscribe(TestSubject, (sender, args) =>
             {
@@ -63,12 +64,44 @@ namespace provide.tests
         {
             var client = SetupNatsClient();
             client.Connect();
-            client.Subscribe(TestSubject, (sender, args) => {});
+            client.Subscribe(TestSubject, (sender, args) => { });
 
             client.Close();
             Assert.Equal(ConnState.CLOSED, client.GetConnectionState());
             Assert.Equal(0, client.GetSubscriptionCount());
         }
-    }
 
+        [Fact]
+        public void TestConnectionEvents()
+        {
+            var onDisconnectedResetEvent = new AutoResetEvent(false);
+            var onClosedResetEvent = new AutoResetEvent(false);
+
+            var onDisconnectedCalled = false;
+            var onClosedCalled = false;
+
+            var client = SetupNatsClient();
+
+            client.OnDisconnected += (object sender, Models.NatsClient.ConnectionEventArguments args) =>
+            {
+                onDisconnectedCalled = true;
+                onDisconnectedResetEvent.Set();
+            };
+
+            client.OnClosed += (object sender, Models.NatsClient.ConnectionEventArguments args) =>
+            {
+                onClosedCalled = true;
+                onClosedResetEvent.Set();
+            };
+
+            client.Connect();
+            client.Close();
+
+            onDisconnectedResetEvent.WaitOne();
+            onClosedResetEvent.WaitOne();
+
+            Assert.True(onDisconnectedCalled);
+            Assert.True(onClosedCalled);
+        }
+    }
 }
