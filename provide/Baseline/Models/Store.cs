@@ -2,11 +2,11 @@ using System.Collections.Generic;
 
 namespace provide.Baseline.Model
 {
-    public class Participant
+    public class Store
     {
-        public string Address { get; set; }
+        public string Identifier { get; set; }
         public Dictionary<string, object> Metadata { get; set; }
+        public string Provider { get; set; }
         public string Url { get; set; }
     }
 }
-
