@@ -2,10 +2,11 @@ using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using NATS.Client;
+using provide.Models.NatsClient;
 
-namespace provide 
+namespace provide
 {
-    public class NatsClient 
+    public class NatsClient
     {
         private string host;
         private string path;
@@ -14,6 +15,16 @@ namespace provide
         private readonly string natsUrl;
         private IConnection connection;
         private Dictionary<string, IAsyncSubscription> subscriptions = new Dictionary<string, IAsyncSubscription>();
+
+        public delegate void AsyncErrorEvent(object sender, ErrorEventArguments args);
+        public delegate void ServerDiscoveredEvent(object sender, ConnectionEventArguments args);
+        public delegate void ClosedEvent(object sender, ConnectionEventArguments args);
+        public delegate void DisconnectedEvent(object sender, ConnectionEventArguments args);
+
+        public event AsyncErrorEvent OnAsyncError;
+        public event ServerDiscoveredEvent OnServerDiscovered;
+        public event ClosedEvent OnClosed;
+        public event DisconnectedEvent OnDisconnected;
 
         public NatsClient(string token)
         {
@@ -32,14 +43,18 @@ namespace provide
         public void Connect()
         {
             var opts = ConnectionFactory.GetDefaultOptions();
+
+            SetEventHandlers(opts);
             SetJWTHandler(opts);
+
             // if not provided it will use default local server url
             opts.Url = this.natsUrl;
+
             try
             {
                 this.connection = new ConnectionFactory().CreateConnection(opts);
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 System.Diagnostics.Debug.WriteLine($"Failed to establish nats connection: {ex}");
                 throw ex;
@@ -53,14 +68,14 @@ namespace provide
 
         public void Close()
         {
-            if (this.connection.IsClosed()) 
+            if (this.connection.IsClosed())
             {
                 return;
             }
             this.connection.Close();
         }
 
-        public int GetSubscriptionCount() 
+        public int GetSubscriptionCount()
         {
             return this.connection.SubscriptionCount;
         }
@@ -96,7 +111,7 @@ namespace provide
             {
                 subscription.Unsubscribe();
             }
-            else 
+            else
             {
                 throw new Exception("Can not find subscription to unsubscribe");
             }
@@ -106,7 +121,15 @@ namespace provide
         {
             return await this.connection.RequestAsync(subject, payload, timeout);
         }
-        
+
+        private void SetEventHandlers(Options opts)
+        {
+            opts.AsyncErrorEventHandler += (sender, args) => OnAsyncError?.Invoke(this, ErrorEventArguments.FromNatsEntity(args));
+            opts.ServerDiscoveredEventHandler += (sender, args) => OnServerDiscovered?.Invoke(this, ConnectionEventArguments.FromNatsEntity(args));
+            opts.ClosedEventHandler += (sender, args) => OnClosed?.Invoke(this, ConnectionEventArguments.FromNatsEntity(args));
+            opts.DisconnectedEventHandler += (sender, args) => OnDisconnected?.Invoke(this, ConnectionEventArguments.FromNatsEntity(args));
+        }
+
         private void SetJWTHandler(Options opts)
         {
             EventHandler<UserJWTEventArgs> jwtEh = (sender, args) =>
@@ -121,5 +144,5 @@ namespace provide
             };
             opts.SetJWTEventHandlers(jwtEh, sigEh);
         }
-    }    
+    }
 }
