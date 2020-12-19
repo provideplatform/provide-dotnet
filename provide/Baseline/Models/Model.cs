@@ -3,12 +3,12 @@ namespace provide.Baseline.Model
     public class Model
     {
         /// <summary>
-        /// 
+        /// TODO
         /// </summary>
         public Store Store { get; set; }
 
         /// <summary>
-        /// Name of the application-specific record type.
+        /// Name of the application-specific record type (i.e. collection, table).
         /// </summary>
         public string Name { get; set; }
 

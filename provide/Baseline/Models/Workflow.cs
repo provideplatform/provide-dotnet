@@ -20,7 +20,7 @@ namespace provide.Baseline.Model
         public Participant[] Participants { get; set; }
 
         /// <summary>
-        /// Workflow identifier; should match circuit.id
+        /// Workflow identifier (should match circuit.id).
         /// </summary>
         public string Identifier  { get; set; }
 

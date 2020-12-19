@@ -5,7 +5,7 @@ namespace provide.Baseline.Model
     public class Store
     {
         /// <summary>
-        /// Optional system of record identifier, i.e. document name, UUID or primary key of relational record.
+        /// Optional system of record identifier (i.e. document name, UUID or primary key of relational record).
         /// </summary>
         public string Identifier { get; set; }
 
@@ -20,7 +20,7 @@ namespace provide.Baseline.Model
         public string Provider { get; set; }
 
         /// <summary>
-        /// Url referencing the local system of record; i.e. DSN in the case of relational SQL database.
+        /// Url referencing the local system of record (i.e. DSN in the case of relational SQL database).
         /// </summary>
         public string Url { get; set; }
     }
