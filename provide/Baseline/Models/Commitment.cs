@@ -10,9 +10,9 @@ namespace provide.Baseline.Model
         public Dictionary<string, object> Metadata { get; set; }
 
         /// <summary>
-        /// 
+        /// TODO
         /// </summary>
-        public int Location { get; set; }
+        public long Location { get; set; }
 
         /// <summary>
         /// Salt such that currentHash = H(data + salt). 
@@ -20,12 +20,12 @@ namespace provide.Baseline.Model
         public string Salt { get; set; }
 
         /// <summary>
-        /// 
+        /// TODO
         /// </summary>
-        public int[] Proof { get; set; }
+        public long[] Proof { get; set; }
 
         /// <summary>
-        /// 
+        /// TODO
         /// </summary>
         public string[] PublicInputs { get; set; }
 
