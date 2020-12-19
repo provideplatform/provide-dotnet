@@ -32,7 +32,7 @@ namespace provide.Baseline.Model
         /// <summary>
         /// Map of model name to model representing the underlying domain model and its local persistent store (i.e. system of record).
         /// </summary>
-        public Dictionary<string, Model> Persistence { get; set; } // TODO: Verify type
+        public Dictionary<string, Model> Persistence { get; set; }
 
         /// <summary>
         /// Arbitrary workflow metadata.
