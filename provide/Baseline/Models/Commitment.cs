@@ -42,7 +42,7 @@ namespace provide.Baseline.Model
         /// <summary>
         /// Unix timestamp when the commitment was pushed. 
         /// </summary>
-        public long Timestamp { get; set; } // TODO: int or long
+        public long Timestamp { get; set; }
 
         /// <summary>
         /// Commitment value. 

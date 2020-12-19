@@ -22,6 +22,6 @@ namespace provide.Baseline.Model
         /// <summary>
         /// References to the workflows that are part of the workgroup.
         /// </summary>
-        public Dictionary<string, Workflow> Workflows { get; set; } // TODO: Verify type 
+        public Dictionary<string, Workflow> Workflows { get; set; } 
     }
 }
