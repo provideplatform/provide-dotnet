@@ -3,7 +3,7 @@ namespace provide.Baseline.Model
     public class Model
     {
         /// <summary>
-        /// TODO
+        /// The local system of record
         /// </summary>
         public Store Store { get; set; }
 

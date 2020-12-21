@@ -10,7 +10,7 @@ namespace provide.Baseline.Model
         public Dictionary<string, object> Metadata { get; set; }
 
         /// <summary>
-        /// TODO
+        /// Abstract location of the commitment (i.e., in the case of a merkle tree, this is the leaf index)
         /// </summary>
         public long Location { get; set; }
 
@@ -20,12 +20,12 @@ namespace provide.Baseline.Model
         public string Salt { get; set; }
 
         /// <summary>
-        /// TODO
+        /// Array of proofs;
         /// </summary>
         public long[] Proof { get; set; }
 
         /// <summary>
-        /// TODO
+        /// Public inputs used to generate the commitment
         /// </summary>
         public string[] PublicInputs { get; set; }
 
