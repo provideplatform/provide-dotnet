@@ -68,7 +68,7 @@ namespace provide
 
         public void Close()
         {
-            if (this.connection.IsClosed())
+            if (this.connection == null || this.connection.IsClosed())
             {
                 return;
             }
