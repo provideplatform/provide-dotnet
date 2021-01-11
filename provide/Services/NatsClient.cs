@@ -54,7 +54,7 @@ namespace provide
             {
                 this.connection = new ConnectionFactory().CreateConnection(opts);
             }
-            catch (Exception ex)
+            catch (Exception ex) when (ex is NATSNoServersException || ex is NATSConnectionException)
             {
                 System.Diagnostics.Debug.WriteLine($"Failed to establish nats connection: {ex}");
                 throw ex;
@@ -68,7 +68,7 @@ namespace provide
 
         public void Close()
         {
-            if (this.connection.IsClosed())
+            if (this.connection == null || this.connection.IsClosed())
             {
                 return;
             }
