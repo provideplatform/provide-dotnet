@@ -8,9 +8,9 @@ namespace provide
 {
     public class Ident: ApiClient
     {
-        const string DEFAULT_HOST = "ident.provide.services";
+        const string DEFAULT_HOST = "localhost:8081";
         const string DEFAULT_PATH = "api/v1";
-        const string DEFAULT_SCHEME = "https";
+        const string DEFAULT_SCHEME = "http";
         const string HOST_ENVIRONMENT_VAR = "IDENT_API_HOST";
         const string SCHEME_ENVIRONMENT_VAR = "IDENT_API_SCHEME";
         const string PATH_ENVIRONMENT_VAR = "IDENT_API_PATH";
@@ -73,6 +73,19 @@ namespace provide
             var uri = String.Format("applications/{0}", applicationID);
             return await this.Put<Application>(uri, application);
         }
+
+        public async Task<List<Organization>>FetchApplicationOrganizations(string applicationID, Dictionary<string, object> query)
+        {
+            var uri = String.Format("applications/{0}/organizations", applicationID);
+            return await this.Get<List<Organization>>(uri, query);
+        }
+
+        public async Task<Organization>AddApplicationOrganizations(string applicationID, ApplicationOrganization appOrg)
+        {
+            var uri = String.Format("applications/{0}/organizations", applicationID);
+            return await this.Post<Organization>(uri, appOrg);
+        }
+
 
         // ListApplications retrieves a paginated list of applications scoped to the given API token
         public async Task<List<Application>>ListApplications(Dictionary<string, object> query)

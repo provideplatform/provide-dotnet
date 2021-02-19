@@ -8,9 +8,9 @@ namespace provide
 {
     public class NChain: ApiClient
     {
-        const string DEFAULT_HOST = "nchain.provide.services";
+        const string DEFAULT_HOST = "localhost:8080";
         const string DEFAULT_PATH = "api/v1";
-        const string DEFAULT_SCHEME = "https";
+        const string DEFAULT_SCHEME = "http";
         const string HOST_ENVIRONMENT_VAR = "NCHAIN_API_HOST";
         const string SCHEME_ENVIRONMENT_VAR = "NCHAIN_API_SCHEME";
         const string PATH_ENVIRONMENT_VAR = "NCHAIN_API_PATH";
@@ -22,7 +22,7 @@ namespace provide
         {
             NChain nchain;
             try {
-                nchain = new NChain(token);
+                nchain = new NChain(DEFAULT_HOST, DEFAULT_PATH, DEFAULT_SCHEME, token);
             } catch {
                 string host = Environment.GetEnvironmentVariable(HOST_ENVIRONMENT_VAR);
                 string path = Environment.GetEnvironmentVariable(PATH_ENVIRONMENT_VAR);
