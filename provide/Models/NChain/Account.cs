@@ -7,16 +7,16 @@ namespace provide.Model.NChain
     public class Account: BaseModel
     {
         [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
-        public Guid NetworkId { get; set; }
+        public Guid? NetworkId { get; set; }
 
         [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
-        public Guid WalletId { get; set; }
+        public Guid? WalletId { get; set; }
 
         [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
-        public Guid ApplicationId  { get; set; }
+        public Guid? ApplicationId  { get; set; }
 
         [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
-        public Guid UserId  { get; set; }
+        public Guid? UserId  { get; set; }
 
         [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
         public string Address  { get; set; }
