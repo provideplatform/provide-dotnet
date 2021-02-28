@@ -7,9 +7,9 @@ namespace provide
 {
     public class Vault : ApiClient
     {
-        const string DEFAULT_HOST = "vault.provide.services";
+        const string DEFAULT_HOST = "localhost:8082";
         const string DEFAULT_PATH = "api/v1";
-        const string DEFAULT_SCHEME = "https";
+        const string DEFAULT_SCHEME = "http";
         const string HOST_ENVIRONMENT_VAR = "VAULT_API_HOST";
         const string SCHEME_ENVIRONMENT_VAR = "VAULT_API_SCHEME";
         const string PATH_ENVIRONMENT_VAR = "VAULT_API_PATH";

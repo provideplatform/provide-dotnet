@@ -8,9 +8,9 @@ namespace provide
 {
     public class Ident: ApiClient
     {
-        const string DEFAULT_HOST = "ident.provide.services";
+        const string DEFAULT_HOST = "localhost:8081";
         const string DEFAULT_PATH = "api/v1";
-        const string DEFAULT_SCHEME = "https";
+        const string DEFAULT_SCHEME = "http";
         const string HOST_ENVIRONMENT_VAR = "IDENT_API_HOST";
         const string SCHEME_ENVIRONMENT_VAR = "IDENT_API_SCHEME";
         const string PATH_ENVIRONMENT_VAR = "IDENT_API_PATH";
