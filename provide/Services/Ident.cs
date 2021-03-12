@@ -87,6 +87,20 @@ namespace provide
             return await this.Get<Application>(uri, query);
         }
 
+        // FetchApplicationOrganizations retrives application organizations for the given application id
+        public async Task<List<Organization>>FetchApplicationOrganizations(string applicationID, Dictionary<string, object> query)
+        {
+            var uri = String.Format("applications/{0}/organizations", applicationID);
+            return await this.Get<List<Organization>>(uri, query);
+        }
+
+        // AddApplicationOrganizations adds new organization to application given application id
+        public async Task<Organization>AddApplicationOrganizations(string applicationID, ApplicationOrganization appOrg)
+        {
+            var uri = String.Format("applications/{0}/organizations", applicationID);
+            return await this.Post<Organization>(uri, appOrg);
+        }
+
         // ListApplicationTokens retrieves a paginated list of application API tokens
         public async Task<List<JWTToken>>ListApplicationTokens(string applicationID, Dictionary<string, object> args)
         {

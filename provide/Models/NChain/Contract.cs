@@ -29,5 +29,8 @@ namespace provide.Model.NChain
 
         [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
         public Dictionary<string, object> Params { get; set; }
+
+        [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
+        public string Type { get; set; }
     }
 }

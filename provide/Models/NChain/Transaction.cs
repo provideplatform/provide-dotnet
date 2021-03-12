@@ -77,6 +77,9 @@ namespace provide.Model.NChain
         public int E2eLatency { get; set; }
 
         [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
-        public Dictionary<string, object> Params { get; set; }
+        public string[] Params { get; set; }
+
+        [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
+        public string Method { get; set; }
     }
 }

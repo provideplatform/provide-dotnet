@@ -1,5 +1,6 @@
 using Newtonsoft.Json;
 using System;
+using System.Collections.Generic;
 
 namespace provide.Model.Ident
 {
@@ -19,5 +20,8 @@ namespace provide.Model.Ident
 
         [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
         public User[] Users { get; set; }
+
+        [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
+        public Dictionary<string, object> Metadata { get; set; }
     }
 }
