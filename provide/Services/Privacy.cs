@@ -55,23 +55,23 @@ namespace provide
         }
 
         // DeployCircuit provisions a new circuit
-        public async Task<provide.Model.Privacy.Circuit> DeployCircuit(Dictionary<string, object> args)
+        public async Task<provide.Model.Privacy.Circuit> DeployCircuit(Circuit circuit)
         {
-            return await this.Post<provide.Model.Privacy.Circuit>("circuits", args);
+            return await this.Post<provide.Model.Privacy.Circuit>("circuits", circuit);
         }
 
         // Prove generates a proof for the given circuit
-        public async Task<provide.Model.Privacy.ProveResponse> Prove(string circuitId, Dictionary<string, object> args)
+        public async Task<provide.Model.Privacy.ProveResponse> Prove(string circuitId, ProveRequest req)
         {
             var uri = $"circuits/{circuitId}/prove";
-            return await this.Post<provide.Model.Privacy.ProveResponse>(uri, args);
+            return await this.Post<provide.Model.Privacy.ProveResponse>(uri, req);
         }
 
         // Verify a proof for the given circuit
-        public async Task<provide.Model.Privacy.VerifyResponse> Verify(string circuitId, Dictionary<string, object> args)
+        public async Task<provide.Model.Privacy.VerifyResponse> Verify(string circuitId, VerifyRequest req)
         {
             var uri = $"circuits/{circuitId}/verify";
-            return await this.Post<provide.Model.Privacy.VerifyResponse>(uri, args);
+            return await this.Post<provide.Model.Privacy.VerifyResponse>(uri, req);
         }
     }
 }

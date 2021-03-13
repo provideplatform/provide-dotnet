@@ -34,6 +34,9 @@ namespace provide.Model.Privacy
         public string ProvingKeyId { get; set; }
 
         [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
+        public string StoreId { get; set; }
+
+        [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
         public string VerifyingKeyId { get; set; }
 
         [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
